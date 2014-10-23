@@ -30,17 +30,14 @@
 		310AA3B6185A9A6E008F9583 /* 4.png in Resources */ = {isa = PBXBuildFile; fileRef = 310AA3B5185A9A6E008F9583 /* 4.png */; };
 		311C0171184EEAB800F01402 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 311C0170184EEAB700F01402 /* README.md */; };
 		314211C618476912003EA789 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 314211C418476912003EA789 /* InfoPlist.strings */; };
-		3144CC1C19F157990004135E /* STDb.h in Headers */ = {isa = PBXBuildFile; fileRef = 3144CC1419F157990004135E /* STDb.h */; };
-		3144CC1D19F157990004135E /* STDb.m in Sources */ = {isa = PBXBuildFile; fileRef = 3144CC1519F157990004135E /* STDb.m */; };
-		3144CC1E19F157990004135E /* STDbHandle.h in Headers */ = {isa = PBXBuildFile; fileRef = 3144CC1619F157990004135E /* STDbHandle.h */; };
-		3144CC1F19F157990004135E /* STDbHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 3144CC1719F157990004135E /* STDbHandle.m */; };
-		3144CC2019F157990004135E /* STDbKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 3144CC1819F157990004135E /* STDbKit.h */; };
-		3144CC2119F157990004135E /* STDbObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 3144CC1919F157990004135E /* STDbObject.h */; };
-		3144CC2219F157990004135E /* STDbObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 3144CC1A19F157990004135E /* STDbObject.m */; };
-		3144CC2319F157990004135E /* STDbVersion.h in Headers */ = {isa = PBXBuildFile; fileRef = 3144CC1B19F157990004135E /* STDbVersion.h */; };
-		3144CC2F19F157BA0004135E /* STDb.m in Sources */ = {isa = PBXBuildFile; fileRef = 3144CC2719F157BA0004135E /* STDb.m */; };
-		3144CC3019F157BA0004135E /* STDbHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 3144CC2919F157BA0004135E /* STDbHandle.m */; };
-		3144CC3119F157BA0004135E /* STDbObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 3144CC2C19F157BA0004135E /* STDbObject.m */; };
+		315A0D2319F8ADCC0079D978 /* STDb.h in Headers */ = {isa = PBXBuildFile; fileRef = 315A0D1919F8ADCC0079D978 /* STDb.h */; };
+		315A0D2419F8ADCC0079D978 /* STDb.m in Sources */ = {isa = PBXBuildFile; fileRef = 315A0D1A19F8ADCC0079D978 /* STDb.m */; };
+		315A0D2519F8ADCC0079D978 /* STDbKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 315A0D1B19F8ADCC0079D978 /* STDbKit.h */; };
+		315A0D2619F8ADCC0079D978 /* STDbObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 315A0D1C19F8ADCC0079D978 /* STDbObject.h */; };
+		315A0D2719F8ADCC0079D978 /* STDbObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 315A0D1D19F8ADCC0079D978 /* STDbObject.m */; };
+		315A0D2819F8ADCC0079D978 /* STDbVersion.h in Headers */ = {isa = PBXBuildFile; fileRef = 315A0D1E19F8ADCC0079D978 /* STDbVersion.h */; };
+		315A0D2919F8ADCC0079D978 /* STDbHandle.h in Headers */ = {isa = PBXBuildFile; fileRef = 315A0D2019F8ADCC0079D978 /* STDbHandle.h */; };
+		315A0D2A19F8ADCC0079D978 /* STDbHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 315A0D2119F8ADCC0079D978 /* STDbHandle.m */; };
 		31AB186F1874FB6700D7640B /* Book.m in Sources */ = {isa = PBXBuildFile; fileRef = 31AB186E1874FB6700D7640B /* Book.m */; };
 		31F840DD19F1186800C4184A /* STDbObject.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 31F840DC19F1186800C4184A /* STDbObject.podspec */; };
 		8992568B18697F12000ABAFB /* 1.png in Resources */ = {isa = PBXBuildFile; fileRef = 8992568A18697F12000ABAFB /* 1.png */; };
@@ -93,22 +90,14 @@
 		314211C318476912003EA789 /* STDbKit-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "STDbKit-Info.plist"; sourceTree = "<group>"; };
 		314211C518476912003EA789 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		314211C718476912003EA789 /* STDbKit-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "STDbKit-Prefix.pch"; sourceTree = "<group>"; };
-		3144CC1419F157990004135E /* STDb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STDb.h; sourceTree = "<group>"; };
-		3144CC1519F157990004135E /* STDb.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STDb.m; sourceTree = "<group>"; };
-		3144CC1619F157990004135E /* STDbHandle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STDbHandle.h; sourceTree = "<group>"; };
-		3144CC1719F157990004135E /* STDbHandle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STDbHandle.m; sourceTree = "<group>"; };
-		3144CC1819F157990004135E /* STDbKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STDbKit.h; sourceTree = "<group>"; };
-		3144CC1919F157990004135E /* STDbObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STDbObject.h; sourceTree = "<group>"; };
-		3144CC1A19F157990004135E /* STDbObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STDbObject.m; sourceTree = "<group>"; };
-		3144CC1B19F157990004135E /* STDbVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STDbVersion.h; sourceTree = "<group>"; };
-		3144CC2619F157BA0004135E /* STDb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STDb.h; sourceTree = "<group>"; };
-		3144CC2719F157BA0004135E /* STDb.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STDb.m; sourceTree = "<group>"; };
-		3144CC2819F157BA0004135E /* STDbHandle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STDbHandle.h; sourceTree = "<group>"; };
-		3144CC2919F157BA0004135E /* STDbHandle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STDbHandle.m; sourceTree = "<group>"; };
-		3144CC2A19F157BA0004135E /* STDbKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STDbKit.h; sourceTree = "<group>"; };
-		3144CC2B19F157BA0004135E /* STDbObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STDbObject.h; sourceTree = "<group>"; };
-		3144CC2C19F157BA0004135E /* STDbObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STDbObject.m; sourceTree = "<group>"; };
-		3144CC2D19F157BA0004135E /* STDbVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STDbVersion.h; sourceTree = "<group>"; };
+		315A0D1919F8ADCC0079D978 /* STDb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STDb.h; sourceTree = "<group>"; };
+		315A0D1A19F8ADCC0079D978 /* STDb.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STDb.m; sourceTree = "<group>"; };
+		315A0D1B19F8ADCC0079D978 /* STDbKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STDbKit.h; sourceTree = "<group>"; };
+		315A0D1C19F8ADCC0079D978 /* STDbObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STDbObject.h; sourceTree = "<group>"; };
+		315A0D1D19F8ADCC0079D978 /* STDbObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STDbObject.m; sourceTree = "<group>"; };
+		315A0D1E19F8ADCC0079D978 /* STDbVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STDbVersion.h; sourceTree = "<group>"; };
+		315A0D2019F8ADCC0079D978 /* STDbHandle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STDbHandle.h; sourceTree = "<group>"; };
+		315A0D2119F8ADCC0079D978 /* STDbHandle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STDbHandle.m; sourceTree = "<group>"; };
 		31AB186D1874FB6700D7640B /* Book.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Book.h; sourceTree = "<group>"; };
 		31AB186E1874FB6700D7640B /* Book.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Book.m; sourceTree = "<group>"; };
 		31F840DC19F1186800C4184A /* STDbObject.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = STDbObject.podspec; sourceTree = SOURCE_ROOT; };
@@ -150,7 +139,6 @@
 		310AA36D185A8A5C008F9583 /* STDbKitDemo */ = {
 			isa = PBXGroup;
 			children = (
-				3144CC2419F157BA0004135E /* Classes */,
 				310AA3B0185A95C3008F9583 /* NSDate+Exts */,
 				310AA39A185A8BC6008F9583 /* classes */,
 				310AA3A1185A8BC6008F9583 /* model */,
@@ -265,7 +253,8 @@
 		314211C118476912003EA789 /* STDbKit */ = {
 			isa = PBXGroup;
 			children = (
-				31F8410619F13B5200C4184A /* Classes */,
+				315A0D1719F8ADCC0079D978 /* Classes */,
+				315A0D1F19F8ADCC0079D978 /* Private */,
 				311C0170184EEAB700F01402 /* README.md */,
 				31F840DC19F1186800C4184A /* STDbObject.podspec */,
 				314211C218476912003EA789 /* Supporting Files */,
@@ -283,37 +272,27 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		3144CC2419F157BA0004135E /* Classes */ = {
+		315A0D1719F8ADCC0079D978 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				3144CC2619F157BA0004135E /* STDb.h */,
-				3144CC2719F157BA0004135E /* STDb.m */,
-				3144CC2819F157BA0004135E /* STDbHandle.h */,
-				3144CC2919F157BA0004135E /* STDbHandle.m */,
-				3144CC2A19F157BA0004135E /* STDbKit.h */,
-				3144CC2B19F157BA0004135E /* STDbObject.h */,
-				3144CC2C19F157BA0004135E /* STDbObject.m */,
-				3144CC2D19F157BA0004135E /* STDbVersion.h */,
+				315A0D1919F8ADCC0079D978 /* STDb.h */,
+				315A0D1A19F8ADCC0079D978 /* STDb.m */,
+				315A0D1B19F8ADCC0079D978 /* STDbKit.h */,
+				315A0D1C19F8ADCC0079D978 /* STDbObject.h */,
+				315A0D1D19F8ADCC0079D978 /* STDbObject.m */,
+				315A0D1E19F8ADCC0079D978 /* STDbVersion.h */,
 			);
-			name = Classes;
-			path = Pod/Classes;
-			sourceTree = SOURCE_ROOT;
+			path = Classes;
+			sourceTree = "<group>";
 		};
-		31F8410619F13B5200C4184A /* Classes */ = {
+		315A0D1F19F8ADCC0079D978 /* Private */ = {
 			isa = PBXGroup;
 			children = (
-				3144CC1419F157990004135E /* STDb.h */,
-				3144CC1519F157990004135E /* STDb.m */,
-				3144CC1619F157990004135E /* STDbHandle.h */,
-				3144CC1719F157990004135E /* STDbHandle.m */,
-				3144CC1819F157990004135E /* STDbKit.h */,
-				3144CC1919F157990004135E /* STDbObject.h */,
-				3144CC1A19F157990004135E /* STDbObject.m */,
-				3144CC1B19F157990004135E /* STDbVersion.h */,
+				315A0D2019F8ADCC0079D978 /* STDbHandle.h */,
+				315A0D2119F8ADCC0079D978 /* STDbHandle.m */,
 			);
-			name = Classes;
-			path = Pod/Classes;
-			sourceTree = SOURCE_ROOT;
+			path = Private;
+			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
@@ -322,11 +301,11 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3144CC2019F157990004135E /* STDbKit.h in Headers */,
-				3144CC1C19F157990004135E /* STDb.h in Headers */,
-				3144CC2119F157990004135E /* STDbObject.h in Headers */,
-				3144CC2319F157990004135E /* STDbVersion.h in Headers */,
-				3144CC1E19F157990004135E /* STDbHandle.h in Headers */,
+				315A0D2519F8ADCC0079D978 /* STDbKit.h in Headers */,
+				315A0D2319F8ADCC0079D978 /* STDb.h in Headers */,
+				315A0D2819F8ADCC0079D978 /* STDbVersion.h in Headers */,
+				315A0D2919F8ADCC0079D978 /* STDbHandle.h in Headers */,
+				315A0D2619F8ADCC0079D978 /* STDbObject.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -459,15 +438,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				310AA378185A8A5C008F9583 /* AppDelegate.m in Sources */,
-				3144CC3119F157BA0004135E /* STDbObject.m in Sources */,
 				310AA3B3185A95C3008F9583 /* NSDate+Exts.m in Sources */,
-				3144CC2F19F157BA0004135E /* STDb.m in Sources */,
 				310AA3A7185A8BC6008F9583 /* UserListViewController.m in Sources */,
 				310AA3A8185A8BC6008F9583 /* User.m in Sources */,
 				310AA374185A8A5C008F9583 /* main.m in Sources */,
 				310AA3A6185A8BC6008F9583 /* UserDetailViewController.m in Sources */,
 				310AA3A5185A8BC6008F9583 /* AddUserViewController.m in Sources */,
-				3144CC3019F157BA0004135E /* STDbHandle.m in Sources */,
 				31AB186F1874FB6700D7640B /* Book.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -484,9 +460,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3144CC2219F157990004135E /* STDbObject.m in Sources */,
-				3144CC1F19F157990004135E /* STDbHandle.m in Sources */,
-				3144CC1D19F157990004135E /* STDb.m in Sources */,
+				315A0D2419F8ADCC0079D978 /* STDb.m in Sources */,
+				315A0D2719F8ADCC0079D978 /* STDbObject.m in Sources */,
+				315A0D2A19F8ADCC0079D978 /* STDbHandle.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
