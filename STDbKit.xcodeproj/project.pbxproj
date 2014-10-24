@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		315A0E0719F8DAAA0079D978 /* STDbKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 315A0DFD19F8DAAA0079D978 /* STDbKit.h */; };
+		315A0E0719F8DAAA0079D978 /* STDbKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 315A0DFD19F8DAAA0079D978 /* STDbKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		315A0E0819F8DAAA0079D978 /* STDbObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 315A0DFE19F8DAAA0079D978 /* STDbObject.h */; };
 		315A0E0919F8DAAA0079D978 /* STDbObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 315A0DFF19F8DAAA0079D978 /* STDbObject.m */; };
 		315A0E0B19F8DAAA0079D978 /* STDbHandle.h in Headers */ = {isa = PBXBuildFile; fileRef = 315A0E0219F8DAAA0079D978 /* STDbHandle.h */; };
@@ -100,8 +100,8 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				315A0E1319F8DC4E0079D978 /* STDb.h in Headers */,
 				315A0E0719F8DAAA0079D978 /* STDbKit.h in Headers */,
+				315A0E1319F8DC4E0079D978 /* STDb.h in Headers */,
 				315A0E0B19F8DAAA0079D978 /* STDbHandle.h in Headers */,
 				315A0E1019F8DBB80079D978 /* STDbVersion.h in Headers */,
 				315A0E0819F8DAAA0079D978 /* STDbObject.h in Headers */,
@@ -322,6 +322,7 @@
 				315A0DF519F8D9F80079D978 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

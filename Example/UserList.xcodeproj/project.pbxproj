@@ -18,7 +18,6 @@
 		315A0DA119F8B7350079D978 /* Book.m in Sources */ = {isa = PBXBuildFile; fileRef = 315A0D9819F8B7350079D978 /* Book.m */; };
 		315A0DA219F8B7350079D978 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 315A0D9A19F8B7350079D978 /* User.m */; };
 		315A0DA319F8B7350079D978 /* NSDate+Exts.m in Sources */ = {isa = PBXBuildFile; fileRef = 315A0D9D19F8B7350079D978 /* NSDate+Exts.m */; };
-		315A0DA519F8B7770079D978 /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = 315A0DA419F8B7770079D978 /* Podfile */; };
 		315A0DA819F8C31A0079D978 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 315A0DA719F8C3190079D978 /* libsqlite3.dylib */; };
 		A9ABA83B6AA2B62B6AFBE6DD /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B7335E770C447B2F7F1A3D93 /* libPods.a */; };
 /* End PBXBuildFile section */
@@ -55,7 +54,6 @@
 		315A0D9A19F8B7350079D978 /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
 		315A0D9C19F8B7350079D978 /* NSDate+Exts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Exts.h"; sourceTree = "<group>"; };
 		315A0D9D19F8B7350079D978 /* NSDate+Exts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Exts.m"; sourceTree = "<group>"; };
-		315A0DA419F8B7770079D978 /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = SOURCE_ROOT; };
 		315A0DA719F8C3190079D978 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		B7335E770C447B2F7F1A3D93 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		B89B63A0487C8342F744F22E /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
@@ -85,7 +83,6 @@
 		315A0D5D19F8B70B0079D978 = {
 			isa = PBXGroup;
 			children = (
-				315A0DA419F8B7770079D978 /* Podfile */,
 				315A0D6819F8B70B0079D978 /* UserList */,
 				315A0D6719F8B70B0079D978 /* Products */,
 				E828030AFA97103EEDB9C841 /* Pods */,
@@ -262,7 +259,6 @@
 			files = (
 				315A0D7519F8B70B0079D978 /* Main.storyboard in Resources */,
 				315A0D7A19F8B70B0079D978 /* LaunchScreen.xib in Resources */,
-				315A0DA519F8B7770079D978 /* Podfile in Resources */,
 				315A0D7719F8B70B0079D978 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -443,6 +439,10 @@
 			baseConfigurationReference = FD1BA2FCCD83D9D6EE89A546 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = UserList/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -454,6 +454,10 @@
 			baseConfigurationReference = B89B63A0487C8342F744F22E /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = UserList/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
