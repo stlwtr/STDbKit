@@ -27,12 +27,8 @@
 #ifndef STDbObject_STDbKit_h
 #define STDbObject_STDbKit_h
 
+#import <STDbKit/STDb.h>
 #import <STDbKit/STDbObject.h>
-
-//! Project version number for STDbKit.
-FOUNDATION_EXPORT double STDbKitVersionNumber;
-
-//! Project version string for STDbKit.
-FOUNDATION_EXPORT const unsigned char STDbKitVersionString[];
+#import <STDbKit/STDbVersion.h>
 
 #endif

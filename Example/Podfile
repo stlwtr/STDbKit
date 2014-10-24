@@ -1,14 +1,3 @@
 source 'https://github.com/CocoaPods/Specs.git'
 
-target 'STDbKit', :exclusive => true do
-  pod "STDbKit", :path => "../"
-end
-
-target 'Tests', :exclusive => true do
-  pod "STDbKit", :path => "../"
-
-  pod 'Specta', '~> 0.2.1'
-  pod 'Expecta'
-  pod 'FBSnapshotTestCase'
-  pod 'Expecta+Snapshots'
-end
+pod "STDbKit"

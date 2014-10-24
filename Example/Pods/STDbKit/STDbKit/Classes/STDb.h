@@ -1,8 +1,8 @@
 //
-//  STDbKit.h
+//  STDb.h
 //  STDbObject
 //
-//  Created by yls on 13-12-2.
+//  Created by yls on 13-12-5.
 //
 // Version 1.0.4
 //
@@ -24,15 +24,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#ifndef STDbObject_STDbKit_h
-#define STDbObject_STDbKit_h
+#import <Foundation/Foundation.h>
 
-#import <STDbKit/STDbObject.h>
+@interface STDb : NSObject
 
-//! Project version number for STDbKit.
-FOUNDATION_EXPORT double STDbKitVersionNumber;
+/**
+ *	@brief	从外部导入数据库
+ *
+ *	@param 	dbName 	数据库名称（dbName.db）
+ */
++ (void)importDb:(NSString *)dbName;
 
-//! Project version string for STDbKit.
-FOUNDATION_EXPORT const unsigned char STDbKitVersionString[];
-
-#endif
+@end
