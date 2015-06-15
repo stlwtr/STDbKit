@@ -43,4 +43,16 @@
     }
 }
 
+/**
+ *	@brief	导入数据库
+ *
+ *	@param 	dbPath 	数据库路径（..../dbName.db）
+ */
++ (void)importDbWithDbPath:(NSString *)dbPath;
+{
+    if (![[NSFileManager defaultManager] fileExistsAtPath:dbPath]) {
+        [STDbHandle importDbWithDbPath:dbPath];
+    }
+}
+
 @end

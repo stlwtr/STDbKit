@@ -35,4 +35,11 @@
  */
 + (void)importDb:(NSString *)dbName;
 
+/**
+ *	@brief	导入数据库
+ *
+ *	@param 	dbPath 	数据库路径（..../dbName.db）
+ */
++ (void)importDbWithDbPath:(NSString *)dbPath;
+
 @end

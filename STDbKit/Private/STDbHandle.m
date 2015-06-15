@@ -325,6 +325,150 @@ enum {
     }
 }
 
++ (void)importDbWithDbPath:(NSString *)dbPath;
+{
+    @synchronized(self){
+        NSString *dbName = [dbPath lastPathComponent];
+        if (![[NSFileManager defaultManager] fileExistsAtPath:dbPath]) {
+            NSString *ext = [dbName pathExtension];
+            NSString *extDbName = [dbName stringByDeletingPathExtension];
+            NSString *extDbPath = [[NSBundle mainBundle] pathForResource:extDbName ofType:ext];
+            if (extDbPath) {
+                NSError *error;
+                BOOL rc = [[NSFileManager defaultManager] copyItemAtPath:extDbPath toPath:dbPath error:&error];
+                if (rc) {
+                    NSArray *tables = [STDbHandle sqlite_tablename];
+                    for (NSString *table in tables) {
+                        NSMutableString *sql;
+                        
+                        sqlite3_stmt *stmt = NULL;
+                        NSString *str = [NSString stringWithFormat:@"select sql from sqlite_master where type='table' and tbl_name='%@'", table];
+                        STDbHandle *stdb = [STDbHandle shareDb];
+                        [STDbHandle openDb];
+                        if (sqlite3_prepare_v2(stdb->_sqlite3DB, [str UTF8String], -1, &stmt, NULL) == SQLITE_OK) {
+                            while (SQLITE_ROW == sqlite3_step(stmt)) {
+                                const unsigned char *text = sqlite3_column_text(stmt, 0);
+                                sql = [NSMutableString stringWithUTF8String:(const char *)text];
+                            }
+                        }
+                        sqlite3_finalize(stmt);
+                        stmt = NULL;
+                        
+                        NSRange r = [sql rangeOfString:@"("];
+                        
+                        // 备份数据库
+                        
+                        // 错误信息
+                        char *errmsg = NULL;
+                        
+                        // 创建临时表
+                        NSString *createTempDb = [NSString stringWithFormat:@"create temporary table t_backup%@", [sql substringFromIndex:r.location]];
+                        int ret = sqlite3_exec(stdb.sqlite3DB, [createTempDb UTF8String], NULL, NULL, &errmsg);
+                        if (ret != SQLITE_OK) {
+                            NSLog(@"%s", errmsg);
+                        }
+                        
+                        //导入数据
+                        NSString *importDb = [NSString stringWithFormat:@"insert into t_backup select * from %@", table];
+                        ret = sqlite3_exec(stdb.sqlite3DB, [importDb UTF8String], NULL, NULL, &errmsg);
+                        if (ret != SQLITE_OK) {
+                            NSLog(@"%s", errmsg);
+                        }
+                        // 删除旧表
+                        NSString *dropDb = [NSString stringWithFormat:@"drop table %@", table];
+                        ret = sqlite3_exec(stdb.sqlite3DB, [dropDb UTF8String], NULL, NULL, &errmsg);
+                        if (ret != SQLITE_OK) {
+                            NSLog(@"%s", errmsg);
+                        }
+                        // 创建新表
+                        NSMutableString *createNewTl = [NSMutableString stringWithString:sql];
+                        if (r.location != NSNotFound) {
+                            NSString *insertStr = [NSString stringWithFormat:@"\n\t%@ %@ primary key,", kDbId, DBInt];
+                            [createNewTl insertString:insertStr atIndex:r.location + 1];
+                        } else {
+                            return;
+                        }
+                        NSString *createDb = [NSString stringWithFormat:@"%@", createNewTl];
+                        ret = sqlite3_exec(stdb.sqlite3DB, [createDb UTF8String], NULL, NULL, &errmsg);
+                        if (ret != SQLITE_OK) {
+                            NSLog(@"%s", errmsg);
+                        }
+                        
+                        // 从临时表导入数据到新表
+                        
+                        NSString *cols = [[NSString alloc] init];
+                        
+                        NSString *t_str = [sql substringWithRange:NSMakeRange(r.location + 1, [sql length] - r.location - 2)];
+                        t_str = [t_str stringByReplacingOccurrencesOfString:@"\n" withString:@""];
+                        t_str = [t_str stringByReplacingOccurrencesOfString:@"\t" withString:@""];
+                        t_str = [t_str stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+                        
+                        NSMutableArray *colsArr = [NSMutableArray arrayWithCapacity:0];
+                        for (NSString *s in [t_str componentsSeparatedByString:@","]) {
+                            NSString *s0 = [NSString stringWithString:s];
+                            s0 = [s0 stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+                            NSArray *a = [s0 componentsSeparatedByString:@" "];
+                            NSString *s1 = a[0];
+                            s1 = [s1 stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+                            [colsArr addObject:s1];
+                        }
+                        cols = [colsArr componentsJoinedByString:@", "];
+                        
+                        importDb = [NSString stringWithFormat:@"insert into %@ select (rowid-1) as %@, %@ from t_backup", table, kDbId, cols];
+                        
+                        ret = sqlite3_exec(stdb.sqlite3DB, [importDb UTF8String], NULL, NULL, &errmsg);
+                        if (ret != SQLITE_OK) {
+                            NSLog(@"%s", errmsg);
+                        }
+                        
+                        // 删除临时表
+                        dropDb = [NSString stringWithFormat:@"drop table t_backup"];
+                        ret = sqlite3_exec(stdb.sqlite3DB, [dropDb UTF8String], NULL, NULL, &errmsg);
+                        if (ret != SQLITE_OK) {
+                            NSLog(@"%s", errmsg);
+                        }
+                        
+                        // 加密数据库
+                        if ([[self shareDb] encryptEnable]) {
+                            NSMutableArray *results = [NSClassFromString(table) allDbObjects];
+                            for (STDbObject *obj in results) {
+                                
+                                [self openDb];
+                                
+                                NSMutableArray *keys = [NSMutableArray arrayWithCapacity:0];
+                                [STDbHandle class:obj.class getPropertyKeyList:keys];
+                                
+                                NSMutableArray *types = [NSMutableArray arrayWithCapacity:0];
+                                [STDbHandle class:obj.class getPropertyTypeList:types];
+                                
+                                for (NSInteger i = 0; i < keys.count; i++) {
+                                    NSString *type = types[i];
+                                    NSString *key = keys[i];
+                                    
+                                    if ([type isEqualToString:@"text"]) {
+                                        NSString *value = [[NSString alloc] initWithFormat:@"%@", [obj valueForKey:key]];
+                                        if ([[self shareDb] encryptEnable]) {
+                                            value = [value encryptWithKey:[self encryptKey]];
+                                        }
+                                        [obj setValue:value forKey:key];
+                                    }
+                                }
+                                
+                                [obj updatetoDb];
+                            }
+                        }
+                    }
+                } else {
+                    NSLog(@"%@", error.localizedDescription);
+                }
+                
+            } else {
+                
+            }
+        }
+    }
+}
+
 /**
  *	@brief	打开数据库
  *

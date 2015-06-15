@@ -12,10 +12,10 @@
 		315A0E0919F8DAAA0079D978 /* STDbObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 315A0DFF19F8DAAA0079D978 /* STDbObject.m */; };
 		315A0E0B19F8DAAA0079D978 /* STDbHandle.h in Headers */ = {isa = PBXBuildFile; fileRef = 315A0E0219F8DAAA0079D978 /* STDbHandle.h */; };
 		315A0E0C19F8DAAA0079D978 /* STDbHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 315A0E0319F8DAAA0079D978 /* STDbHandle.m */; };
-		315A0E0E19F8DAE30079D978 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 315A0E0D19F8DAE30079D978 /* libsqlite3.dylib */; };
 		315A0E1019F8DBB80079D978 /* STDbVersion.h in Headers */ = {isa = PBXBuildFile; fileRef = 315A0E0F19F8DBB80079D978 /* STDbVersion.h */; };
 		315A0E1319F8DC4E0079D978 /* STDb.h in Headers */ = {isa = PBXBuildFile; fileRef = 315A0E1119F8DC4E0079D978 /* STDb.h */; };
 		315A0E1419F8DC4E0079D978 /* STDb.m in Sources */ = {isa = PBXBuildFile; fileRef = 315A0E1219F8DC4E0079D978 /* STDb.m */; };
+		3199D01D1A031A8900BDD645 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 3199D01C1A031A8900BDD645 /* libsqlite3.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,10 +26,10 @@
 		315A0DFF19F8DAAA0079D978 /* STDbObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STDbObject.m; sourceTree = "<group>"; };
 		315A0E0219F8DAAA0079D978 /* STDbHandle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STDbHandle.h; sourceTree = "<group>"; };
 		315A0E0319F8DAAA0079D978 /* STDbHandle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STDbHandle.m; sourceTree = "<group>"; };
-		315A0E0D19F8DAE30079D978 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		315A0E0F19F8DBB80079D978 /* STDbVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STDbVersion.h; sourceTree = "<group>"; };
 		315A0E1119F8DC4E0079D978 /* STDb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STDb.h; sourceTree = "<group>"; };
 		315A0E1219F8DC4E0079D978 /* STDb.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STDb.m; sourceTree = "<group>"; };
+		3199D01C1A031A8900BDD645 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -37,7 +37,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				315A0E0E19F8DAE30079D978 /* libsqlite3.dylib in Frameworks */,
+				3199D01D1A031A8900BDD645 /* libsqlite3.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -47,8 +47,6 @@
 		315A0DA919F8D95E0079D978 = {
 			isa = PBXGroup;
 			children = (
-				315A0E0D19F8DAE30079D978 /* libsqlite3.dylib */,
-				315A0DE019F8D9F80079D978 /* STDbKit.framework */,
 				315A0DE119F8D9F80079D978 /* STDbKit */,
 			);
 			sourceTree = "<group>";
@@ -56,9 +54,11 @@
 		315A0DE119F8D9F80079D978 /* STDbKit */ = {
 			isa = PBXGroup;
 			children = (
+				3199D01B1A031A7300BDD645 /* libs */,
 				315A0DF919F8DAAA0079D978 /* Classes */,
 				315A0E0119F8DAAA0079D978 /* Private */,
 				315A0DE219F8D9F80079D978 /* Supporting Files */,
+				315A0DE019F8D9F80079D978 /* STDbKit.framework */,
 			);
 			path = STDbKit;
 			sourceTree = "<group>";
@@ -91,6 +91,14 @@
 				315A0E0319F8DAAA0079D978 /* STDbHandle.m */,
 			);
 			path = Private;
+			sourceTree = "<group>";
+		};
+		3199D01B1A031A7300BDD645 /* libs */ = {
+			isa = PBXGroup;
+			children = (
+				3199D01C1A031A8900BDD645 /* libsqlite3.dylib */,
+			);
+			name = libs;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

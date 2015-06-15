@@ -81,6 +81,8 @@ extern objc_property_t * st_class_copyPropertyList(Class cls, unsigned int *coun
  */
 + (void)importDb:(NSString *)dbName;
 
++ (void)importDbWithDbPath:(NSString *)dbPath;
+
 /**
  *	@brief	根据aClass创建表
  *
