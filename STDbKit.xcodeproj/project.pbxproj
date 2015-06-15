@@ -7,37 +7,83 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		315A0E0719F8DAAA0079D978 /* STDbKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 315A0DFD19F8DAAA0079D978 /* STDbKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		315A0E0819F8DAAA0079D978 /* STDbObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 315A0DFE19F8DAAA0079D978 /* STDbObject.h */; };
-		315A0E0919F8DAAA0079D978 /* STDbObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 315A0DFF19F8DAAA0079D978 /* STDbObject.m */; };
-		315A0E0B19F8DAAA0079D978 /* STDbHandle.h in Headers */ = {isa = PBXBuildFile; fileRef = 315A0E0219F8DAAA0079D978 /* STDbHandle.h */; };
-		315A0E0C19F8DAAA0079D978 /* STDbHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 315A0E0319F8DAAA0079D978 /* STDbHandle.m */; };
-		315A0E1019F8DBB80079D978 /* STDbVersion.h in Headers */ = {isa = PBXBuildFile; fileRef = 315A0E0F19F8DBB80079D978 /* STDbVersion.h */; };
-		315A0E1319F8DC4E0079D978 /* STDb.h in Headers */ = {isa = PBXBuildFile; fileRef = 315A0E1119F8DC4E0079D978 /* STDb.h */; };
-		315A0E1419F8DC4E0079D978 /* STDb.m in Sources */ = {isa = PBXBuildFile; fileRef = 315A0E1219F8DC4E0079D978 /* STDb.m */; };
-		3199D01D1A031A8900BDD645 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 3199D01C1A031A8900BDD645 /* libsqlite3.dylib */; };
+		44075AF01B2DC2EF00714895 /* STDbObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 44075AE91B2DC2EF00714895 /* STDbObject.m */; };
+		44075AF11B2DC30C00714895 /* STDbKit.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 44075AE71B2DC2EF00714895 /* STDbKit.h */; };
+		44075AFC1B2DC33D00714895 /* libSTDbKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 44075ABF1B2DC16C00714895 /* libSTDbKit.a */; };
+		44075B041B2DC54200714895 /* STDbObjectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 44075B031B2DC54200714895 /* STDbObjectTests.m */; };
+		44075B071B2DC6CA00714895 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 44075B061B2DC6CA00714895 /* User.m */; };
+		44075B091B2DC75500714895 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 44075B081B2DC75500714895 /* libsqlite3.dylib */; };
+		44075B171B2EF83700714895 /* STDb.m in Sources */ = {isa = PBXBuildFile; fileRef = 44075B161B2EF83700714895 /* STDb.m */; };
+		44075B241B2EFB0D00714895 /* NSData+STDbHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 44075B1A1B2EFB0D00714895 /* NSData+STDbHandle.m */; };
+		44075B251B2EFB0D00714895 /* NSDate+STDbHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 44075B1C1B2EFB0D00714895 /* NSDate+STDbHandle.m */; };
+		44075B261B2EFB0D00714895 /* NSObject+STDbHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 44075B1E1B2EFB0D00714895 /* NSObject+STDbHandle.m */; };
+		44075B271B2EFB0D00714895 /* NSString+STDbHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 44075B201B2EFB0D00714895 /* NSString+STDbHandle.m */; };
+		44075B281B2EFB0D00714895 /* STDbQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 44075B221B2EFB0D00714895 /* STDbQueue.m */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		44075AFD1B2DC33D00714895 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 315A0DAA19F8D95F0079D978 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 44075ABE1B2DC16C00714895;
+			remoteInfo = STDbKit;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		44075ABD1B2DC16C00714895 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+				44075AF11B2DC30C00714895 /* STDbKit.h in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
-		315A0DE019F8D9F80079D978 /* STDbKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = STDbKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		315A0DE319F8D9F80079D978 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		315A0DFD19F8DAAA0079D978 /* STDbKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STDbKit.h; sourceTree = "<group>"; };
-		315A0DFE19F8DAAA0079D978 /* STDbObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STDbObject.h; sourceTree = "<group>"; };
-		315A0DFF19F8DAAA0079D978 /* STDbObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STDbObject.m; sourceTree = "<group>"; };
-		315A0E0219F8DAAA0079D978 /* STDbHandle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STDbHandle.h; sourceTree = "<group>"; };
-		315A0E0319F8DAAA0079D978 /* STDbHandle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STDbHandle.m; sourceTree = "<group>"; };
-		315A0E0F19F8DBB80079D978 /* STDbVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STDbVersion.h; sourceTree = "<group>"; };
-		315A0E1119F8DC4E0079D978 /* STDb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STDb.h; sourceTree = "<group>"; };
-		315A0E1219F8DC4E0079D978 /* STDb.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STDb.m; sourceTree = "<group>"; };
-		3199D01C1A031A8900BDD645 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+		44075ABF1B2DC16C00714895 /* libSTDbKit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libSTDbKit.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		44075AE71B2DC2EF00714895 /* STDbKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STDbKit.h; sourceTree = "<group>"; };
+		44075AE81B2DC2EF00714895 /* STDbObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STDbObject.h; sourceTree = "<group>"; };
+		44075AE91B2DC2EF00714895 /* STDbObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STDbObject.m; sourceTree = "<group>"; };
+		44075AF61B2DC33D00714895 /* STDbKit Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "STDbKit Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		44075AF91B2DC33D00714895 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		44075B031B2DC54200714895 /* STDbObjectTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STDbObjectTests.m; sourceTree = "<group>"; };
+		44075B051B2DC6CA00714895 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
+		44075B061B2DC6CA00714895 /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
+		44075B081B2DC75500714895 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+		44075B151B2EF83700714895 /* STDb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STDb.h; sourceTree = "<group>"; };
+		44075B161B2EF83700714895 /* STDb.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STDb.m; sourceTree = "<group>"; };
+		44075B191B2EFB0D00714895 /* NSData+STDbHandle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+STDbHandle.h"; sourceTree = "<group>"; };
+		44075B1A1B2EFB0D00714895 /* NSData+STDbHandle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+STDbHandle.m"; sourceTree = "<group>"; };
+		44075B1B1B2EFB0D00714895 /* NSDate+STDbHandle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+STDbHandle.h"; sourceTree = "<group>"; };
+		44075B1C1B2EFB0D00714895 /* NSDate+STDbHandle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+STDbHandle.m"; sourceTree = "<group>"; };
+		44075B1D1B2EFB0D00714895 /* NSObject+STDbHandle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+STDbHandle.h"; sourceTree = "<group>"; };
+		44075B1E1B2EFB0D00714895 /* NSObject+STDbHandle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+STDbHandle.m"; sourceTree = "<group>"; };
+		44075B1F1B2EFB0D00714895 /* NSString+STDbHandle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+STDbHandle.h"; sourceTree = "<group>"; };
+		44075B201B2EFB0D00714895 /* NSString+STDbHandle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+STDbHandle.m"; sourceTree = "<group>"; };
+		44075B211B2EFB0D00714895 /* STDbQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STDbQueue.h; sourceTree = "<group>"; };
+		44075B221B2EFB0D00714895 /* STDbQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STDbQueue.m; sourceTree = "<group>"; };
+		44075B231B2EFB0D00714895 /* STDbVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STDbVersion.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		315A0DDC19F8D9F80079D978 /* Frameworks */ = {
+		44075ABC1B2DC16C00714895 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3199D01D1A031A8900BDD645 /* libsqlite3.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		44075AF31B2DC33D00714895 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				44075B091B2DC75500714895 /* libsqlite3.dylib in Frameworks */,
+				44075AFC1B2DC33D00714895 /* libSTDbKit.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -47,86 +93,82 @@
 		315A0DA919F8D95E0079D978 = {
 			isa = PBXGroup;
 			children = (
-				315A0DE119F8D9F80079D978 /* STDbKit */,
+				44075ABF1B2DC16C00714895 /* libSTDbKit.a */,
+				44075AC01B2DC16C00714895 /* STDbKit */,
+				44075AF61B2DC33D00714895 /* STDbKit Tests.xctest */,
+				44075AF71B2DC33D00714895 /* STDbKit Tests */,
 			);
 			sourceTree = "<group>";
 		};
-		315A0DE119F8D9F80079D978 /* STDbKit */ = {
+		44075AC01B2DC16C00714895 /* STDbKit */ = {
 			isa = PBXGroup;
 			children = (
-				3199D01B1A031A7300BDD645 /* libs */,
-				315A0DF919F8DAAA0079D978 /* Classes */,
-				315A0E0119F8DAAA0079D978 /* Private */,
-				315A0DE219F8D9F80079D978 /* Supporting Files */,
-				315A0DE019F8D9F80079D978 /* STDbKit.framework */,
+				44075AD61B2DC2EF00714895 /* Classes */,
 			);
 			path = STDbKit;
 			sourceTree = "<group>";
 		};
-		315A0DE219F8D9F80079D978 /* Supporting Files */ = {
+		44075AD61B2DC2EF00714895 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				315A0DE319F8D9F80079D978 /* Info.plist */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		315A0DF919F8DAAA0079D978 /* Classes */ = {
-			isa = PBXGroup;
-			children = (
-				315A0DFD19F8DAAA0079D978 /* STDbKit.h */,
-				315A0DFE19F8DAAA0079D978 /* STDbObject.h */,
-				315A0DFF19F8DAAA0079D978 /* STDbObject.m */,
+				44075B181B2EFB0D00714895 /* Category */,
+				44075AE71B2DC2EF00714895 /* STDbKit.h */,
+				44075B151B2EF83700714895 /* STDb.h */,
+				44075B161B2EF83700714895 /* STDb.m */,
+				44075B211B2EFB0D00714895 /* STDbQueue.h */,
+				44075B221B2EFB0D00714895 /* STDbQueue.m */,
+				44075AE81B2DC2EF00714895 /* STDbObject.h */,
+				44075AE91B2DC2EF00714895 /* STDbObject.m */,
+				44075B231B2EFB0D00714895 /* STDbVersion.h */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
 		};
-		315A0E0119F8DAAA0079D978 /* Private */ = {
+		44075AF71B2DC33D00714895 /* STDbKit Tests */ = {
 			isa = PBXGroup;
 			children = (
-				315A0E1119F8DC4E0079D978 /* STDb.h */,
-				315A0E1219F8DC4E0079D978 /* STDb.m */,
-				315A0E0F19F8DBB80079D978 /* STDbVersion.h */,
-				315A0E0219F8DAAA0079D978 /* STDbHandle.h */,
-				315A0E0319F8DAAA0079D978 /* STDbHandle.m */,
+				44075B081B2DC75500714895 /* libsqlite3.dylib */,
+				44075B031B2DC54200714895 /* STDbObjectTests.m */,
+				44075B051B2DC6CA00714895 /* User.h */,
+				44075B061B2DC6CA00714895 /* User.m */,
+				44075AF81B2DC33D00714895 /* Supporting Files */,
 			);
-			path = Private;
+			path = "STDbKit Tests";
 			sourceTree = "<group>";
 		};
-		3199D01B1A031A7300BDD645 /* libs */ = {
+		44075AF81B2DC33D00714895 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				3199D01C1A031A8900BDD645 /* libsqlite3.dylib */,
+				44075AF91B2DC33D00714895 /* Info.plist */,
 			);
-			name = libs;
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		44075B181B2EFB0D00714895 /* Category */ = {
+			isa = PBXGroup;
+			children = (
+				44075B191B2EFB0D00714895 /* NSData+STDbHandle.h */,
+				44075B1A1B2EFB0D00714895 /* NSData+STDbHandle.m */,
+				44075B1B1B2EFB0D00714895 /* NSDate+STDbHandle.h */,
+				44075B1C1B2EFB0D00714895 /* NSDate+STDbHandle.m */,
+				44075B1D1B2EFB0D00714895 /* NSObject+STDbHandle.h */,
+				44075B1E1B2EFB0D00714895 /* NSObject+STDbHandle.m */,
+				44075B1F1B2EFB0D00714895 /* NSString+STDbHandle.h */,
+				44075B201B2EFB0D00714895 /* NSString+STDbHandle.m */,
+			);
+			path = Category;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
-/* Begin PBXHeadersBuildPhase section */
-		315A0DDD19F8D9F80079D978 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				315A0E0719F8DAAA0079D978 /* STDbKit.h in Headers */,
-				315A0E1319F8DC4E0079D978 /* STDb.h in Headers */,
-				315A0E0B19F8DAAA0079D978 /* STDbHandle.h in Headers */,
-				315A0E1019F8DBB80079D978 /* STDbVersion.h in Headers */,
-				315A0E0819F8DAAA0079D978 /* STDbObject.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXHeadersBuildPhase section */
-
 /* Begin PBXNativeTarget section */
-		315A0DDF19F8D9F80079D978 /* STDbKit */ = {
+		44075ABE1B2DC16C00714895 /* STDbKit */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 315A0DF319F8D9F80079D978 /* Build configuration list for PBXNativeTarget "STDbKit" */;
+			buildConfigurationList = 44075AD01B2DC16C00714895 /* Build configuration list for PBXNativeTarget "STDbKit" */;
 			buildPhases = (
-				315A0DDB19F8D9F80079D978 /* Sources */,
-				315A0DDC19F8D9F80079D978 /* Frameworks */,
-				315A0DDD19F8D9F80079D978 /* Headers */,
-				315A0DDE19F8D9F80079D978 /* Resources */,
+				44075ABB1B2DC16C00714895 /* Sources */,
+				44075ABC1B2DC16C00714895 /* Frameworks */,
+				44075ABD1B2DC16C00714895 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -134,8 +176,26 @@
 			);
 			name = STDbKit;
 			productName = STDbKit;
-			productReference = 315A0DE019F8D9F80079D978 /* STDbKit.framework */;
-			productType = "com.apple.product-type.framework";
+			productReference = 44075ABF1B2DC16C00714895 /* libSTDbKit.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		44075AF51B2DC33D00714895 /* STDbKit Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 44075AFF1B2DC33D00714895 /* Build configuration list for PBXNativeTarget "STDbKit Tests" */;
+			buildPhases = (
+				44075AF21B2DC33D00714895 /* Sources */,
+				44075AF31B2DC33D00714895 /* Frameworks */,
+				44075AF41B2DC33D00714895 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				44075AFE1B2DC33D00714895 /* PBXTargetDependency */,
+			);
+			name = "STDbKit Tests";
+			productName = "STDbKit Tests";
+			productReference = 44075AF61B2DC33D00714895 /* STDbKit Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -146,8 +206,11 @@
 				LastUpgradeCheck = 0610;
 				ORGANIZATIONNAME = yls;
 				TargetAttributes = {
-					315A0DDF19F8D9F80079D978 = {
-						CreatedOnToolsVersion = 6.1;
+					44075ABE1B2DC16C00714895 = {
+						CreatedOnToolsVersion = 6.3;
+					};
+					44075AF51B2DC33D00714895 = {
+						CreatedOnToolsVersion = 6.3;
 					};
 				};
 			};
@@ -164,13 +227,14 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				315A0DDF19F8D9F80079D978 /* STDbKit */,
+				44075ABE1B2DC16C00714895 /* STDbKit */,
+				44075AF51B2DC33D00714895 /* STDbKit Tests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		315A0DDE19F8D9F80079D978 /* Resources */ = {
+		44075AF41B2DC33D00714895 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -180,17 +244,38 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		315A0DDB19F8D9F80079D978 /* Sources */ = {
+		44075ABB1B2DC16C00714895 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				315A0E0919F8DAAA0079D978 /* STDbObject.m in Sources */,
-				315A0E0C19F8DAAA0079D978 /* STDbHandle.m in Sources */,
-				315A0E1419F8DC4E0079D978 /* STDb.m in Sources */,
+				44075B271B2EFB0D00714895 /* NSString+STDbHandle.m in Sources */,
+				44075B261B2EFB0D00714895 /* NSObject+STDbHandle.m in Sources */,
+				44075B241B2EFB0D00714895 /* NSData+STDbHandle.m in Sources */,
+				44075B281B2EFB0D00714895 /* STDbQueue.m in Sources */,
+				44075B251B2EFB0D00714895 /* NSDate+STDbHandle.m in Sources */,
+				44075AF01B2DC2EF00714895 /* STDbObject.m in Sources */,
+				44075B171B2EF83700714895 /* STDb.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		44075AF21B2DC33D00714895 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				44075B071B2DC6CA00714895 /* User.m in Sources */,
+				44075B041B2DC54200714895 /* STDbObjectTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		44075AFE1B2DC33D00714895 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 44075ABE1B2DC16C00714895 /* STDbKit */;
+			targetProxy = 44075AFD1B2DC33D00714895 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		315A0DD319F8D95F0079D978 /* Debug */ = {
@@ -269,45 +354,79 @@
 			};
 			name = Release;
 		};
-		315A0DF419F8D9F80079D978 /* Debug */ = {
+		44075AD11B2DC16C00714895 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = STDbKit/Info.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"${ROOTSRC}",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
 			};
 			name = Debug;
 		};
-		315A0DF519F8D9F80079D978 /* Release */ = {
+		44075AD21B2DC16C00714895 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = STDbKit/Info.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_NO_COMMON_BLOCKS = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"${ROOTSRC}",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		44075B001B2DC33D00714895 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "STDbKit Tests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		44075B011B2DC33D00714895 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = "STDbKit Tests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
 		};
@@ -323,11 +442,20 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		315A0DF319F8D9F80079D978 /* Build configuration list for PBXNativeTarget "STDbKit" */ = {
+		44075AD01B2DC16C00714895 /* Build configuration list for PBXNativeTarget "STDbKit" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				315A0DF419F8D9F80079D978 /* Debug */,
-				315A0DF519F8D9F80079D978 /* Release */,
+				44075AD11B2DC16C00714895 /* Debug */,
+				44075AD21B2DC16C00714895 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		44075AFF1B2DC33D00714895 /* Build configuration list for PBXNativeTarget "STDbKit Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				44075B001B2DC33D00714895 /* Debug */,
+				44075B011B2DC33D00714895 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

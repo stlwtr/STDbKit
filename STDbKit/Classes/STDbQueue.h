@@ -1,8 +1,8 @@
 //
-//  STDbKit.h
-//  STDbObject
+//  STDbQueue.h
+//  STDbKit
 //
-//  Created by yls on 13-12-2.
+//  Created by stlwtr on 15/6/15.
 //
 // Version 1.0.4
 //
@@ -28,17 +28,25 @@
 // QQ: 603291699
 //
 
-#ifndef STDbObject_STDbKit_h
-#define STDbObject_STDbKit_h
+#import <Foundation/Foundation.h>
 
-#import "STDb.h"
-#import "STDbQueue.h"
-#import "STDbObject.h"
+@class STDb;
 
-//! Project version number for STDbKit.
-FOUNDATION_EXPORT double STDbKitVersionNumber;
+@interface STDbQueue : NSObject
 
-//! Project version string for STDbKit.
-FOUNDATION_EXPORT const unsigned char STDbKitVersionString[];
+/**
+ *	@brief	数据库路径，不存在自动创建
+ */
++ (instancetype)dbWithPath:(NSString *)path;
 
-#endif
+/**
+ *	@brief	数据库路径
+ */
+@property (nonatomic, strong, readonly) NSString *dbPath;
+
+/**
+ *	@brief	多线程执行方法
+ */
+- (void)execute:(void (^)(STDb *db))block;
+
+@end

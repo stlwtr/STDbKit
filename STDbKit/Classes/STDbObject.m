@@ -23,11 +23,20 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
+//
+// emailto: 2008.yls@163.com
+// QQ: 603291699
+//
 
 #import "STDbObject.h"
-#import "STDbHandle.h"
 #import "STDbVersion.h"
+#import "STDbQueue.h"
+#import "STDb.h"
+
 #import <objc/runtime.h>
+
+#import "NSDate+STDbHandle.h"
+#import "NSData+STDbHandle.h"
 
 @implementation STDbObject
 
@@ -36,6 +45,16 @@
     self = [super init];
     if (self) {
         self.expireDate = [NSDate distantFuture];
+        ___id__ = -1;
+    }
+    return self;
+}
+
+- (instancetype)initWithPrimaryValue:(NSInteger)_id;
+{
+    self = [self init];
+    if (self) {
+        ___id__ = _id;
     }
     return self;
 }
@@ -46,21 +65,27 @@
 - (BOOL)insertToDb
 {
     @synchronized(self){
-        return [[[STDbHandle alloc] init] insertDbObject:self];
+        return [[STDb defaultDb] insertDbObject:self];
     }
 }
+- (BOOL)insertToDb:(STDb *)db
+{
+    return [db insertDbObject:self];
+}
 
-/**
- *	@brief	更新某些数据
- *
- *	@param 	where 	条件
- *          例：name='xue zhang' and sex='男'
- *
- */
++ (NSInteger)lastRowId;
+{
+    return [[STDb defaultDb] lastRowIdWithClass:[self class]];
+}
++ (NSInteger)lastRowIdInDb:(STDb *)db;
+{
+    return [db lastRowIdWithClass:[self class]];
+}
+
 - (BOOL)updateToDbsWhere:(NSString *)where NS_DEPRECATED(10_0, 10_4, 2_0, 2_0)
 {
     @synchronized(self){
-        return [[[STDbHandle alloc] init] updateDbObject:self condition:where];
+        return [[STDb defaultDb] updateDbObject:self condition:where];
     }
 }
 
@@ -70,20 +95,27 @@
 - (BOOL)replaceToDb;
 {
     @synchronized(self){
-        return [[[STDbHandle alloc] init] replaceDbObject:self];
+        return [[STDb defaultDb] replaceDbObject:self];
+    }
+}
+- (BOOL)replaceToDb:(STDb *)db;
+{
+    @synchronized(self){
+        return [db replaceDbObject:self];
     }
 }
 
-/**
- *	@brief	更新数据到数据库中
- *
- *	@return	更新成功YES,否则NO
- */
-- (BOOL)updatetoDb
+- (BOOL)updateToDb
+{
+    @synchronized(self){
+        return [self updateToDb:[STDb defaultDb]];
+    }
+}
+- (BOOL)updateToDb:(STDb *)db
 {
     @synchronized(self){
         NSString *condition = [NSString stringWithFormat:@"%@=%@", kDbId, @(self.__id__)];
-        return [[[STDbHandle alloc] init] updateDbObject:self condition:condition];
+        return [db updateDbObject:self condition:condition];
     }
 }
 
@@ -95,12 +127,18 @@
 - (BOOL)removeFromDb
 {
     @synchronized(self){
+        return [self removeFromDb:[STDb defaultDb]];
+    }
+}
+- (BOOL)removeFromDb:(STDb *)db
+{
+    @synchronized(self){
         NSMutableArray *subDbObjects = [NSMutableArray arrayWithCapacity:0];
         [self subDbObjects:subDbObjects];
         
         for (STDbObject *dbObj in subDbObjects) {
             NSString *where = [NSString stringWithFormat:@"%@=%@", kDbId, @(dbObj.__id__)];
-            [[[STDbHandle alloc] init] removeDbObjects:[dbObj class] condition:where];
+            [db removeDbObjects:[dbObj class] condition:where];
         }
         return YES;
     }
@@ -160,7 +198,13 @@
 + (BOOL)existDbObjectsWhere:(NSString *)where
 {
     @synchronized(self){
-        NSArray *objs = [[[STDbHandle alloc] init] selectDbObjects:[self class] condition:where orderby:nil];
+        return [self existDbObjectsWhere:where db:[STDb defaultDb]];
+    }
+}
++ (BOOL)existDbObjectsWhere:(NSString *)where db:(STDb *)db
+{
+    @synchronized(self){
+        NSArray *objs = [db selectDbObjects:[self class] condition:where orderby:nil];
         if ([objs count] > 0) {
             return YES;
         }
@@ -179,8 +223,13 @@
  */
 + (BOOL)removeDbObjectsWhere:(NSString *)where
 {
+    return [self removeDbObjectsWhere:where db:[STDb defaultDb]];
+}
++ (BOOL)removeDbObjectsWhere:(NSString *)where db:(STDb *)db
+{
     @synchronized(self){
-        return [[[STDbHandle alloc] init] removeDbObjects:[self class] condition:where];
+        return [db removeDbObjects:[self class] condition:where];
+        return NO;
     }
 }
 
@@ -198,8 +247,12 @@
  */
 + (NSArray *)dbObjectsWhere:(NSString *)where orderby:(NSString *)orderby
 {
+    return [self dbObjectsWhere:where orderby:orderby db:[STDb defaultDb]];
+}
++ (NSArray *)dbObjectsWhere:(NSString *)where orderby:(NSString *)orderby db:(STDb *)db
+{
     @synchronized(self){
-        return [[[STDbHandle alloc] init] selectDbObjects:[self class] condition:where orderby:orderby];
+        return [db selectDbObjects:[self class] condition:where orderby:orderby];
     }
 }
 
@@ -211,17 +264,13 @@
 + (NSMutableArray *)allDbObjects
 {
     @synchronized(self){
-        return [[[STDbHandle alloc] init] selectDbObjects:[self class] condition:@"all" orderby:nil];
+        return [[STDb defaultDb] selectDbObjects:[self class] condition:@"all" orderby:nil];
     }
 }
-
-/*
- * 查看最后插入数据的行号
- */
-+ (NSInteger)lastRowId;
++ (NSMutableArray *)allDbObjectsInDb:(STDb *)db
 {
     @synchronized(self){
-        return [STDbHandle lastRowIdWithClass:self];
+        return [db selectDbObjects:[self class] condition:@"all" orderby:nil];
     }
 }
 
@@ -255,7 +304,7 @@
 /**
  *	@brief	objc from dictionary
  */
-- (STDbObject *)objcFromDictionary:(NSDictionary *)dict;
++ (STDbObject *)objcFromDictionary:(NSDictionary *)dict;
 {
     @synchronized(self){
         STDbObject *obj = [[[self class] alloc] init];

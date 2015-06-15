@@ -23,6 +23,10 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
+//
+// emailto: 2008.yls@163.com
+// QQ: 603291699
+//
 
 #import <Foundation/Foundation.h>
 
@@ -31,7 +35,10 @@
 
 #define key( __p__ ) [NSString stringWithFormat:@"%@%@", __p__, kDbKeySuffix]
 
+@class STDb;
+
 @protocol STDbObject
+
 
 @required
 
@@ -59,12 +66,14 @@
  *	@brief	插入到数据库中
  */
 - (BOOL)insertToDb;
+- (BOOL)insertToDb:(STDb *)db;
 
 /**
  *	@brief	保证数据唯一
  */
 - (BOOL)replaceToDb;
-    
+- (BOOL)replaceToDb:(STDb *)db;
+
 /**
  *	@brief	更新某些数据
  *
@@ -79,7 +88,8 @@
  *
  *	@return	更新成功YES,否则NO
  */
-- (BOOL)updatetoDb;
+- (BOOL)updateToDb;
+- (BOOL)updateToDb:(STDb *)db;
 
 /**
  *	@brief	从数据库删除对象
@@ -87,6 +97,7 @@
  *	@return	更新成功YES,否则NO
  */
 - (BOOL)removeFromDb;
+- (BOOL)removeFromDb:(STDb *)db;
 
 /**
  *	@brief	查看是否包含对象
@@ -97,6 +108,7 @@
  *	@return	包含YES,否则NO
  */
 + (BOOL)existDbObjectsWhere:(NSString *)where;
++ (BOOL)existDbObjectsWhere:(NSString *)where db:(STDb *)db;
 
 /**
  *	@brief	删除某些数据
@@ -108,6 +120,7 @@
  *	@return 成功YES,否则NO
  */
 + (BOOL)removeDbObjectsWhere:(NSString *)where;
++ (BOOL)removeDbObjectsWhere:(NSString *)where db:(STDb *)db;
 
 /**
  *	@brief	根据条件取出某些数据
@@ -122,6 +135,7 @@
  *	@return	数据
  */
 + (NSMutableArray *)dbObjectsWhere:(NSString *)where orderby:(NSString *)orderby;
++ (NSMutableArray *)dbObjectsWhere:(NSString *)where orderby:(NSString *)orderby db:(STDb *)db;
 
 /**
  *	@brief	取出所有数据
@@ -129,11 +143,13 @@
  *	@return	数据
  */
 + (NSMutableArray *)allDbObjects;
++ (NSMutableArray *)allDbObjectsInDb:(STDb *)db;
 
 /*
  * 查看最后插入数据的行号
  */
 + (NSInteger)lastRowId;
++ (NSInteger)lastRowIdInDb:(STDb *)db;
 
 @end
 
@@ -159,6 +175,8 @@
  */
 @property (strong, nonatomic) NSDate *expireDate;
 
+- (instancetype)initWithPrimaryValue:(NSInteger)_id;
+
 /**
  *	@brief	objc to dictionary
  */
@@ -167,7 +185,7 @@
 /**
  *	@brief	objc from dictionary
  */
-- (STDbObject *)objcFromDictionary:(NSDictionary *)dict;
++ (STDbObject *)objcFromDictionary:(NSDictionary *)dict;
 
 @end
 

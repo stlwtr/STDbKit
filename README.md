@@ -22,13 +22,17 @@
 2.0.2 更新内容（2014-02-18更新）
     1. add objc to dictionary method 
     2. add dictionary to objc method
+2.2.1 更新内容（2015-06-15）
+	1. 添加多线程支持
+	2. 多db文件支持
 ```
 
 ## 2. 使用方法
 
 ```
 方法一：导入源码
-方法二：制作STDbKit.framework并引入，可从附件中下载
+方法二：项目支持cocoapods，在Podfile中添加pod STDbKit
+方法三：制作STDbKit.framework并引入，可从附件中下载
 
 支持模拟器和真机STDbKit.framework制作方法:
    1. 分别在device和模拟器下运行
@@ -49,7 +53,9 @@
 
 #####  1. 声明一个类，这里新建类User
 ```
-#import "STDbKit/STDbObject.h"
+#import "STDbObject.h"
+#import "STDbQueue.h"
+#import "STDb.h"
 
  @interface User : STDbObject
 
@@ -63,26 +69,47 @@
 ```
 #####  2. 插入到数据库
 ```
-// 初始化
- User *user = [[User alloc] init];
- user.name = @"admin";
- user.age = 20;
- user.sex = @1;
- user._id = 0;
- // 插入到数据库
- [user insertToDb];
+方式一：
+STDbQueue *dbQueue = [STDbQueue dbWithPath:@"stdb_test/test_queue.sqlite"];
+[dbQueue execute:^(STDb *db) {
+	User *user = [[User alloc] initWithPrimaryValue:8];
+	user.name = @"yls";
+	[db insertDbObject:user];
+}];
+方式二：
+STDbQueue *dbQueue = [STDbQueue dbWithPath:@"stdb_test/test_queue.sqlite"];
+[dbQueue execute:^(STDb *db) {
+	User *user = [[User alloc] initWithPrimaryValue:8];
+	user.name = @"yls";
+	[user insertToDb:db];
+}];
+方式三：
+STDbQueue *dbQueue = [STDbQueue dbWithPath:@"stdb_test/test_queue.sqlite"];
+[dbQueue execute:^(STDb *db) {
+	[db executeUpdate:@"insert into User(?) values(?)" dictionaryArgs:@{@"name" : @"aaa"}];
+}];
+
 ```
 #####  3. 查询
 ```
 // 取出所有用户
+方式一：
 NSArray *users = [User allDbObjects];
-
+方式二：
+[dbQueue execute:^(STDb *db) {
+	[db executeQuery:@"select * from User" resultBlock:^(NSArray *resultArray) {
+            NSLog(@"%@", resultArray);
+	}];
+}];
+    
 // 按条件取出数据
 NSArray *users = [User dbObjectsWhere:@"_id=11" orderby:nil];
+
 ```
 #####  4. 修改
 ```
 // 首先从数据库中取出要修改的对象
+方式一：
 NSArray *users = [User dbObjectsWhere:@"_id=11" orderby:nil];
 if ([users count] > 0) {
    User *user = users[0];
@@ -90,14 +117,23 @@ if ([users count] > 0) {
    // 更新到数据库
    [user updateToDb];
 }
+方式二：
+[dbQueue execute:^(STDb *db) {
+	[user updateToDb:db];
+}];
 ```
 #####  5. 删除
 ```
 // 要删除的数据
+方式一：
 User *user = _users[row];
 // 从数据库中删除数据
 [user removeFromDb];
-    
+方式二：
+[dbQueue execute:^(STDb *db) {
+	[db executeQuery:@"delete from User where __id__=8"];
+	}];
+}];
 // 批量删除
 [User removeDbObjectsWhere:@"_id=%d", 4];
 ```
