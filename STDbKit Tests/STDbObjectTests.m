@@ -102,4 +102,20 @@
     }];
 }
 
+- (void)testUpgradeDb {
+    [_dbQueue execute:^(STDb *db) {
+        BOOL rc = [db setDbVersion:1 toDbObjectClass:[User class]];
+        XCTAssertTrue(rc);
+        NSInteger localVersion = [db localVersionForClass:[User class]];
+        XCTAssertEqual(localVersion, 1);
+    }];
+}
+
+- (void)testProperty {
+    [_dbQueue execute:^(STDb *db) {
+//        [db propertyForClass:[User class]];
+        [db upgradeTableIfNeed:[User class]];
+    }];
+}
+
 @end

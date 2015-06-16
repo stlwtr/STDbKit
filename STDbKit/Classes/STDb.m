@@ -4,7 +4,7 @@
 //
 //  Created by yls on 13-12-5.
 //
-// Version 1.0.4
+// Version 2.2.1
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -55,11 +55,8 @@ NSString *STDbDefaultName = @"stdb_default.sqlite";
 #define STDBLog(...)
 #endif
 
-
-
 objc_property_t * st_class_copyPropertyList(Class cls, unsigned int *count);
 static int STDBBusyHandler(void *f, int count);
-
 
 enum {
     DBObjAttrInt,
@@ -98,37 +95,6 @@ enum {
 + (BOOL)setCurrentDbPath:(NSString *)dbPath;
 {
     return NO;
-    dbPath = [dbPath stringByStandardizingPath];
-    if (![dbPath isAbsolutePath]) {
-        NSString *docPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
-        dbPath = [docPath stringByAppendingFormat:@"/%@", dbPath];
-    }
-    
-    NSString *pathExt = [dbPath pathExtension];
-    NSString *filePath = dbPath;
-    NSString *dirPath = dbPath;
-    if (pathExt.length != 0) {
-        dirPath = [dbPath stringByDeletingLastPathComponent];
-    } else {
-        filePath = [dbPath stringByAppendingPathComponent:STDbDefaultName];
-    }
-    
-    NSError *error;
-    if (![[NSFileManager defaultManager] fileExistsAtPath:dirPath]) {
-        BOOL rc = [[NSFileManager defaultManager] createDirectoryAtPath:dirPath withIntermediateDirectories:YES attributes:nil error:&error];
-        if (!rc) {
-            NSLog(@"%@", error);
-            return NO;
-        }
-    }
-    if (![[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
-        BOOL rc = [[NSFileManager defaultManager] createFileAtPath:filePath contents:nil attributes:nil];
-        if (!rc) {
-            NSLog(@"create file %@ error.", filePath);
-            return NO;
-        }
-    }
-    return YES;
 }
 
 #pragma mark - path 
@@ -185,7 +151,7 @@ enum {
 
 + (instancetype)defaultDb;
 {
-    return [STDb dbWithPath:nil];
+    return [STDb dbWithPath:[STDb defaultDbPath]];
 }
 
 - (NSString *)dbPath
@@ -218,139 +184,6 @@ enum {
 - (BOOL)executeUpdate:(NSString*)query dictionaryArgs:(NSDictionary *)dictionaryArgs {
     BOOL result = [self executeUpdate:query error:nil dictionaryArgs:dictionaryArgs];
     return result;
-}
-
-#pragma mark - STDbObject method
-
-- (BOOL)insertDbObject:(STDbObject *)obj forced:(BOOL)forced
-{
-    @synchronized(self){
-        if (![self isOpened]) {
-            [self openDb];
-        }
-        
-        NSString *tableName = NSStringFromClass(obj.class);
-        
-        if (![self sqlite_tableExist:obj.class]) {
-            [self createDbTable:obj.class];
-        }
-        
-        if (![self isOpened]) {
-            [self openDb];
-        }
-        
-        NSMutableArray *propertyArr = [NSMutableArray arrayWithCapacity:0];
-        propertyArr = [NSMutableArray arrayWithArray:[self sqlite_columns:obj.class]];
-        
-        NSUInteger argNum = [propertyArr count];
-        
-        NSString *insertSql = forced ? @"insert" : @"replace";
-        NSMutableString *sql_NSString = [[NSMutableString alloc] initWithFormat:@"%@ into %@ values(?)", insertSql,tableName];
-        NSRange range = [sql_NSString rangeOfString:@"?"];
-        for (int i = 0; i < argNum - 1; i++) {
-            [sql_NSString insertString:@",?" atIndex:range.location + 1];
-        }
-        
-        sqlite3_stmt *stmt = NULL;
-        STDb *db = self;
-        sqlite3 *sqlite3DB = db.sqlite3DB;
-        
-        // obj包含的STDbObject对象
-        //    NSMutableArray *subDbObjects = [NSMutableArray arrayWithCapacity:0];
-        
-        const char *errmsg = NULL;
-        if (sqlite3_prepare_v2(sqlite3DB, [sql_NSString UTF8String], -1, &stmt, &errmsg) == SQLITE_OK) {
-            
-            NSInteger dbId = 0;
-            for (int i = 1; i <= argNum; i++) {
-                NSString * key = propertyArr[i - 1][@"title"];
-                
-                if ([key isEqualToString:kDbId]) {
-                    if (obj.__id__ == -1) {
-                        continue;
-                    }
-                }
-                
-                NSString *column_type_string = propertyArr[i - 1][@"type"];
-                
-                id value;
-                NSInteger rowId = [self lastRowIdWithClass:obj.class];
-                dbId = rowId + 1;
-                if ([key hasPrefix:DBParentPrefix]) {
-                    key = [key stringByReplacingOccurrencesOfString:DBParentPrefix withString:@""];
-                    
-                    value = [[NSString alloc] initWithFormat:@"%@", @(rowId+1)];
-                } else {
-                    value = [obj valueForKey:key];
-                    NSObject *object = (NSObject *)value;
-                    if ([object isKindOfClass:[STDbObject class]]) {
-                        NSInteger subDbRowId = [self lastRowIdWithClass:object.class];
-                        value = [[NSString alloc] initWithFormat:@"%@", @(subDbRowId+1)];
-                        
-                        STDbObject *dbObj = (STDbObject *)object;
-                        [dbObj setValue:@(rowId+1) forKey:kPId];
-                        [self insertDbObject:dbObj forced:YES];
-                    }
-                }
-                
-                if ([column_type_string isEqualToString:@"blob"]) {
-                    if (!value || value == [NSNull null] || [value isEqual:@""]) {
-                        sqlite3_bind_null(stmt, i);
-                    } else {
-                        NSData *data = [NSData dataWithData:value];
-                        NSUInteger len = [data length];
-                        const void *bytes = [data bytes];
-                        sqlite3_bind_blob(stmt, i, bytes, (int)len, NULL);
-                    }
-                    
-                } else if ([column_type_string isEqualToString:@"text"]) {
-                    if (!value || value == [NSNull null] || [value isEqual:@""]) {
-                        sqlite3_bind_null(stmt, i);
-                    } else {
-                        objc_property_t property_t = class_getProperty(obj.class, [key UTF8String]);
-                        
-                        value = [self valueForDbObjc_property_t:property_t dbValue:value _id:rowId];
-                        NSString *column_value = [NSString stringWithFormat:@"%@", value];
-                        sqlite3_bind_text(stmt, i, [column_value UTF8String], -1, SQLITE_STATIC);
-                    }
-                    
-                } else if ([column_type_string isEqualToString:@"real"]) {
-                    if (!value || value == [NSNull null] || [value isEqual:@""]) {
-                        sqlite3_bind_null(stmt, i);
-                    } else {
-                        id column_value = value;
-                        sqlite3_bind_double(stmt, i, [column_value doubleValue]);
-                    }
-                }
-                else if ([column_type_string isEqualToString:@"integer"]) {
-                    if (!value || value == [NSNull null] || [value isEqual:@""]) {
-                        sqlite3_bind_null(stmt, i);
-                    } else {
-                        id column_value = value;
-                        sqlite3_bind_int(stmt, i, [column_value intValue]);
-                    }
-                }
-            }
-            int rc = sqlite3_step(stmt);
-            if (obj.__id__ == -1) {
-                [obj setValue:@(dbId) forKeyPath:@"__id__"];
-            }
-            if ((rc != SQLITE_DONE) && (rc != SQLITE_ROW)) {
-                NSString *insertSql = forced ? @"insert" : @"replace";
-                fprintf(stderr,"%s dbObject fail: %s\n", insertSql.UTF8String, errmsg);
-                sqlite3_finalize(stmt);
-                stmt = NULL;
-                //                [self closeDb];
-                
-                return NO;
-            }
-        }
-        sqlite3_finalize(stmt);
-        stmt = NULL;
-        //        [self closeDb];
-        
-        return YES;
-    }
 }
 
 #pragma mark - private method
@@ -1062,6 +895,14 @@ static int STDBBusyHandler(void *f, int count) {
     if (![self isOpened]) {
         [self openDb];
     }
+
+    NSString *tableName = NSStringFromClass(aClass);
+    
+    if (![self sqlite_tableExist:aClass]) {
+        [self createDbTable:aClass];
+    }
+    
+    [self upgradeTableIfNeed:aClass];
     
     // 清除过期数据
     [self cleanExpireDbObject:aClass];
@@ -1069,7 +910,6 @@ static int STDBBusyHandler(void *f, int count) {
     sqlite3_stmt *stmt = NULL;
     NSMutableArray *array = nil;
     NSMutableString *selectstring = nil;
-    NSString *tableName = NSStringFromClass(aClass);
     
     selectstring = [[NSMutableString alloc] initWithFormat:@"select %@ from %@", @"*", tableName];
     if (condition != nil || [condition length] != 0) {
@@ -1117,18 +957,14 @@ static int STDBBusyHandler(void *f, int count) {
                     }
                 } else if ([obj_column_decltype isEqualToString:@"integer"]) {
                     int value = sqlite3_column_int(stmt, i);
-                    if (&value != NULL) {
-                        column_value = [NSNumber numberWithInt: value];
-                        id objValue = [self valueForObjc_property_t:property_t dbValue:column_value];
-                        [obj setValue:objValue forKey:key];
-                    }
+                    column_value = [NSNumber numberWithInt: value];
+                    id objValue = [self valueForObjc_property_t:property_t dbValue:column_value];
+                    [obj setValue:objValue forKey:key];
                 } else if ([obj_column_decltype isEqualToString:@"real"]) {
                     double value = sqlite3_column_double(stmt, i);
-                    if (&value != NULL) {
-                        column_value = [NSNumber numberWithDouble:value];
-                        id objValue = [self valueForObjc_property_t:property_t dbValue:column_value];
-                        [obj setValue:objValue forKey:key];
-                    }
+                    column_value = [NSNumber numberWithDouble:value];
+                    id objValue = [self valueForObjc_property_t:property_t dbValue:column_value];
+                    [obj setValue:objValue forKey:key];
                 } else if ([obj_column_decltype isEqualToString:@"blob"]) {
                     const void *databyte = sqlite3_column_blob(stmt, i);
                     if (databyte != NULL) {
@@ -1165,15 +1001,24 @@ static int STDBBusyHandler(void *f, int count) {
 - (BOOL)updateDbObject:(STDbObject *)obj condition:(NSString *)condition
 {
     //    @synchronized(self){
+    
     if (![self isOpened]) {
         [self openDb];
     }
+    
+    NSString *tableName = NSStringFromClass(obj.class);
+    
+    if (![self sqlite_tableExist:obj.class]) {
+        [self createDbTable:obj.class];
+    }
+    
+    [self upgradeTableIfNeed:obj.class];
     
     NSMutableArray *propertyTypeArr = [NSMutableArray arrayWithArray:[self sqlite_columns:obj.class]];
     
     sqlite3_stmt *stmt = NULL;
     int rc = -1;
-    NSString *tableName = NSStringFromClass(obj.class);
+
     NSMutableArray *propertyArr = [NSMutableArray arrayWithCapacity:0];
     sqlite3 *sqlite3DB = [self sqlite3DB];
     
@@ -1286,6 +1131,135 @@ static int STDBBusyHandler(void *f, int count) {
     }
 }
 
+- (BOOL)insertDbObject:(STDbObject *)obj forced:(BOOL)forced
+{
+    @synchronized(self){
+        if (![self isOpened]) {
+            [self openDb];
+        }
+        
+        NSString *tableName = NSStringFromClass(obj.class);
+        
+        if (![self sqlite_tableExist:obj.class]) {
+            [self createDbTable:obj.class];
+        }
+        
+        [self upgradeTableIfNeed:obj.class];
+        
+        NSMutableArray *propertyArr = [NSMutableArray arrayWithCapacity:0];
+        propertyArr = [NSMutableArray arrayWithArray:[self sqlite_columns:obj.class]];
+        
+        NSUInteger argNum = [propertyArr count];
+        
+        NSString *insertSql = forced ? @"insert" : @"replace";
+        NSMutableString *sql_NSString = [[NSMutableString alloc] initWithFormat:@"%@ into %@ values(?)", insertSql,tableName];
+        NSRange range = [sql_NSString rangeOfString:@"?"];
+        for (int i = 0; i < argNum - 1; i++) {
+            [sql_NSString insertString:@",?" atIndex:range.location + 1];
+        }
+        
+        sqlite3_stmt *stmt = NULL;
+        STDb *db = self;
+        sqlite3 *sqlite3DB = db.sqlite3DB;
+        
+        // obj包含的STDbObject对象
+        //    NSMutableArray *subDbObjects = [NSMutableArray arrayWithCapacity:0];
+        
+        const char *errmsg = NULL;
+        if (sqlite3_prepare_v2(sqlite3DB, [sql_NSString UTF8String], -1, &stmt, &errmsg) == SQLITE_OK) {
+            
+            NSInteger dbId = 0;
+            for (int i = 1; i <= argNum; i++) {
+                NSString * key = propertyArr[i - 1][@"title"];
+                
+                if ([key isEqualToString:kDbId]) {
+                    if (obj.__id__ == -1) {
+                        continue;
+                    }
+                }
+                
+                NSString *column_type_string = propertyArr[i - 1][@"type"];
+                
+                id value;
+                NSInteger rowId = [self lastRowIdWithClass:obj.class];
+                dbId = rowId + 1;
+                if ([key hasPrefix:DBParentPrefix]) {
+                    key = [key stringByReplacingOccurrencesOfString:DBParentPrefix withString:@""];
+                    
+                    value = [[NSString alloc] initWithFormat:@"%@", @(rowId+1)];
+                } else {
+                    value = [obj valueForKey:key];
+                    NSObject *object = (NSObject *)value;
+                    if ([object isKindOfClass:[STDbObject class]]) {
+                        NSInteger subDbRowId = [self lastRowIdWithClass:object.class];
+                        value = [[NSString alloc] initWithFormat:@"%@", @(subDbRowId+1)];
+                        
+                        STDbObject *dbObj = (STDbObject *)object;
+                        [dbObj setValue:@(rowId+1) forKey:kPId];
+                        [self insertDbObject:dbObj forced:YES];
+                    }
+                }
+                
+                if ([column_type_string isEqualToString:@"blob"]) {
+                    if (!value || value == [NSNull null] || [value isEqual:@""]) {
+                        sqlite3_bind_null(stmt, i);
+                    } else {
+                        NSData *data = [NSData dataWithData:value];
+                        NSUInteger len = [data length];
+                        const void *bytes = [data bytes];
+                        sqlite3_bind_blob(stmt, i, bytes, (int)len, NULL);
+                    }
+                    
+                } else if ([column_type_string isEqualToString:@"text"]) {
+                    if (!value || value == [NSNull null] || [value isEqual:@""]) {
+                        sqlite3_bind_null(stmt, i);
+                    } else {
+                        objc_property_t property_t = class_getProperty(obj.class, [key UTF8String]);
+                        
+                        value = [self valueForDbObjc_property_t:property_t dbValue:value _id:rowId];
+                        NSString *column_value = [NSString stringWithFormat:@"%@", value];
+                        sqlite3_bind_text(stmt, i, [column_value UTF8String], -1, SQLITE_STATIC);
+                    }
+                    
+                } else if ([column_type_string isEqualToString:@"real"]) {
+                    if (!value || value == [NSNull null] || [value isEqual:@""]) {
+                        sqlite3_bind_null(stmt, i);
+                    } else {
+                        id column_value = value;
+                        sqlite3_bind_double(stmt, i, [column_value doubleValue]);
+                    }
+                }
+                else if ([column_type_string isEqualToString:@"integer"]) {
+                    if (!value || value == [NSNull null] || [value isEqual:@""]) {
+                        sqlite3_bind_null(stmt, i);
+                    } else {
+                        id column_value = value;
+                        sqlite3_bind_int(stmt, i, [column_value intValue]);
+                    }
+                }
+            }
+            int rc = sqlite3_step(stmt);
+            if (obj.__id__ == -1) {
+                [obj setValue:@(dbId) forKeyPath:@"__id__"];
+            }
+            if ((rc != SQLITE_DONE) && (rc != SQLITE_ROW)) {
+                NSString *insertSql = forced ? @"insert" : @"replace";
+                fprintf(stderr,"%s dbObject fail: %s\n", insertSql.UTF8String, errmsg);
+                sqlite3_finalize(stmt);
+                stmt = NULL;
+                //                [self closeDb];
+                
+                return NO;
+            }
+        }
+        sqlite3_finalize(stmt);
+        stmt = NULL;
+        //        [self closeDb];
+        
+        return YES;
+    }
+}
+
 - (BOOL)removeDbObjects:(Class)aClass condition:(NSString *)condition
 {
     @synchronized(self){
@@ -1293,12 +1267,18 @@ static int STDBBusyHandler(void *f, int count) {
             [self openDb];
         }
         
+        NSString *tableName = NSStringFromClass(aClass);
+        
+        if (![self sqlite_tableExist:aClass]) {
+            [self createDbTable:aClass];
+        }
+        
+        [self upgradeTableIfNeed:aClass];
+        
         sqlite3_stmt *stmt = NULL;
         int rc = -1;
         
         sqlite3 *sqlite3DB = [self sqlite3DB];
-        
-        NSString *tableName = NSStringFromClass(aClass);
         
         // 删掉表
         if (!condition || [[condition lowercaseString] isEqualToString:@"all"]) {
@@ -1354,6 +1334,43 @@ static int STDBBusyHandler(void *f, int count) {
     }
 }
 
+- (NSString *)createSqlWithClass:(Class)aClass selectSql:(NSString *)selectSql {
+    NSMutableString *sql = [NSMutableString stringWithCapacity:0];
+    [sql appendString:@"create table "];
+    [sql appendString:NSStringFromClass(aClass)];
+    [sql appendString:@"("];
+    
+    NSMutableArray *propertyArr = [NSMutableArray arrayWithCapacity:0];
+    NSMutableArray *primaryKeys = [NSMutableArray arrayWithCapacity:0];
+    
+    [self class:aClass getPropertyNameList:propertyArr primaryKeys:primaryKeys];
+    
+    NSString *propertyStr = [propertyArr componentsJoinedByString:@","];
+    
+    [sql appendString:propertyStr];
+    
+    NSMutableArray *primaryKeysArr = [NSMutableArray array];
+    for (NSString *s in primaryKeys) {
+        NSString *str = [NSString stringWithFormat:@"\"%@\"", s];
+        [primaryKeysArr addObject:str];
+    }
+    
+    NSString *priKeysStr = [primaryKeysArr componentsJoinedByString:@","];
+    NSString *primaryKeysStr = [NSString stringWithFormat:@",primary key(%@)", priKeysStr];
+    [sql appendString:primaryKeysStr];
+    
+    if (selectSql) {
+        [sql appendString:selectSql];
+    }
+    
+    [sql appendString:@");"];
+    return sql;
+};
+
+- (NSString *)createSqlWithClass:(Class)aClass {
+    return [self createSqlWithClass:aClass selectSql:nil];
+}
+
 - (void)createDbTable:(Class)aClass
 {
     @synchronized(self){
@@ -1370,31 +1387,7 @@ static int STDBBusyHandler(void *f, int count) {
             [self openDb];
         }
         
-        NSMutableString *sql = [NSMutableString stringWithCapacity:0];
-        [sql appendString:@"create table "];
-        [sql appendString:NSStringFromClass(aClass)];
-        [sql appendString:@"("];
-        
-        NSMutableArray *propertyArr = [NSMutableArray arrayWithCapacity:0];
-        NSMutableArray *primaryKeys = [NSMutableArray arrayWithCapacity:0];
-        
-        [self class:aClass getPropertyNameList:propertyArr primaryKeys:primaryKeys];
-        
-        NSString *propertyStr = [propertyArr componentsJoinedByString:@","];
-        
-        [sql appendString:propertyStr];
-        
-        NSMutableArray *primaryKeysArr = [NSMutableArray array];
-        for (NSString *s in primaryKeys) {
-            NSString *str = [NSString stringWithFormat:@"\"%@\"", s];
-            [primaryKeysArr addObject:str];
-        }
-        
-        NSString *priKeysStr = [primaryKeysArr componentsJoinedByString:@","];
-        NSString *primaryKeysStr = [NSString stringWithFormat:@",primary key(%@)", priKeysStr];
-        [sql appendString:primaryKeysStr];
-        
-        [sql appendString:@");"];
+        NSString *sql = [self createSqlWithClass:aClass];
         
         char *errmsg = 0;
         STDb *db = self;
@@ -1449,10 +1442,6 @@ static int STDBBusyHandler(void *f, int count) {
         [self openDb];
     }
     
-    if (![self isOpened]) {
-        [self openDb];
-    }
-    
     sqlite3_stmt *stmt = NULL;
     STDb *db = self;
     sqlite3 *sqlite3DB = db.sqlite3DB;
@@ -1501,8 +1490,6 @@ static int STDBBusyHandler(void *f, int count) {
     
     return YES;
 }
-
-
 
 int STDbExecuteBulkSQLCallback(void *theBlockAsVoid, int columns, char **values, char **names) {
     
@@ -1620,9 +1607,154 @@ int STDbExecuteBulkSQLCallback(void *theBlockAsVoid, int columns, char **values,
         if (![self isOpened]) {
             [self openDb];
         }
-        
         return YES;
     }
+}
+
+#pragma mark - version for dbobject
+
+- (BOOL)upgradeTableIfNeed:(Class)cls {
+    if ([self shouldUpgradeDbObjectTable:cls]) {
+        NSArray *columns = [self sqlite_columns:cls];
+        NSMutableArray *columnArr = [NSMutableArray array];
+        for (NSDictionary *dict in columns) {
+            [columnArr addObject:dict[@"title"]];
+        }
+        
+        NSMutableArray *propertyArr = [NSMutableArray arrayWithCapacity:0];
+        NSMutableArray *primaryKeys = [NSMutableArray arrayWithCapacity:0];
+        
+        [self class:cls getPropertyNameList:propertyArr primaryKeys:primaryKeys];
+        
+        NSMutableArray *propertyNames = [NSMutableArray array];
+        for (NSString *property in propertyArr) {
+            [propertyNames addObject:[property componentsSeparatedByString:@" "][0]];
+        }
+        NSArray *propertys = propertyNames;
+        
+        NSArray *sameArr = [self sameItemsWithArray1:columnArr array2:propertys];
+        if ([columnArr isEqualToArray:sameArr]) {
+            [self setDbVersion:[cls dbVersion] toDbObjectClass:cls];
+        } else {
+            NSString *tempTableName = [NSString stringWithFormat:@"temp_%@", NSStringFromClass(cls)];
+            NSString *sql = [NSString stringWithFormat:@"create table if not exists %@ as select * from %@;", tempTableName, NSStringFromClass(cls)];
+            BOOL rc = [self executeQuery:sql];
+            if (rc) {
+                NSString *dropSql = [NSString stringWithFormat:@"drop table if exists %@;", NSStringFromClass(cls)];
+                if ([self executeQuery:dropSql]) {
+                    NSArray *sameItems = [self sameItemsWithArray1:columnArr array2:propertys];
+                    NSString *colStr = [sameItems componentsJoinedByString:@", "];
+                    NSString *select = [NSString stringWithFormat:@"select %@ from %@;", colStr, tempTableName];
+                    NSString *createSql = [NSString stringWithFormat:@"create table if not exists %@ as %@;", NSStringFromClass(cls), select];
+                    if ([self executeQuery:createSql]) {
+                        NSString *dropTempSql = [NSString stringWithFormat:@"drop table if exists %@;", tempTableName];
+                        [self executeQuery:dropTempSql];
+    
+                        NSArray *otherCols = [self itemsContainInArray1:propertys notContainInArray2:columnArr];
+                        
+                        NSMutableArray *otherProperty = [NSMutableArray array];
+                        for (NSString *col in otherCols) {
+                            for (NSString *property in propertyArr) {
+                                NSString *name = [property componentsSeparatedByString:@" "][0];
+                                if ([name isEqualToString:col]) {
+                                    [otherProperty addObject:property];
+                                }
+                            }
+                        }
+                        
+                        for (NSString *property in otherProperty) {
+                            NSString *alterSql = [NSString stringWithFormat:@"alter table %@ add column %@;", NSStringFromClass(cls), property];
+                            [self executeQuery:alterSql];
+                        }
+                        [self setDbVersion:[cls dbVersion] toDbObjectClass:cls];
+                    }
+                };
+            }
+            return rc;
+        }
+    }
+    
+    return YES;
+}
+
+- (NSArray *)propertyForClass:(Class)cls {
+    NSMutableArray *propertyArr = [NSMutableArray arrayWithCapacity:0];
+    NSMutableArray *primaryKeys = [NSMutableArray arrayWithCapacity:0];
+    
+    [self class:cls getPropertyNameList:propertyArr primaryKeys:primaryKeys];
+    
+    NSMutableArray *propertyNames = [NSMutableArray array];
+    for (NSString *property in propertyArr) {
+        [propertyNames addObject:[property componentsSeparatedByString:@" "][0]];
+    }
+    return propertyNames;
+}
+
+- (NSString *)versionFilePath {
+    NSString *path = [self dbPath];
+    NSInteger hash = [path hash];
+    
+    NSString *file = [NSHomeDirectory() stringByAppendingFormat:@"/Documents/%@.stdbversion", @(hash)];
+    return file;
+}
+
+- (NSInteger)localVersionForClass:(Class)cls {
+    NSString *file = [self versionFilePath];
+    NSMutableDictionary *versionDict = [NSMutableDictionary dictionaryWithContentsOfFile:file];
+    if([versionDict isKindOfClass:[NSDictionary class]]) {
+        NSNumber *versionNum = versionDict[NSStringFromClass(cls)];
+        return versionNum.integerValue;
+    }
+    return 0;
+}
+
+- (BOOL)shouldUpgradeDbObjectTable:(Class)cls {
+    NSInteger dbVersion = [cls dbVersion];
+    NSInteger localVersion = [self localVersionForClass:cls];
+    if (dbVersion > localVersion) {
+        return YES;
+    }
+    return NO;
+}
+
+- (BOOL)setDbVersion:(NSInteger)version toDbObjectClass:(Class)cls {
+    NSString *file = [self versionFilePath];
+    NSMutableDictionary *versionDict = [NSMutableDictionary dictionaryWithContentsOfFile:file];
+    if (!versionDict) {
+        versionDict = [NSMutableDictionary dictionary];
+    }
+    [versionDict setObject:@(version) forKey:NSStringFromClass(cls)];
+    if (![versionDict writeToFile:file atomically:YES]) {
+        NSLog(@"版本号写入失败！");
+        return NO;
+    };
+    return YES;
+}
+
+#pragma mark - other method
+
+- (NSArray *)sameItemsWithArray1:(NSArray *)array1 array2:(NSArray *)array2 {
+    NSMutableArray *sameItems = [NSMutableArray array];
+    if ([array1 isKindOfClass:[NSArray class]] && [array2 isKindOfClass:[NSArray class]]) {
+        for (id obj in array1) {
+            if ([array2 containsObject:obj]) {
+                [sameItems addObject:obj];
+            }
+        }
+    }
+    return sameItems;
+}
+
+- (NSArray *)itemsContainInArray1:(NSArray *)array1 notContainInArray2:(NSArray *)array2 {
+    NSMutableArray *sameItems = [NSMutableArray array];
+    if ([array1 isKindOfClass:[NSArray class]] && [array2 isKindOfClass:[NSArray class]]) {
+        for (id obj in array1) {
+            if (![array2 containsObject:obj]) {
+                [sameItems addObject:obj];
+            }
+        }
+    }
+    return sameItems;
 }
 
 @end

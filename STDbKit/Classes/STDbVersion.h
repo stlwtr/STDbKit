@@ -4,7 +4,7 @@
 //
 //  Created by yls on 13-12-2.
 //
-// Version 1.0.4
+// Version 2.2.1
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -48,7 +48,7 @@
     1. 支持复杂类型（NSData， NSDate， NSArray, NSDictionary）
     2. 修正一些bug
  --------------------------
- *  @brief v1.0.4 2013-12-20更新
+ *  @brief v2.2.1 2013-12-20更新
     1. 添加dbObject过期属性，当数据过期，数据会被自动删除，可用于有时间限制的历史纪录等场景
  --------------------------
  *  @brief v1.0.5 2013-12-31更新
@@ -60,6 +60,6 @@
 #define STDbKitVersionNumber1_0_4 100.40
 
 static double STDbKitVersionNumber = STDbKitVersionNumber1_0_4;
-static const unsigned char STDbKitVersionString[] = "1.0.4";
+static const unsigned char STDbKitVersionString[] = "2.2.1";
 
 #endif

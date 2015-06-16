@@ -4,7 +4,7 @@
 //
 //  Created by yls on 13-11-21.
 //
-// Version 1.0.4
+// Version 2.2.1
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -39,7 +39,6 @@
 
 @protocol STDbObject
 
-
 @required
 
 /**
@@ -61,6 +60,11 @@
  *	@brief	失效日期
  */
 @property (strong, nonatomic) NSDate *expireDate;
+
+/**
+ *	@brief	数据表版本号，要更新数据库表，override
+ */
++ (NSInteger)dbVersion;
 
 /**
  *	@brief	插入到数据库中
@@ -175,6 +179,9 @@
  */
 @property (strong, nonatomic) NSDate *expireDate;
 
+/**
+ *	@brief	init with primary key
+ */
 - (instancetype)initWithPrimaryValue:(NSInteger)_id;
 
 /**

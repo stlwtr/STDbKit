@@ -10,5 +10,9 @@
 
 @implementation User
 
++ (NSInteger)dbVersion
+{
+    return 2;
+}
 
 @end

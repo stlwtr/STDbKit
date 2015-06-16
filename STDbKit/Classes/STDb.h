@@ -4,7 +4,7 @@
 //
 //  Created by yls on 13-12-5.
 //
-// Version 1.0.4
+// Version 2.2.1
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -135,6 +135,15 @@ extern objc_property_t * st_class_copyPropertyList(Class cls, unsigned int *coun
  */
 - (BOOL)removeDbObjects:(Class)aClass condition:(NSString *)condition;
 
+/**
+ *	@brief	last row in table named aClass
+ */
 - (NSInteger)lastRowIdWithClass:(Class)aClass;
+
+- (NSInteger)localVersionForClass:(Class)cls;
+- (BOOL)setDbVersion:(NSInteger)version toDbObjectClass:(Class)cls;
+
+- (NSArray *)propertyForClass:(Class)cls;
+- (BOOL)upgradeTableIfNeed:(Class)cls;
 
 @end
