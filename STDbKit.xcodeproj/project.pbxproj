@@ -15,6 +15,10 @@
 		44075B091B2DC75500714895 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 44075B081B2DC75500714895 /* libsqlite3.dylib */; };
 		44075B171B2EF83700714895 /* STDb.m in Sources */ = {isa = PBXBuildFile; fileRef = 44075B161B2EF83700714895 /* STDb.m */; };
 		44075B281B2EFB0D00714895 /* STDbQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 44075B221B2EFB0D00714895 /* STDbQueue.m */; };
+		44BD11011B301CE700821F2A /* NSData+STDbHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 44BD10FA1B301CE700821F2A /* NSData+STDbHandle.m */; };
+		44BD11021B301CE700821F2A /* NSDate+STDbHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 44BD10FC1B301CE700821F2A /* NSDate+STDbHandle.m */; };
+		44BD11031B301CE700821F2A /* NSObject+STDbHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 44BD10FE1B301CE700821F2A /* NSObject+STDbHandle.m */; };
+		44BD11041B301CE700821F2A /* NSString+STDbHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 44BD11001B301CE700821F2A /* NSString+STDbHandle.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,6 +60,14 @@
 		44075B211B2EFB0D00714895 /* STDbQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STDbQueue.h; sourceTree = "<group>"; };
 		44075B221B2EFB0D00714895 /* STDbQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STDbQueue.m; sourceTree = "<group>"; };
 		44075B231B2EFB0D00714895 /* STDbVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STDbVersion.h; sourceTree = "<group>"; };
+		44BD10F91B301CE700821F2A /* NSData+STDbHandle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+STDbHandle.h"; sourceTree = "<group>"; };
+		44BD10FA1B301CE700821F2A /* NSData+STDbHandle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+STDbHandle.m"; sourceTree = "<group>"; };
+		44BD10FB1B301CE700821F2A /* NSDate+STDbHandle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+STDbHandle.h"; sourceTree = "<group>"; };
+		44BD10FC1B301CE700821F2A /* NSDate+STDbHandle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+STDbHandle.m"; sourceTree = "<group>"; };
+		44BD10FD1B301CE700821F2A /* NSObject+STDbHandle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+STDbHandle.h"; sourceTree = "<group>"; };
+		44BD10FE1B301CE700821F2A /* NSObject+STDbHandle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+STDbHandle.m"; sourceTree = "<group>"; };
+		44BD10FF1B301CE700821F2A /* NSString+STDbHandle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+STDbHandle.h"; sourceTree = "<group>"; };
+		44BD11001B301CE700821F2A /* NSString+STDbHandle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+STDbHandle.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,6 +103,7 @@
 		44075AC01B2DC16C00714895 /* STDbKit */ = {
 			isa = PBXGroup;
 			children = (
+				44BD10F81B301CE700821F2A /* Category */,
 				44075AD61B2DC2EF00714895 /* Classes */,
 			);
 			path = STDbKit;
@@ -129,6 +142,21 @@
 				44075AF91B2DC33D00714895 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		44BD10F81B301CE700821F2A /* Category */ = {
+			isa = PBXGroup;
+			children = (
+				44BD10F91B301CE700821F2A /* NSData+STDbHandle.h */,
+				44BD10FA1B301CE700821F2A /* NSData+STDbHandle.m */,
+				44BD10FB1B301CE700821F2A /* NSDate+STDbHandle.h */,
+				44BD10FC1B301CE700821F2A /* NSDate+STDbHandle.m */,
+				44BD10FD1B301CE700821F2A /* NSObject+STDbHandle.h */,
+				44BD10FE1B301CE700821F2A /* NSObject+STDbHandle.m */,
+				44BD10FF1B301CE700821F2A /* NSString+STDbHandle.h */,
+				44BD11001B301CE700821F2A /* NSString+STDbHandle.m */,
+			);
+			path = Category;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -220,8 +248,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				44BD11031B301CE700821F2A /* NSObject+STDbHandle.m in Sources */,
 				44075B281B2EFB0D00714895 /* STDbQueue.m in Sources */,
+				44BD11011B301CE700821F2A /* NSData+STDbHandle.m in Sources */,
 				44075AF01B2DC2EF00714895 /* STDbObject.m in Sources */,
+				44BD11021B301CE700821F2A /* NSDate+STDbHandle.m in Sources */,
+				44BD11041B301CE700821F2A /* NSString+STDbHandle.m in Sources */,
 				44075B171B2EF83700714895 /* STDb.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
