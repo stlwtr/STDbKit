@@ -14,10 +14,6 @@
 		44075B071B2DC6CA00714895 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 44075B061B2DC6CA00714895 /* User.m */; };
 		44075B091B2DC75500714895 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 44075B081B2DC75500714895 /* libsqlite3.dylib */; };
 		44075B171B2EF83700714895 /* STDb.m in Sources */ = {isa = PBXBuildFile; fileRef = 44075B161B2EF83700714895 /* STDb.m */; };
-		44075B241B2EFB0D00714895 /* NSData+STDbHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 44075B1A1B2EFB0D00714895 /* NSData+STDbHandle.m */; };
-		44075B251B2EFB0D00714895 /* NSDate+STDbHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 44075B1C1B2EFB0D00714895 /* NSDate+STDbHandle.m */; };
-		44075B261B2EFB0D00714895 /* NSObject+STDbHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 44075B1E1B2EFB0D00714895 /* NSObject+STDbHandle.m */; };
-		44075B271B2EFB0D00714895 /* NSString+STDbHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 44075B201B2EFB0D00714895 /* NSString+STDbHandle.m */; };
 		44075B281B2EFB0D00714895 /* STDbQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 44075B221B2EFB0D00714895 /* STDbQueue.m */; };
 /* End PBXBuildFile section */
 
@@ -57,14 +53,6 @@
 		44075B081B2DC75500714895 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		44075B151B2EF83700714895 /* STDb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STDb.h; sourceTree = "<group>"; };
 		44075B161B2EF83700714895 /* STDb.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STDb.m; sourceTree = "<group>"; };
-		44075B191B2EFB0D00714895 /* NSData+STDbHandle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+STDbHandle.h"; sourceTree = "<group>"; };
-		44075B1A1B2EFB0D00714895 /* NSData+STDbHandle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+STDbHandle.m"; sourceTree = "<group>"; };
-		44075B1B1B2EFB0D00714895 /* NSDate+STDbHandle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+STDbHandle.h"; sourceTree = "<group>"; };
-		44075B1C1B2EFB0D00714895 /* NSDate+STDbHandle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+STDbHandle.m"; sourceTree = "<group>"; };
-		44075B1D1B2EFB0D00714895 /* NSObject+STDbHandle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+STDbHandle.h"; sourceTree = "<group>"; };
-		44075B1E1B2EFB0D00714895 /* NSObject+STDbHandle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+STDbHandle.m"; sourceTree = "<group>"; };
-		44075B1F1B2EFB0D00714895 /* NSString+STDbHandle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+STDbHandle.h"; sourceTree = "<group>"; };
-		44075B201B2EFB0D00714895 /* NSString+STDbHandle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+STDbHandle.m"; sourceTree = "<group>"; };
 		44075B211B2EFB0D00714895 /* STDbQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STDbQueue.h; sourceTree = "<group>"; };
 		44075B221B2EFB0D00714895 /* STDbQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STDbQueue.m; sourceTree = "<group>"; };
 		44075B231B2EFB0D00714895 /* STDbVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STDbVersion.h; sourceTree = "<group>"; };
@@ -111,7 +99,6 @@
 		44075AD61B2DC2EF00714895 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				44075B181B2EFB0D00714895 /* Category */,
 				44075AE71B2DC2EF00714895 /* STDbKit.h */,
 				44075B151B2EF83700714895 /* STDb.h */,
 				44075B161B2EF83700714895 /* STDb.m */,
@@ -142,21 +129,6 @@
 				44075AF91B2DC33D00714895 /* Info.plist */,
 			);
 			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		44075B181B2EFB0D00714895 /* Category */ = {
-			isa = PBXGroup;
-			children = (
-				44075B191B2EFB0D00714895 /* NSData+STDbHandle.h */,
-				44075B1A1B2EFB0D00714895 /* NSData+STDbHandle.m */,
-				44075B1B1B2EFB0D00714895 /* NSDate+STDbHandle.h */,
-				44075B1C1B2EFB0D00714895 /* NSDate+STDbHandle.m */,
-				44075B1D1B2EFB0D00714895 /* NSObject+STDbHandle.h */,
-				44075B1E1B2EFB0D00714895 /* NSObject+STDbHandle.m */,
-				44075B1F1B2EFB0D00714895 /* NSString+STDbHandle.h */,
-				44075B201B2EFB0D00714895 /* NSString+STDbHandle.m */,
-			);
-			path = Category;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -248,11 +220,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				44075B271B2EFB0D00714895 /* NSString+STDbHandle.m in Sources */,
-				44075B261B2EFB0D00714895 /* NSObject+STDbHandle.m in Sources */,
-				44075B241B2EFB0D00714895 /* NSData+STDbHandle.m in Sources */,
 				44075B281B2EFB0D00714895 /* STDbQueue.m in Sources */,
-				44075B251B2EFB0D00714895 /* NSDate+STDbHandle.m in Sources */,
 				44075AF01B2DC2EF00714895 /* STDbObject.m in Sources */,
 				44075B171B2EF83700714895 /* STDb.m in Sources */,
 			);
