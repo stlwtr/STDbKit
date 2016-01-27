@@ -2,34 +2,47 @@
 
 ## 1. 概述
 ```
-对于小型数据很方便, 声明一个继承于STDbObject的类对象user，
-
+对于小型数据很方便, 声明一个继承于STDbObject的类对象user
 写入到数据库直接执行方法  [user insertToDb]; 
 从数据库读取，NSArray *users = [User dbObjectsWhere:@"_id=11" orderby:nil];
 更新到数据库，[user updateToDb];
 从数据库删除，[user removeFromDb]; 
 ```
-更新内容  
 
-版本 | 更新内容 | 
------  | ----- | 
+## 更新历史
 
-1.0.3版本支持复杂类型 NSData, NSDate, NSArray, NSDictionary
-1.0.4添加dbObject过期属性，当数据过期，数据会被自动删除，可用于有时间限制的历史纪录等场景
-     添加了数据库加密功能（目前仅支持字符串加密）
-     一个STDbObject允许添加另一个STDbObject对象了（2014-01-02更新）
-1.0.5支持一个STDbObject对象包含另一个STDbObject对象了(2014-01-04更新)
-2.0 更新内容（2014-01-06更新）
-    support array contain objects of STDbObject class
-    support dictionary contain an STDbObject object
-    remove the sub STDbObject after remove the parent object
-2.0.2 更新内容（2014-02-18更新）
-    1. add objc to dictionary method 
-    2. add dictionary to objc method
+2.2.4 更新内容（2016-01-27） 
+
+  - 支持事务处理
+  - 优化性能 
+
 2.2.1 更新内容（2015-06-15）
-	1. 添加多线程支持
-	2. 多db文件支持
-	3. 增加了数据库更新功能， + (NSInteger)dbVersion;
+
+  - 添加多线程支持  
+  - 多db文件支持  
+  - 增加了数据库更新功能， + (NSInteger)dbVersion;  
+                                   
+2.0.2 更新内容（2014-02-18）
+  - add objc to dictionary method 
+  - add dictionary to objc method
+
+2.0 更新内容（2014-01-06）
+
+  - support array contain objects of STDbObject class
+  - support dictionary contain an STDbObject object
+  - remove the sub STDbObject after remove the parent object
+
+1.0.5 更新内容（2014-01-04）
+
+  - 支持一个STDbObject对象包含另一个STDbObject对象了
+
+1.0.4 更新内容（2014-01-02）
+
+  - 添加dbObject过期属性，当数据过期，数据会被自动删除，可用于有时间限制的历史纪录等场景添加了数据库加密功能（目前仅支持字符串加密）
+  
+1.0.3 更新内容（2013-06-01）
+
+  - 支持复杂类型NSData,NSDate,NSArray,NSDictionary
 
 ## 2. 使用方法
 
