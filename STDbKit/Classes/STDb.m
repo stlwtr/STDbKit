@@ -80,7 +80,8 @@ enum {
     NSTimeInterval _maxBusyRetryTimeInterval;
     BOOL _inTransaction;
     
-    NSMutableDictionary *_tableSchemaCache;
+    NSMutableDictionary *_dbTableColumnsCache;
+    NSMutableDictionary *_propertyForClassCache;
 }
 
 @property (nonatomic) sqlite3 *sqlite3DB;
@@ -101,13 +102,8 @@ enum {
 }
 
 - (instancetype)init {
-    self = [super init];
-    if (self) {
-        _tableSchemaCache = [NSMutableDictionary dictionary];
-    }
-    return self;
+    return [self initWithPath:[STDb defaultDbPath]];
 }
-
 
 #pragma mark - path 
 
@@ -176,6 +172,10 @@ enum {
     if (self) {
         _maxBusyRetryTimeInterval = 2.0;
         _dbPath = path;
+        
+        _dbTableColumnsCache = [NSMutableDictionary dictionary];
+        _propertyForClassCache = [NSMutableDictionary dictionary];
+        
 #ifdef STDb_EncryptEnable
         self.encryptEnable = YES;
 #endif
@@ -293,55 +293,62 @@ objc_property_t * st_class_copyPropertyList(Class cls, unsigned int *count)
 
 - (NSArray *)sqlite_columns:(Class)cls
 {
-    @synchronized(self){
-        NSString *table = NSStringFromClass(cls);
-        NSMutableString *sql;
-        
-        sqlite3_stmt *stmt = NULL;
-        NSString *str = [NSString stringWithFormat:@"select sql from sqlite_master where type='table' and tbl_name='%@'", table];
-        STDb *stdb = self;
-        [self openDb];
-        if (sqlite3_prepare_v2(stdb->_sqlite3DB, [str UTF8String], -1, &stmt, NULL) == SQLITE_OK) {
-            while (SQLITE_ROW == sqlite3_step(stmt)) {
-                const unsigned char *text = sqlite3_column_text(stmt, 0);
-                sql = [NSMutableString stringWithUTF8String:(const char *)text];
-            }
-        }
-        sqlite3_finalize(stmt);
-        stmt = NULL;
-        
-        NSRange r = [sql rangeOfString:@"("];
-        
-        NSString *t_str = [sql substringWithRange:NSMakeRange(r.location + 1, [sql length] - r.location - 2)];
-        t_str = [t_str stringByReplacingOccurrencesOfString:@"\n" withString:@""];
-        t_str = [t_str stringByReplacingOccurrencesOfString:@"\t" withString:@""];
-        t_str = [t_str stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-        
-        NSRange primaryRangeR = [t_str rangeOfString:@",primary key\\(.*\\)" options:NSRegularExpressionSearch];
-        //        NSLog(@"%@", NSStringFromRange(primaryRangeR));
-        if (primaryRangeR.location != NSNotFound) {
-            t_str = [t_str stringByReplacingCharactersInRange:primaryRangeR withString:@""];
-        }
-        
-        NSMutableArray *colsArr = [NSMutableArray arrayWithCapacity:0];
-        NSArray *strs = [t_str componentsSeparatedByString:@","];
-        
-        for (NSString *s in strs) {
-            if ([s hasPrefix:@"primary key"] || s.length == 0) {
-                continue;
-            }
-            NSString *s0 = [NSString stringWithString:s];
-            s0 = [s0 stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-            NSArray *a = [s0 componentsSeparatedByString:@" "];
-            NSString *s1 = a[0];
-            NSString *type = a.count >= 2 ? a[1] : @"blob";
-            type = [type stringByReplacingOccurrencesOfString:@"\"" withString:@""];
-            type = [type stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-            s1 = [s1 stringByReplacingOccurrencesOfString:@"\"" withString:@""];
-            [colsArr addObject:@{@"type": type, @"title": s1}];
-        }
-        return colsArr;
+    NSArray *columnsInfo = [_dbTableColumnsCache objectForKey:NSStringFromClass(cls)];
+    if (!columnsInfo) {
+        columnsInfo = [self tableColumnsCache:cls];
+        [_dbTableColumnsCache setObject:columnsInfo forKey:NSStringFromClass(cls)];
     }
+    return columnsInfo;
+}
+
+- (NSArray *)tableColumnsCache:(Class)cls {
+    NSString *table = NSStringFromClass(cls);
+    NSMutableString *sql;
+    
+    sqlite3_stmt *stmt = NULL;
+    NSString *str = [NSString stringWithFormat:@"select sql from sqlite_master where type='table' and tbl_name='%@'", table];
+    STDb *stdb = self;
+    [self openDb];
+    if (sqlite3_prepare_v2(stdb->_sqlite3DB, [str UTF8String], -1, &stmt, NULL) == SQLITE_OK) {
+        while (SQLITE_ROW == sqlite3_step(stmt)) {
+            const unsigned char *text = sqlite3_column_text(stmt, 0);
+            sql = [NSMutableString stringWithUTF8String:(const char *)text];
+        }
+    }
+    sqlite3_finalize(stmt);
+    stmt = NULL;
+    
+    NSRange r = [sql rangeOfString:@"("];
+    
+    NSString *t_str = [sql substringWithRange:NSMakeRange(r.location + 1, [sql length] - r.location - 2)];
+    t_str = [t_str stringByReplacingOccurrencesOfString:@"\n" withString:@""];
+    t_str = [t_str stringByReplacingOccurrencesOfString:@"\t" withString:@""];
+    t_str = [t_str stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    
+    NSRange primaryRangeR = [t_str rangeOfString:@",primary key\\(.*\\)" options:NSRegularExpressionSearch];
+    //        NSLog(@"%@", NSStringFromRange(primaryRangeR));
+    if (primaryRangeR.location != NSNotFound) {
+        t_str = [t_str stringByReplacingCharactersInRange:primaryRangeR withString:@""];
+    }
+    
+    NSMutableArray *colsArr = [NSMutableArray arrayWithCapacity:0];
+    NSArray *strs = [t_str componentsSeparatedByString:@","];
+    
+    for (NSString *s in strs) {
+        if ([s hasPrefix:@"primary key"] || s.length == 0) {
+            continue;
+        }
+        NSString *s0 = [NSString stringWithString:s];
+        s0 = [s0 stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        NSArray *a = [s0 componentsSeparatedByString:@" "];
+        NSString *s1 = a[0];
+        NSString *type = a.count >= 2 ? a[1] : @"blob";
+        type = [type stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+        type = [type stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        s1 = [s1 stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+        [colsArr addObject:@{@"type": type, @"title": s1}];
+    }
+    return colsArr;
 }
 
 - (NSString *)dbTypeConvertFromObjc_property_t:(objc_property_t)property
@@ -1729,6 +1736,8 @@ int STDbExecuteBulkSQLCallback(void *theBlockAsVoid, int columns, char **values,
                         [self setDbVersion:[cls dbVersion] toDbObjectClass:cls];
                     }
                 };
+                NSArray *columnsInfo = [self tableColumnsCache:cls];
+                [_dbTableColumnsCache setObject:columnsInfo forKey:NSStringFromClass(cls)];
             }
             return rc;
         }
@@ -1738,12 +1747,19 @@ int STDbExecuteBulkSQLCallback(void *theBlockAsVoid, int columns, char **values,
 }
 
 - (NSArray *)propertyForClass:(Class)cls {
+    
+    NSMutableArray *propertyNames = [_propertyForClassCache objectForKey:NSStringFromClass(cls)];
+    
+    if (propertyNames) {
+        return propertyNames;
+    }
+    
+    propertyNames = [NSMutableArray array];
     NSMutableArray *propertyArr = [NSMutableArray arrayWithCapacity:0];
     NSMutableArray *primaryKeys = [NSMutableArray arrayWithCapacity:0];
     
     [self class:cls getPropertyNameList:propertyArr primaryKeys:primaryKeys];
     
-    NSMutableArray *propertyNames = [NSMutableArray array];
     for (NSString *property in propertyArr) {
         [propertyNames addObject:[property componentsSeparatedByString:@" "][0]];
     }
