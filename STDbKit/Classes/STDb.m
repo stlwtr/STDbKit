@@ -78,6 +78,9 @@ enum {
     NSString *_dbPath;
     NSTimeInterval _startBusyRetryTime;
     NSTimeInterval _maxBusyRetryTimeInterval;
+    BOOL _inTransaction;
+    
+    NSMutableDictionary *_tableSchemaCache;
 }
 
 @property (nonatomic) sqlite3 *sqlite3DB;
@@ -96,6 +99,15 @@ enum {
 {
     return NO;
 }
+
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        _tableSchemaCache = [NSMutableDictionary dictionary];
+    }
+    return self;
+}
+
 
 #pragma mark - path 
 
@@ -181,9 +193,50 @@ enum {
     return [self dbTable:nil executeQuery:query callBackBlock:nil];
 }
 
+- (BOOL)executeUpdate:(NSString*)query {
+    BOOL result = [self executeQuery:query];
+    return result;
+}
+
 - (BOOL)executeUpdate:(NSString*)query dictionaryArgs:(NSDictionary *)dictionaryArgs {
     BOOL result = [self executeUpdate:query error:nil dictionaryArgs:dictionaryArgs];
     return result;
+}
+
+#pragma mark - transaction
+
+- (BOOL)beginTransaction {
+    
+    BOOL rc = [self executeUpdate:@"begin exclusive transaction"];
+    
+    if (rc) {
+        _inTransaction = YES;
+    }
+    return rc;
+}
+
+- (BOOL)commit {
+    BOOL rc =  [self executeUpdate:@"commit transaction"];
+    
+    if (rc) {
+        _inTransaction = NO;
+    }
+    
+    return rc;
+}
+
+- (BOOL)rollback {
+    BOOL rc = [self executeUpdate:@"rollback transaction"];
+    
+    if (rc) {
+        _inTransaction = NO;
+    }
+    
+    return rc;
+}
+
+- (BOOL)inTransaction {
+    return _inTransaction;
 }
 
 #pragma mark - private method
@@ -891,7 +944,6 @@ static int STDBBusyHandler(void *f, int count) {
 
 - (NSMutableArray *)selectDbObjects:(Class)aClass condition:(NSString *)condition orderby:(NSString *)orderby
 {
-    //    @synchronized(self){
     if (![self isOpened]) {
         [self openDb];
     }
@@ -924,12 +976,17 @@ static int STDBBusyHandler(void *f, int count) {
         }
     }
     
+    [selectstring appendString:@";"];
+    
     STDb *db = self;
     sqlite3 *sqlite3DB = db.sqlite3DB;
     
     if (sqlite3_prepare_v2(sqlite3DB, [selectstring UTF8String], -1, &stmt, NULL) == SQLITE_OK) {
         int column_count = sqlite3_column_count(stmt);
-        while (sqlite3_step(stmt) == SQLITE_ROW) {
+        
+        int rc = sqlite3_step(stmt);
+        
+        while (rc == SQLITE_ROW) {
             
             STDbObject *obj = [[NSClassFromString(tableName) alloc] init];
             
@@ -987,6 +1044,8 @@ static int STDBBusyHandler(void *f, int count) {
             } else {
                 [array addObject:obj];
             }
+            
+            rc = sqlite3_step(stmt);
         }
     }
     
@@ -1419,10 +1478,11 @@ static int STDBBusyHandler(void *f, int count) {
     STDb *db = self;
     
     __block NSMutableArray *resultArray = [NSMutableArray array];
-    void (^resultBlock)(NSDictionary *resultDictionary) = ^(NSDictionary *resultDictionary) {
+    int (^resultBlock)(NSDictionary *resultDictionary) = ^(NSDictionary *resultDictionary) {
         if ([resultDictionary isKindOfClass:[NSDictionary class]]) {
             [resultArray addObject:resultDictionary];
         }
+        return 0;
     };
     int ret = sqlite3_exec(db.sqlite3DB, [sql UTF8String], block ? STDbExecuteBulkSQLCallback : nil, (__bridge void *)(resultBlock), &errmsg);
     

@@ -72,6 +72,11 @@ extern objc_property_t * st_class_copyPropertyList(Class cls, unsigned int *coun
 + (instancetype)defaultDb;
 
 /**
+ *	@brief	默认数据库路径
+ */
++ (NSString *)defaultDbPath;
+
+/**
  *	@brief	数据库路径
  */
 @property (nonatomic, strong, readonly) NSString *dbPath;
@@ -90,7 +95,16 @@ extern objc_property_t * st_class_copyPropertyList(Class cls, unsigned int *coun
  *	@brief	执行create, update, delete方法
  */
 - (BOOL)executeQuery:(NSString *)query;
+- (BOOL)executeUpdate:(NSString*)query;
 - (BOOL)executeUpdate:(NSString*)query dictionaryArgs:(NSDictionary *)dictionaryArgs;
+
+
+#pragma mark - transaction
+
+- (BOOL)beginTransaction;
+- (BOOL)commit;
+- (BOOL)rollback;
+- (BOOL)inTransaction;
 
 #pragma mark - STDbObject method
 

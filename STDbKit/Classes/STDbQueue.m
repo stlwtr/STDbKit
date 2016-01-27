@@ -66,8 +66,9 @@ static const void * const kDispatchQueueSpecificKey = &kDispatchQueueSpecificKey
     dispatch_queue_t queue = self->_queue;
     
     dispatch_sync(queue, ^{
+        STDb *db = self->_db;
         if (block) {
-            block(self->_db);
+            block(db);
         }
     });
 }
@@ -104,6 +105,13 @@ static const void * const kDispatchQueueSpecificKey = &kDispatchQueueSpecificKey
     }
     STDbQueue *dbQueue = [[STDbQueue alloc] initWithPath:filePath];
     return dbQueue;
+}
+
+/**
+ *	@brief	默认数据库路径
+ */
++ (instancetype)defaultQueue {
+    return [STDbQueue dbWithPath:[STDb defaultDbPath]];
 }
 
 @end
