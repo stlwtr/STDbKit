@@ -27,6 +27,7 @@
 // emailto: 2008.yls@163.com
 // QQ: 603291699
 //
+#define SQLITE_HAS_CODEC 1
 
 #import <Foundation/Foundation.h>
 #import <objc/runtime.h>
@@ -82,9 +83,14 @@ extern objc_property_t * st_class_copyPropertyList(Class cls, unsigned int *coun
 @property (nonatomic, strong, readonly) NSString *dbPath;
 
 /**
- *	@brief	是否加密
+ *	@brief	是否进行字段加密
  */
 @property (nonatomic, assign) BOOL encryptEnable;
+
+/**
+ *	@brief	是否进行数据库文件加密
+ */
+@property (nonatomic, assign) BOOL encryptDB;
 
 /**
  *	@brief	执行select方法

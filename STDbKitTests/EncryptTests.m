@@ -25,7 +25,7 @@
     
     _dbQueue = [STDbQueue dbWithPath:@"stdb_test/test_encrypt_queue.sqlite"];
     
-    // 加密
+    // 数据库db文件加密
     [_dbQueue execute:^(STDb *db) {
         db.encryptDB = YES;
     }];

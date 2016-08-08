@@ -1471,7 +1471,7 @@ static int STDBBusyHandler(void *f, int count) {
 - (BOOL)dbTable:(Class)aClass executeQuery:(NSString *)query callBackBlock:(void (^)(NSArray *resultArray))block;
 {
     if (query.length == 0) {
-        return nil;
+        return NO;
     }
     
     if (![self isOpened]) {
@@ -1548,7 +1548,7 @@ static int STDBBusyHandler(void *f, int count) {
             
             return NO;
         } else {
-            NSInteger rowid = sqlite3_last_insert_rowid(sqlite3DB);
+            sqlite3_int64 rowid = sqlite3_last_insert_rowid(sqlite3DB);
             [obj setValue:@(rowid) forKeyPath:@"__id__"];
         }
     }
@@ -1600,19 +1600,26 @@ int STDbExecuteBulkSQLCallback(void *theBlockAsVoid, int columns, char **values,
         }
         
         if ([self isOpened]) {
-            //        STDBLog(@"数据库已打开");
             return YES;
         }
         
         int rc = sqlite3_open_v2([dbPath UTF8String], &db->_sqlite3DB, flags, NULL);
         if (rc == SQLITE_OK) {
-            //        STDBLog(@"打开数据库%@成功!", dbPath);
-            
             db.isOpened = YES;
             if (db->_maxBusyRetryTimeInterval > 0.0) {
                 // set the handler
                 [db setMaxBusyRetryTimeInterval:db->_maxBusyRetryTimeInterval];
             }
+            
+            NSString *key = [self encryptKey];
+            NSData *keyData = [NSData dataWithBytes:[key UTF8String] length:(NSUInteger)strlen([key UTF8String])];
+            int rc = sqlite3_key(_sqlite3DB, [keyData bytes], (int)[keyData length]);
+            
+            if (rc != SQLITE_OK) {
+                STDBLog(@"设置encrypt key值失败!");
+            }
+            
+            return (rc == SQLITE_OK);
             
             return YES;
         } else {
@@ -1622,6 +1629,18 @@ int STDbExecuteBulkSQLCallback(void *theBlockAsVoid, int columns, char **values,
         
         return NO;
     }
+}
+
+- (void)setEncryptDB:(BOOL)encryptDB {
+    if (encryptDB) {
+        NSString *key = [self encryptKey];
+        NSData *keyData = [NSData dataWithBytes:[key UTF8String] length:(NSUInteger)strlen([key UTF8String])];
+        int rc = sqlite3_key(_sqlite3DB, [keyData bytes], (int)[keyData length]);
+        if (rc != SQLITE_OK) {
+            STDBLog(@"设置encrypt key值失败!");
+        }
+    }
+    _encryptDB = encryptDB;
 }
 
 - (BOOL)sqlite_tableExist:(Class)aClass {

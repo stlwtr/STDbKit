@@ -3,6 +3,8 @@
 ## 1. 概述
 ```
 对于小型数据很方便, 声明一个继承于STDbObject的类对象user
+_dbQueue = [STDbQueue dbWithPath:@"stdb_test/test_encrypt_queue.sqlite"];
+
 写入到数据库直接执行方法  [user insertToDb]; 
 从数据库读取，NSArray *users = [User dbObjectsWhere:@"_id=11" orderby:nil];
 更新到数据库，[user updateToDb];
@@ -10,7 +12,17 @@
 ```
 
 ## 2. 更新历史
+2.2.5 更新内容（2016-08-08） 
 
+  - 支持数据库加密
+  
+```
+// 数据库db文件加密
+[_dbQueue execute:^(STDb *db) { 
+	db.encryptDB = YES; 
+}]; 
+```
+ 
 2.2.4 更新内容（2016-01-27） 
 
   - 支持事务处理
@@ -154,4 +166,5 @@ User *user = _users[row];
 // 批量删除
 [User removeDbObjectsWhere:@"_id=%d", 4];
 ```
-**注意：** *一旦修改了数据类，请删除原来的应用重新运行。本项目内置了日期相关方法，详情参见* [NSDate+STExts](http://git.oschina.net/yanglishuan/NSDate-STExts)。
+**注意：** *一旦修改了数据类，请删除原来的应用重新运行。本项目内置了日期相关方法，详情参见* [NSDate+STExts](http://git.oschina.net/yanglishuan/NSDate-STExts)。  
+git库地址[https://github.com/stlwtr/STDbKit](https://github.com/stlwtr/STDbKit)

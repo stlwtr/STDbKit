@@ -17,8 +17,6 @@
 		44EE87BA1C50873F002BE2DA /* STDb.m in Sources */ = {isa = PBXBuildFile; fileRef = 44EE87AF1C50873F002BE2DA /* STDb.m */; };
 		44EE87BB1C50873F002BE2DA /* STDbObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 44EE87B21C50873F002BE2DA /* STDbObject.m */; };
 		44EE87BC1C50873F002BE2DA /* STDbQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 44EE87B41C50873F002BE2DA /* STDbQueue.m */; };
-		44EE87C01C508A81002BE2DA /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 44EE87BF1C508A81002BE2DA /* libsqlite3.dylib */; };
-		44EE87C11C508ABD002BE2DA /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 44EE87BF1C508A81002BE2DA /* libsqlite3.dylib */; };
 		44EE87E61C50930A002BE2DA /* NSData+STDbHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 44EE87A51C50873F002BE2DA /* NSData+STDbHandle.m */; };
 		44EE87E71C50930A002BE2DA /* NSDate+STDbHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 44EE87A71C50873F002BE2DA /* NSDate+STDbHandle.m */; };
 		44EE87E81C50930A002BE2DA /* NSObject+STDbHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 44EE87A91C50873F002BE2DA /* NSObject+STDbHandle.m */; };
@@ -26,6 +24,8 @@
 		44EE87EA1C50930A002BE2DA /* STDb.m in Sources */ = {isa = PBXBuildFile; fileRef = 44EE87AF1C50873F002BE2DA /* STDb.m */; };
 		44EE87EB1C50930A002BE2DA /* STDbObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 44EE87B21C50873F002BE2DA /* STDbObject.m */; };
 		44EE87EC1C50930A002BE2DA /* STDbQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 44EE87B41C50873F002BE2DA /* STDbQueue.m */; };
+		44F747521D580F120096473E /* libsqlcipher.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 44F747511D580F120096473E /* libsqlcipher.a */; };
+		44F747551D5813DE0096473E /* EncryptTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 44F747531D5813DE0096473E /* EncryptTests.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,7 +73,8 @@
 		44EE87B31C50873F002BE2DA /* STDbQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STDbQueue.h; sourceTree = "<group>"; };
 		44EE87B41C50873F002BE2DA /* STDbQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STDbQueue.m; sourceTree = "<group>"; };
 		44EE87B51C50873F002BE2DA /* STDbVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STDbVersion.h; sourceTree = "<group>"; };
-		44EE87BF1C508A81002BE2DA /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = ../../../../../usr/lib/libsqlite3.dylib; sourceTree = "<group>"; };
+		44F747511D580F120096473E /* libsqlcipher.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libsqlcipher.a; sourceTree = "<group>"; };
+		44F747531D5813DE0096473E /* EncryptTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EncryptTests.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,7 +82,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				44EE87C01C508A81002BE2DA /* libsqlite3.dylib in Frameworks */,
+				44F747521D580F120096473E /* libsqlcipher.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -89,7 +90,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				44EE87C11C508ABD002BE2DA /* libsqlite3.dylib in Frameworks */,
 				44EE87941C508657002BE2DA /* libSTDbKit.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -100,7 +100,6 @@
 		44EE87761C50862D002BE2DA = {
 			isa = PBXGroup;
 			children = (
-				44EE87BF1C508A81002BE2DA /* libsqlite3.dylib */,
 				44EE87811C50862D002BE2DA /* STDbKit */,
 				44EE87901C508657002BE2DA /* STDbKitTests */,
 				44EE87801C50862D002BE2DA /* Products */,
@@ -119,6 +118,7 @@
 		44EE87811C50862D002BE2DA /* STDbKit */ = {
 			isa = PBXGroup;
 			children = (
+				44F747501D580F120096473E /* libs */,
 				44EE87A31C50873F002BE2DA /* Category */,
 				44EE87AC1C50873F002BE2DA /* Classes */,
 			);
@@ -129,6 +129,7 @@
 			isa = PBXGroup;
 			children = (
 				44EE879C1C5086BB002BE2DA /* STDbObjectTests.m */,
+				44F747531D5813DE0096473E /* EncryptTests.m */,
 				44EE879D1C5086BB002BE2DA /* User.h */,
 				44EE879E1C5086BB002BE2DA /* User.m */,
 				44EE87931C508657002BE2DA /* Info.plist */,
@@ -164,6 +165,14 @@
 				44EE87B51C50873F002BE2DA /* STDbVersion.h */,
 			);
 			path = Classes;
+			sourceTree = "<group>";
+		};
+		44F747501D580F120096473E /* libs */ = {
+			isa = PBXGroup;
+			children = (
+				44F747511D580F120096473E /* libsqlcipher.a */,
+			);
+			path = libs;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -275,6 +284,7 @@
 				44EE87E81C50930A002BE2DA /* NSObject+STDbHandle.m in Sources */,
 				44EE87E91C50930A002BE2DA /* NSString+STDbHandle.m in Sources */,
 				44EE87EA1C50930A002BE2DA /* STDb.m in Sources */,
+				44F747551D5813DE0096473E /* EncryptTests.m in Sources */,
 				44EE87EB1C50930A002BE2DA /* STDbObject.m in Sources */,
 				44EE87EC1C50930A002BE2DA /* STDbQueue.m in Sources */,
 				44EE87A01C5086BB002BE2DA /* User.m in Sources */,
@@ -376,6 +386,10 @@
 		44EE87891C50862D002BE2DA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/STDbKit/libs",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -385,6 +399,10 @@
 		44EE878A1C50862D002BE2DA /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/STDbKit/libs",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -430,6 +448,7 @@
 				44EE878A1C50862D002BE2DA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		44EE87971C508657002BE2DA /* Build configuration list for PBXNativeTarget "STDbKitTests" */ = {
 			isa = XCConfigurationList;
@@ -438,6 +457,7 @@
 				44EE87991C508657002BE2DA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
