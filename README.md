@@ -165,6 +165,37 @@ User *user = _users[row];
 }];
 // 批量删除
 [User removeDbObjectsWhere:@"_id=%d", 4];
+
 ```
-**注意：** *一旦修改了数据类，请删除原来的应用重新运行。本项目内置了日期相关方法，详情参见* [NSDate+STExts](http://git.oschina.net/yanglishuan/NSDate-STExts)。  
-git库地址[https://github.com/stlwtr/STDbKit](https://github.com/stlwtr/STDbKit)
+FAQ
+----------------
+No question asked so far.
+
+Requirements
+----------------
+This project require :
++ ```iOS5```
++ ```ARC```
+
+Licence
+----------------
+MIT Licence  
+Copyright (c) 2014 Thibault Carpentier <carpen_t@epitech.eu>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
