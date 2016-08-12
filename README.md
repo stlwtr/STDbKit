@@ -1,3 +1,165 @@
+STDbKit
+==============
+
+This library provides an easy way to access sqlite database.
+
+Requirements
+----------------
+This project require :
++ ```iOS5```
++ ```ARC```
+
+Ｕsage
+----------------
+#####  1. declare a class,such as User
+```
+#import "STDbObject.h"
+#import "STDbQueue.h"
+#import "STDb.h"
+
+ @interface User : STDbObject
+
+ @property (strong, nonatomic) NSString *name;
+ @property (assign, nonatomic) NSInteger age;
+ @property (strong, nonatomic) NSNumber *sex;
+ @property (assign, nonatomic) NSTimeInterval time;
+ @property (assign, nonatomic) int _id;
+
+ @end
+```
+#####  2. insert into db
+```
+1：
+STDbQueue *dbQueue = [STDbQueue dbWithPath:@"stdb_test/test_queue.sqlite"];
+[dbQueue execute:^(STDb *db) {
+  User *user = [[User alloc] initWithPrimaryValue:8];
+  user.name = @"yls";
+  [db insertDbObject:user];
+}];
+2：
+STDbQueue *dbQueue = [STDbQueue dbWithPath:@"stdb_test/test_queue.sqlite"];
+[dbQueue execute:^(STDb *db) {
+  User *user = [[User alloc] initWithPrimaryValue:8];
+  user.name = @"yls";
+  [user insertToDb:db];
+}];
+3：
+STDbQueue *dbQueue = [STDbQueue dbWithPath:@"stdb_test/test_queue.sqlite"];
+[dbQueue execute:^(STDb *db) {
+  [db executeUpdate:@"insert into User(?) values(?)" dictionaryArgs:@{@"name" : @"aaa"}];
+}];
+
+```
+#####  3. query
+```
+// query
+1：
+NSArray *users = [User allDbObjects];
+2：
+[dbQueue execute:^(STDb *db) {
+  [db executeQuery:@"select * from User" resultBlock:^(NSArray *resultArray) {
+            NSLog(@"%@", resultArray);
+  }];
+}];
+    
+// query objects on condition
+NSArray *users = [User dbObjectsWhere:@"_id=11" orderby:nil];
+
+```
+#####  4. update
+```
+// first, query the object 
+1：
+NSArray *users = [User dbObjectsWhere:@"_id=11" orderby:nil];
+if ([users count] > 0) {
+   User *user = users[0];
+   user.name = @"stlwtr";
+   // 更新到数据库
+   [user updateToDb];
+}
+2：
+[dbQueue execute:^(STDb *db) {
+  [user updateToDb:db];
+}];
+```
+#####  5. delete
+```
+// get the objects to remove
+1：
+User *user = _users[row];
+// delete the object
+[user removeFromDb];
+2：
+[dbQueue execute:^(STDb *db) {
+  [db executeQuery:@"delete from User where __id__=8"];
+  }];
+}];
+// delete the objects on condition
+[User removeDbObjectsWhere:@"_id=%d", 4];
+
+
+Roadmap
+----------------
+
+####Current Version : ***2.2.5***  
+
+- ***2.2.5:***  
+	+ Support .sqlite file encrypt
+	+ Finish Readme.md documentation
+
+- ***V2.2.4:***
+	+ Support transaction management 
+
+- ***V2.2.1:***
+	+ Support thread Management
+
+- ***V2.0.2:***
+  	+ Add method for convert class object into dictionary 
+  	+ Add method for convert dictionary into class object
+
+- ***V2.0:***
+	+ Support array contains class objects of STDbObject
+  	+ Support dictionary contains an STDbObject object
+  	+ Remove the associate STDbObject class object after remove the parent object
+	
+- ***V1.0.5:***
+  	+ Support STDbObject class object contains another STDbObject class object
+
+- ***V1.0.4:***
+  - add dbObject expireDate property，when then data expire，it will be auto remove from db
+ 
+ - ***V1.0.3:***
+  - Support Collections class,such as NSData,NSDate,NSArray,NSDictionary
+
+```
+FAQ
+----------------
+No question asked so far.
+
+
+Licence
+----------------
+MIT Licence  
+Copyright (c) 2014 Thibault Carpentier <carpen_t@epitech.eu>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
 #STDbKit
 
 ## 1. 概述
