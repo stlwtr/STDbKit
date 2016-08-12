@@ -96,7 +96,7 @@ User *user = _users[row];
 }];
 // delete the objects on condition
 [User removeDbObjectsWhere:@"_id=%d", 4];
-
+```
 
 Roadmap
 ----------------
