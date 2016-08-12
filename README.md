@@ -9,7 +9,7 @@ This project require :
 + ```iOS5```
 + ```ARC```
 
-Ｕsage
+Usage
 ----------------
 #####  1. declare a class,such as User
 ```
