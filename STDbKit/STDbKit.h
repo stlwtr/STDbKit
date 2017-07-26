@@ -1,10 +1,10 @@
 //
-//  STDbQueue.h
-//  STDbKit
+//  STDbKit.h
+//  STDbObject
 //
-//  Created by stlwtr on 15/6/15.
+//  Created by stlwtr on 13-12-2.
 //
-// Version 2.2.1
+// Version 2.3.0
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -26,32 +26,14 @@
 //
 // emailto: 2008.yls@163.com
 // QQ: 603291699
+// https://github.com/stlwtr/STDbKit
 //
 
-#import <Foundation/Foundation.h>
+#ifndef STDbObject_STDbKit_h
+#define STDbObject_STDbKit_h
 
-@class STDb;
+#import <STDbKit/STDb.h>
+#import <STDbKit/STDbQueue.h>
+#import <STDbKit/STDbObject.h>
 
-@interface STDbQueue : NSObject
-
-/**
- *	@brief	数据库路径，不存在自动创建
- */
-+ (instancetype)dbWithPath:(NSString *)path;
-
-/**
- *	@brief	默认数据库路径
- */
-+ (instancetype)defaultQueue;
-
-/**
- *	@brief	数据库路径
- */
-@property (nonatomic, strong, readonly) NSString *dbPath;
-
-/**
- *	@brief	多线程执行方法
- */
-- (void)execute:(void (^)(STDb *db))block;
-
-@end
+#endif

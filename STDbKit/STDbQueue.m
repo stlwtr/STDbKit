@@ -4,7 +4,7 @@
 //
 //  Created by stlwtr on 15/6/15.
 //
-// Version 2.2.1
+// Version 2.3.0
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -26,6 +26,7 @@
 //
 // emailto: 2008.yls@163.com
 // QQ: 603291699
+// https://github.com/stlwtr/STDbKit
 //
 
 #import "STDbQueue.h"
@@ -45,7 +46,7 @@ static const void * const kDispatchQueueSpecificKey = &kDispatchQueueSpecificKey
 - (instancetype)initWithPath:(NSString *)filePath {
     self = [super init];
     if (self) {
-        _queue = dispatch_queue_create([NSString stringWithFormat:@"stdb.%@", self].UTF8String, NULL);
+        _queue = dispatch_queue_create([NSString stringWithFormat:@"com_stlwtr.db.%@", self].UTF8String, NULL);
         dispatch_queue_set_specific(_queue, kDispatchQueueSpecificKey, (__bridge void *)self, NULL);
         STDb *db = [STDb dbWithPath:filePath];
         self->_db = db;
@@ -73,7 +74,7 @@ static const void * const kDispatchQueueSpecificKey = &kDispatchQueueSpecificKey
     });
 }
 
-+ (instancetype)dbWithPath:(NSString *)path;
++ (instancetype)dbQueueWithPath:(NSString *)path;
 {
     NSString *dbPath = [path stringByStandardizingPath];
     if (![dbPath isAbsolutePath]) {
@@ -111,7 +112,7 @@ static const void * const kDispatchQueueSpecificKey = &kDispatchQueueSpecificKey
  *	@brief	默认数据库路径
  */
 + (instancetype)defaultQueue {
-    return [STDbQueue dbWithPath:[STDb defaultDbPath]];
+    return [STDbQueue dbQueueWithPath:[STDb defaultDbPath]];
 }
 
 @end

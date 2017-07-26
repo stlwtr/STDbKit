@@ -9,6 +9,25 @@ This project require :
 + ```iOS5```
 + ```ARC```
 
+Podfile
+----------------
+To integrate STDbKit into your Xcode project using CocoaPods, specify it in your Podfile:
+
+```
+source 'https://github.com/CocoaPods/Specs.git'
+platform :ios, '8.0'
+
+target 'TargetName' do
+pod 'STDbKit', '~> 2.3.0'
+end
+```
+
+Then, run the following command:
+
+```
+$ pod install
+```
+
 Usage
 ----------------
 #####  1. declare a class,such as User
@@ -101,7 +120,10 @@ User *user = _users[row];
 Roadmap
 ----------------
 
-####Current Version : ***2.2.5***  
+#### Current Version : ***2.3.0***  
+
+- ***2.3.0:***  
+  + Support STIgnore、STDbPrimaryKey
 
 - ***2.2.5:***  
 	+ Support .sqlite file encrypt

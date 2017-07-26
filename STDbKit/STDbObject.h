@@ -2,9 +2,9 @@
 //  DbObject.h
 //  STQuickKit
 //
-//  Created by yls on 13-11-21.
+//  Created by stlwtr on 13-11-21.
 //
-// Version 2.2.1
+// Version 2.3.0
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -26,35 +26,45 @@
 //
 // emailto: 2008.yls@163.com
 // QQ: 603291699
+// https://github.com/stlwtr/STDbKit
 //
 
 #import <Foundation/Foundation.h>
+#import <STDbKit/NSObject+Dictionary.h>
+
+static const char * kSTDbClassPropertiesKey;
 
 #define kDbId           @"__id__"
+#define kDbPId           @"__pid__"
 #define kDbKeySuffix    @"__key__"
 
 #define key( __p__ ) [NSString stringWithFormat:@"%@%@", __p__, kDbKeySuffix]
 
 @class STDb;
 
+
+@protocol STDbPrimaryKey <NSObject>
+@end
+
+/**
+ * Make all objects compatible to avoid compiler warnings
+ */
+@interface NSObject (STDbObjectPropertyCompatibility) <STIgnore, STDbPrimaryKey>
+@end
+
 @protocol STDbObject
 
 @required
 
 /**
- *	@brief	对象id，唯一标志
+ *	@brief	objct id
  */
-@property (assign, nonatomic, readonly) NSInteger __id__;
+@property (strong, nonatomic, readonly) NSString * __id__;
 
 /**
- *	@brief	父对象id，唯一标志
+ *	@brief	parent id
  */
-@property (assign, nonatomic, readonly) NSInteger __pid__;
-
-/**
- *	@brief	子对象id，唯一标志
- */
-@property (assign, nonatomic, readonly) NSInteger __cid__;
+@property (strong, nonatomic, readonly) NSString * __pid__;
 
 /**
  *	@brief	失效日期
@@ -160,39 +170,35 @@
 @interface STDbObject : NSObject<STDbObject>
 
 /**
- *	@brief	对象id，唯一标志
+ *	@brief	objct id
  */
-@property (assign, nonatomic, readonly) NSInteger __id__;
+@property (strong, nonatomic, readonly) NSString * __id__;
 
 /**
- *	@brief	父对象id，唯一标志
+ *	@brief	parent id
  */
-@property (assign, nonatomic, readonly) NSInteger __pid__;
+@property (strong, nonatomic, readonly) NSString * __pid__;
 
 /**
- *	@brief	子对象id，唯一标志
- */
-@property (assign, nonatomic, readonly) NSInteger __cid__;
-
-/**
- *	@brief	失效日期
+ *	@brief	expireDate
  */
 @property (strong, nonatomic) NSDate *expireDate;
 
 /**
- *	@brief	init with primary key
+ * @brief Indicates whether the property with the given name is primary key.
+ * @return a BOOL result indicating whether the property is primary key
  */
-- (instancetype)initWithPrimaryValue:(NSInteger)_id;
++ (BOOL)propertyIsPrimary:(NSString *)propertyName;
 
 /**
- *	@brief	objc to dictionary
+ *	@brief	primaryKeys
  */
-- (NSDictionary *)objcDictionary;
++ (NSArray *)properties;
 
 /**
- *	@brief	objc from dictionary
+ *	@brief	primaryKeys
  */
-+ (STDbObject *)objcFromDictionary:(NSDictionary *)dict;
++ (NSArray *)primaryKeys;
 
 @end
 

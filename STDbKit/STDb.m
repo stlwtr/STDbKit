@@ -2,9 +2,9 @@
 //  STDb.m
 //  STDbObject
 //
-//  Created by yls on 13-12-5.
+//  Created by stlwtr on 13-12-5.
 //
-// Version 2.2.1
+// Version 2.3.0
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -26,19 +26,25 @@
 //
 // emailto: 2008.yls@163.com
 // QQ: 603291699
+// https://github.com/stlwtr/STDbKit
 //
 
 #import "STDb.h"
 #import <sqlite3.h>
-
 #import "STDbObject.h"
 
 #import "NSDate+STDbHandle.h"
 #import "NSData+STDbHandle.h"
 #import "NSObject+STDbHandle.h"
 #import "NSString+STDbHandle.h"
+#import "STDbObjectProperty.h"
 
 NSString *STDbDefaultName = @"stdb_default.sqlite";
+static NSMutableDictionary *stdbClassPropertiesDictionary;
+
+#ifdef STDBEncryptEnable
+#define SQLITE_HAS_CODEC 1
+#endif
 
 #define DBParentPrefix @"STDBParentID_"
 #define DBChildPrefix  @"STDBChildID_"
@@ -68,11 +74,6 @@ enum {
     DBObjAttrDictionary,
 };
 
-#define DBText  @"text"
-#define DBInt   @"integer"
-#define DBFloat @"real"
-#define DBData  @"blob"
-
 @interface STDb()
 {
     NSString *_dbPath;
@@ -81,7 +82,6 @@ enum {
     BOOL _inTransaction;
     
     NSMutableDictionary *_dbTableColumnsCache;
-    NSMutableDictionary *_propertyForClassCache;
 }
 
 @property (nonatomic) sqlite3 *sqlite3DB;
@@ -174,7 +174,6 @@ enum {
         _dbPath = path;
         
         _dbTableColumnsCache = [NSMutableDictionary dictionary];
-        _propertyForClassCache = [NSMutableDictionary dictionary];
         
 #ifdef STDb_EncryptEnable
         self.encryptEnable = YES;
@@ -355,7 +354,7 @@ objc_property_t * st_class_copyPropertyList(Class cls, unsigned int *count)
 {
     @synchronized(self){
         char * type = property_copyAttributeValue(property, "T");
-        
+
         switch(type[0]) {
             case 'f' : //float
             case 'd' : //double
@@ -365,9 +364,13 @@ objc_property_t * st_class_copyPropertyList(Class cls, unsigned int *count)
                 break;
                 
             case 'c':   // char
-            case 's' : //short
+            case 's' :  // short
             case 'i':   // int
             case 'l':   // long
+            case 'q':   // long
+            case 'I':   // NSInteger
+            case 'Q':   // NSUInteger
+            case 'B':   // BOOL
             {
                 return DBInt;
             }
@@ -525,9 +528,9 @@ objc_property_t * st_class_copyPropertyList(Class cls, unsigned int *count)
                                 NSString *rowidStr = [dbObj stringByReplacingOccurrencesOfString:DBChildPrefix withString:@""];
                                 NSArray *arr = [rowidStr componentsSeparatedByString:@","];
                                 NSString *clsName = arr[0];
-                                NSInteger rowid = [arr[1] integerValue];
+                                NSString *__id__ = arr[1];
                                 
-                                NSString *where = [NSString stringWithFormat:@"%@=%@", kDbId, @(rowid)];
+                                NSString *where = [NSString stringWithFormat:@"%@=%@", kDbId, __id__];
                                 
                                 STDbObject *child = (STDbObject *)[NSClassFromString(clsName) dbObjectsWhere:where orderby:nil][0];
                                 [results setObject:child forKey:key];
@@ -558,13 +561,15 @@ objc_property_t * st_class_copyPropertyList(Class cls, unsigned int *count)
                                 NSString *rowidStr = [dbObj stringByReplacingOccurrencesOfString:DBChildPrefix withString:@""];
                                 NSArray *arr = [rowidStr componentsSeparatedByString:@","];
                                 NSString *clsName = arr[0];
-                                NSInteger rowid = [arr[1] integerValue];
+                                NSString *__id__ = arr[1];
                                 
-                                NSString *where = [NSString stringWithFormat:@"%@=%@", kDbId, @(rowid)];
-                                
-                                STDbObject *child = (STDbObject *)[NSClassFromString(clsName) dbObjectsWhere:where orderby:nil][0];
-                                [results addObject:child];
-                                
+                                NSString *where = [NSString stringWithFormat:@"%@=%@", kDbId, __id__];
+                                NSString *queryStr = [NSString stringWithFormat:@"select * from %@ where %@;", clsName, where];
+                                [self executeQuery:queryStr resultBlock:^(NSArray *resultArray) {
+                                    if (resultArray.count > 0) {
+                                        [results addObject:resultArray[0]];
+                                    }
+                                }];
                                 continue;
                             }
                         }
@@ -588,11 +593,24 @@ objc_property_t * st_class_copyPropertyList(Class cls, unsigned int *count)
                 }
                 
                 if ([NSClassFromString(cls) isSubclassOfClass:[STDbObject class]]) {
+                    NSString *userFlag = (NSString *)dbValue;
+                    NSMutableArray *results = [NSMutableArray array];
                     
-                    NSString *where = [[NSString alloc] initWithFormat:@"%@=%@", kDbId, dbValue];
-                    
-                    NSMutableArray *results = [NSClassFromString(cls) dbObjectsWhere:where orderby:nil];
-                    
+                    if ([userFlag isKindOfClass:[NSString class]]) {
+                        NSString *__id__Str = [userFlag stringByReplacingOccurrencesOfString:DBChildPrefix withString:@""];
+                        NSArray *arr = [__id__Str componentsSeparatedByString:@","];
+                        NSString *clsName = arr[0];
+                        NSString *__id__ = arr[1];
+                        NSString *where = [[NSString alloc] initWithFormat:@"%@ = \"%@\" and %@ is not null", kDbId, __id__, kDbPId];
+                        
+                        NSString *queryStr = [NSString stringWithFormat:@"select * from %@ where %@;", clsName, where];
+                        [self executeQuery:queryStr resultBlock:^(NSArray *resultArray) {
+                            if (resultArray.count > 0) {
+                                id object = [NSClassFromString(clsName) objcFromDictionary:resultArray[0]];
+                                [results addObject:object];
+                            }
+                        }];
+                    }
                     if (results.count > 0) {
                         STDbObject *obj = results[0];
                         return obj;
@@ -677,7 +695,7 @@ objc_property_t * st_class_copyPropertyList(Class cls, unsigned int *count)
     }
 }
 
-- (id)valueForDbObjc_property_t:(objc_property_t)property dbValue:(id)dbValue _id:(NSInteger)_id
+- (id)valueForDbObjc_property_t:(objc_property_t)property dbValue:(id)dbValue _id:(NSString *)_id
 {
     @synchronized(self){
         if (!dbValue) {
@@ -685,143 +703,114 @@ objc_property_t * st_class_copyPropertyList(Class cls, unsigned int *count)
         }
         char * type = property_copyAttributeValue(property, "T");
         
-        switch(type[0]) {
-            case 'f' : //float
-            {
-                return [NSNumber numberWithDouble:[dbValue floatValue]];
+        if (type[0] != '@') {
+            return dbValue;
+        } else {
+            NSString *cls = [NSString stringWithUTF8String:type];
+            cls = [cls stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+            cls = [cls stringByReplacingOccurrencesOfString:@"@" withString:@""];
+            cls = [cls stringByReplacingOccurrencesOfString:@"\"" withString:@""];
+            
+            if ([NSClassFromString(cls) isSubclassOfClass:[NSString class]]) {
+                NSString *retStr = [NSString stringWithFormat:@"%@", [NSString stringWithFormat:@"%@", dbValue]];
+                if ([self encryptEnable]) {
+                    retStr = [retStr encryptWithKey:[self encryptKey]];
+                }
+                return retStr;
             }
-                break;
-            case 'd' : //double
-            {
+            
+            if ([NSClassFromString(cls) isSubclassOfClass:[NSNumber class]]) {
                 return [NSNumber numberWithDouble:[dbValue doubleValue]];
             }
-                break;
+            
+            if ([NSClassFromString(cls) isSubclassOfClass:[NSDictionary class]]) {
+                NSMutableDictionary *results = [NSMutableDictionary dictionaryWithCapacity:0];
                 
-            case 'c':   // char
-            {
-                return [NSNumber numberWithDouble:[dbValue charValue]];
-            }
-                break;
-            case 's' : //short
-            {
-                return [NSNumber numberWithDouble:[dbValue shortValue]];
-            }
-                break;
-            case 'i':   // int
-            {
-                return [NSNumber numberWithDouble:[dbValue longValue]];
-            }
-                break;
-            case 'l':   // long
-            {
-                return [NSNumber numberWithDouble:[dbValue longValue]];
-            }
-                break;
-                
-            case '*':   // char *
-                break;
-                
-            case '@' : //ObjC object
-                //Handle different clases in here
-            {
-                NSString *cls = [NSString stringWithUTF8String:type];
-                cls = [cls stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-                cls = [cls stringByReplacingOccurrencesOfString:@"@" withString:@""];
-                cls = [cls stringByReplacingOccurrencesOfString:@"\"" withString:@""];
-                
-                if ([NSClassFromString(cls) isSubclassOfClass:[NSString class]]) {
-                    NSString *retStr = [NSString stringWithFormat:@"%@", [NSString stringWithFormat:@"%@", dbValue]];
-                    if ([self encryptEnable]) {
-                        retStr = [retStr encryptWithKey:[self encryptKey]];
-                    }
-                    return retStr;
-                }
-                
-                if ([NSClassFromString(cls) isSubclassOfClass:[NSNumber class]]) {
-                    return [NSNumber numberWithDouble:[dbValue doubleValue]];
-                }
-                
-                if ([NSClassFromString(cls) isSubclassOfClass:[NSDictionary class]]) {
-                    NSMutableDictionary *results = [NSMutableDictionary dictionaryWithCapacity:0];
+                for (NSString *key in dbValue) {
+                    NSObject *obj = dbValue[key];
                     
-                    for (NSString *key in dbValue) {
-                        NSObject *obj = dbValue[key];
+                    if ([obj isKindOfClass:[STDbObject class]]) {
+                        STDbObject *dbObject = (STDbObject *)obj;
                         
-                        if ([obj isKindOfClass:[STDbObject class]]) {
-                            STDbObject *dbObject = (STDbObject *)obj;
-                            
-                            [dbObject setValue:@(_id) forKey:kPId];
-                            [self replaceDbObject:dbObject];
-//                            [dbObject replaceToDb];
-                            
-                            NSInteger rowid = [dbObject.class lastRowId];
-                            
-                            [results setObject:[NSString stringWithFormat:@"%@%@,%@", DBChildPrefix, NSStringFromClass(obj.class),@(rowid)]  forKey:key];
-                        } else {
-                            [results setObject:obj forKey:key];
-                        }
-                    }
-                    
-                    NSString *retStr = [NSString stringWithFormat:@"%@", [NSDictionary stringWithObject:results]];
-                    if ([self encryptEnable]) {
-                        retStr = [retStr encryptWithKey:[self encryptKey]];
-                    }
-                    return retStr;
-                }
-                
-                if ([NSClassFromString(cls) isSubclassOfClass:[NSArray class]]) {
-                    
-                    NSMutableArray *results = [NSMutableArray arrayWithCapacity:0];
-                    for (NSObject *obj in (NSArray *)dbValue) {
-                        if ([obj isKindOfClass:[STDbObject class]]) {
-                            STDbObject *dbObject = (STDbObject *)obj;
-                            
-                            [dbObject setValue:@(_id) forKey:kPId];
-                            [self replaceDbObject:dbObject];
-                            
-                            NSInteger rowid = [dbObject.class lastRowId];
-                            
-                            [results addObject:[NSString stringWithFormat:@"%@%@,%@", DBChildPrefix, NSStringFromClass(obj.class),@(rowid)]];
-                        } else {
-                            [results addObject:obj];
-                        }
-                    }
-                    NSString *retStr = [NSString stringWithFormat:@"%@", [NSArray stringWithObject:results]];
-                    if ([self encryptEnable]) {
-                        retStr = [retStr encryptWithKey:[self encryptKey]];
-                    }
-                    return retStr;
-                }
-                
-                if ([NSClassFromString(cls) isSubclassOfClass:[NSDate class]]) {
-                    if ([dbValue isKindOfClass:[NSDate class]]) {
-                        NSString *retStr = [NSString stringWithFormat:@"%@", [NSDate stringWithDate:dbValue]];
-                        if ([self encryptEnable]) {
-                            retStr = [retStr encryptWithKey:[self encryptKey]];
-                        }
-                        return retStr;
+                        [dbObject setValue:_id forKey:kPId];
+                        [self replaceDbObject:dbObject];
+                        
+                        NSInteger rowid = [dbObject.class lastRowId];
+                        
+                        [results setObject:[NSString stringWithFormat:@"%@%@,%@", DBChildPrefix, NSStringFromClass(obj.class),@(rowid)]  forKey:key];
                     } else {
-                        return @"";
+                        [results setObject:obj forKey:key];
                     }
-                    
                 }
                 
-                if ([NSClassFromString(cls) isSubclassOfClass:[NSValue class]]) {
-                    return [NSData dataWithData:dbValue];
+                NSString *retStr = [NSString stringWithFormat:@"%@", [NSDictionary stringWithObject:results]];
+                if ([self encryptEnable]) {
+                    retStr = [retStr encryptWithKey:[self encryptKey]];
                 }
+                return retStr;
+            }
+            
+            if ([NSClassFromString(cls) isSubclassOfClass:[NSArray class]]) {
                 
-                if ([NSClassFromString(cls) isSubclassOfClass:[STDbObject class]]) {
-                    return dbValue;
+                NSMutableArray *results = [NSMutableArray arrayWithCapacity:0];
+                for (NSObject *obj in (NSArray *)dbValue) {
+                    if ([obj isKindOfClass:[STDbObject class]]) {
+                        STDbObject *dbObject = (STDbObject *)obj;
+                        
+                        [dbObject setValue:_id forKey:kPId];
+                        [self replaceDbObject:dbObject];
+                        
+                        NSInteger rowid = [dbObject.class lastRowId];
+                        
+                        [results addObject:[NSString stringWithFormat:@"%@%@,%@", DBChildPrefix, NSStringFromClass(obj.class),@(rowid)]];
+                    } else {
+                        [results addObject:obj];
+                    }
+                }
+                NSString *retStr = [NSString stringWithFormat:@"%@", [NSArray stringWithObject:results]];
+                if ([self encryptEnable]) {
+                    retStr = [retStr encryptWithKey:[self encryptKey]];
+                }
+                return retStr;
+            }
+            
+            if ([NSClassFromString(cls) isSubclassOfClass:[NSDate class]]) {
+                if ([dbValue isKindOfClass:[NSDate class]]) {
+                    NSString *retStr = [NSString stringWithFormat:@"%@", [NSDate stringWithDate:dbValue]];
+                    if ([self encryptEnable]) {
+                        retStr = [retStr encryptWithKey:[self encryptKey]];
+                    }
+                    return retStr;
                 }
             }
-                break;
+            
+            if ([NSClassFromString(cls) isSubclassOfClass:[NSValue class]]) {
+                return [NSData dataWithData:dbValue];
+            }
+            
+            if ([NSClassFromString(cls) isSubclassOfClass:[STDbObject class]]) {
+                return dbValue;
+            }
         }
         
         return dbValue;
     }
 }
 
-- (void)class:(Class)aClass getPropertyNameList:(NSMutableArray *)proName primaryKeys:(NSMutableArray *)primaryKeys
+- (NSArray *)keyTypeArrayForClass:(Class)class {
+    NSArray *properties = [class properties];
+    
+    NSMutableArray *keyTypeArray = [NSMutableArray array];
+    
+    for (STDbObjectProperty *p in properties) {
+        NSString *keyTypeStr = [NSString stringWithFormat:@"%@ %@", p.name, p.dbType];
+        [keyTypeArray addObject:keyTypeStr];
+    }
+    
+    return keyTypeArray;
+}
+
+- (void)class:(Class)aClass getPropertyNameList:(NSMutableArray *)proName primaryKeys:(NSMutableArray *)primaryKeys  __attribute__ ((deprecated))
 {
     unsigned int count;
     objc_property_t *properties = class_copyPropertyList(aClass, &count);
@@ -974,7 +963,14 @@ static int STDBBusyHandler(void *f, int count) {
     if (condition != nil || [condition length] != 0) {
         if (![[condition lowercaseString] isEqualToString:@"all"]) {
             [selectstring appendFormat:@" where %@", condition];
+            if (![condition containsString:kDbPId]) {
+                [selectstring appendFormat:@" and %@ is null", kDbPId];
+            }
+        } else {
+            [selectstring appendFormat:@" where %@ is null", kDbPId];
         }
+    } else {
+        [selectstring appendFormat:@" where %@ is null", kDbPId];
     }
     
     if (orderby != nil || [orderby length] != 0) {
@@ -1015,8 +1011,15 @@ static int STDBBusyHandler(void *f, int count) {
                     if (value != NULL) {
                         column_value = [NSString stringWithUTF8String: (const char *)value];
                         id objValue = [self valueForObjc_property_t:property_t dbValue:column_value];
+                        NSString *objectKey = [NSString stringWithFormat:@"_%@", key];
+                        Ivar ivar = class_getInstanceVariable([obj class], objectKey.UTF8String);
+                        const char* typeEncoding = ivar_getTypeEncoding(ivar);
                         if (objValue) {
-                            [obj setValue:objValue forKey:key];
+                            if (typeEncoding[0] == '*') {
+                                object_setIvar(obj, ivar, objValue);
+                            } else {
+                                [obj setValue:objValue forKey:key];
+                            }
                         }
                     }
                 } else if ([obj_column_decltype isEqualToString:@"integer"]) {
@@ -1058,7 +1061,6 @@ static int STDBBusyHandler(void *f, int count) {
     
     sqlite3_finalize(stmt);
     stmt = NULL;
-    //        [self closeDb];
     
     return array;
     //    }
@@ -1080,34 +1082,31 @@ static int STDBBusyHandler(void *f, int count) {
     
     [self upgradeTableIfNeed:obj.class];
     
-    NSMutableArray *propertyTypeArr = [NSMutableArray arrayWithArray:[self sqlite_columns:obj.class]];
-    
     sqlite3_stmt *stmt = NULL;
     int rc = -1;
-
-    NSMutableArray *propertyArr = [NSMutableArray arrayWithCapacity:0];
     sqlite3 *sqlite3DB = [self sqlite3DB];
     
-    unsigned int count;
     Class cls = [obj class];
-    objc_property_t *properties = st_class_copyPropertyList(cls, &count);
+    NSArray *propertyArr = [cls properties];
     
-    NSMutableArray *keys = [NSMutableArray arrayWithCapacity:0];
+    NSMutableArray *keys = [NSMutableArray array];
+    NSMutableArray *binds = [NSMutableArray array];
+    NSMutableArray *dbPropertyArr = [NSMutableArray array];
     
-    for (int i = 0; i < count; i++) {
-        objc_property_t property = properties[i];
-        NSString * key = [[NSString alloc]initWithCString:property_getName(property) encoding:NSUTF8StringEncoding];
-        id objValue = [obj valueForKey:key];
-        id value = [self valueForDbObjc_property_t:property dbValue:objValue _id:-1];
+    for (STDbObjectProperty *p in propertyArr) {
+        NSString * key = p.name;
         
-        if (value && (NSNull *)value != [NSNull null]) {
-            NSString *bindValue = [NSString stringWithFormat:@"%@=?", key];
-            [propertyArr addObject:bindValue];
-            [keys addObject:key];
+        if ([key isEqualToString:kDbId] || [key isEqualToString:kDbPId]) {
+            continue;
         }
+        
+        NSString *bindValue = [NSString stringWithFormat:@"%@=?", key];
+        [binds addObject:bindValue];
+        [keys addObject:key];
+        [dbPropertyArr addObject:p];
     }
     
-    NSString *newValue = [propertyArr componentsJoinedByString:@","];
+    NSString *newValue = [binds componentsJoinedByString:@","];
     
     if (![self isOpened]) {
         [self openDb];
@@ -1119,15 +1118,13 @@ static int STDBBusyHandler(void *f, int count) {
     if (sqlite3_prepare_v2(sqlite3DB, [createStr UTF8String], -1, &stmt, &errmsg) == SQLITE_OK) {
         
         int i = 1;
-        for (NSString *key in keys) {
+        for (STDbObjectProperty *p in dbPropertyArr) {
+            NSString *key = p.name;
+            NSString *column_type_string = p.dbType;
             
-            if ([key isEqualToString:kDbId] && obj.__id__ == -1) {
-                continue;
-            }
-            
-            NSString *column_type_string = propertyTypeArr[i - 1][@"type"];
-            
-            id value = [obj valueForKey:key];
+            id value = [self ivarObject:obj forKey:key];
+            // convert to db value
+            value = [self convertToDbValue:value pid:obj.__id__];
             
             if ([column_type_string isEqualToString:@"blob"]) {
                 if (!value || value == [NSNull null] || [value isEqual:@""]) {
@@ -1143,9 +1140,7 @@ static int STDBBusyHandler(void *f, int count) {
                 if (!value || value == [NSNull null] || [value isEqual:@""]) {
                     sqlite3_bind_null(stmt, i);
                 } else {
-                    objc_property_t property_t = class_getProperty(obj.class, [key UTF8String]);
-                    
-                    value = [self valueForDbObjc_property_t:property_t dbValue:value _id:obj.__id__];
+        
                     NSString *column_value = [NSString stringWithFormat:@"%@", value];
                     
                     sqlite3_bind_text(stmt, i, [column_value UTF8String], -1, SQLITE_STATIC);
@@ -1212,8 +1207,7 @@ static int STDBBusyHandler(void *f, int count) {
         
         [self upgradeTableIfNeed:obj.class];
         
-        NSMutableArray *propertyArr = [NSMutableArray arrayWithCapacity:0];
-        propertyArr = [NSMutableArray arrayWithArray:[self sqlite_columns:obj.class]];
+        NSArray *propertyArr = [self keyTypeArrayForClass:obj.class];
         
         NSUInteger argNum = [propertyArr count];
         
@@ -1233,38 +1227,14 @@ static int STDBBusyHandler(void *f, int count) {
         
         const char *errmsg = NULL;
         if (sqlite3_prepare_v2(sqlite3DB, [sql_NSString UTF8String], -1, &stmt, &errmsg) == SQLITE_OK) {
-            
-            NSInteger dbId = 0;
             for (int i = 1; i <= argNum; i++) {
-                NSString * key = propertyArr[i - 1][@"title"];
+                NSArray *keyTypeArray = [propertyArr[i - 1] componentsSeparatedByString:@" "];
+                NSString * key = keyTypeArray[0];
                 
-                if ([key isEqualToString:kDbId]) {
-                    if (obj.__id__ == -1) {
-                        continue;
-                    }
-                }
+                NSString *column_type_string = keyTypeArray[1];
                 
-                NSString *column_type_string = propertyArr[i - 1][@"type"];
-                
-                id value;
-                NSInteger rowId = [self lastRowIdWithClass:obj.class];
-                dbId = rowId + 1;
-                if ([key hasPrefix:DBParentPrefix]) {
-                    key = [key stringByReplacingOccurrencesOfString:DBParentPrefix withString:@""];
-                    
-                    value = [[NSString alloc] initWithFormat:@"%@", @(rowId+1)];
-                } else {
-                    value = [obj valueForKey:key];
-                    NSObject *object = (NSObject *)value;
-                    if ([object isKindOfClass:[STDbObject class]]) {
-                        NSInteger subDbRowId = [self lastRowIdWithClass:object.class];
-                        value = [[NSString alloc] initWithFormat:@"%@", @(subDbRowId+1)];
-                        
-                        STDbObject *dbObj = (STDbObject *)object;
-                        [dbObj setValue:@(rowId+1) forKey:kPId];
-                        [self insertDbObject:dbObj forced:YES];
-                    }
-                }
+                id value = [self ivarObject:obj forKey:key];
+                value = [self convertToDbValue:value pid:obj.__id__];
                 
                 if ([column_type_string isEqualToString:@"blob"]) {
                     if (!value || value == [NSNull null] || [value isEqual:@""]) {
@@ -1280,10 +1250,7 @@ static int STDBBusyHandler(void *f, int count) {
                     if (!value || value == [NSNull null] || [value isEqual:@""]) {
                         sqlite3_bind_null(stmt, i);
                     } else {
-                        objc_property_t property_t = class_getProperty(obj.class, [key UTF8String]);
-                        
-                        value = [self valueForDbObjc_property_t:property_t dbValue:value _id:rowId];
-                        NSString *column_value = [NSString stringWithFormat:@"%@", value];
+                        NSString *column_value = value;
                         sqlite3_bind_text(stmt, i, [column_value UTF8String], -1, SQLITE_STATIC);
                     }
                     
@@ -1305,9 +1272,7 @@ static int STDBBusyHandler(void *f, int count) {
                 }
             }
             int rc = sqlite3_step(stmt);
-            if (obj.__id__ == -1) {
-                [obj setValue:@(dbId) forKeyPath:@"__id__"];
-            }
+
             if ((rc != SQLITE_DONE) && (rc != SQLITE_ROW)) {
                 NSString *insertSql = forced ? @"insert" : @"replace";
                 fprintf(stderr,"%s dbObject fail: %s\n", insertSql.UTF8String, errmsg);
@@ -1406,10 +1371,8 @@ static int STDBBusyHandler(void *f, int count) {
     [sql appendString:NSStringFromClass(aClass)];
     [sql appendString:@"("];
     
-    NSMutableArray *propertyArr = [NSMutableArray arrayWithCapacity:0];
-    NSMutableArray *primaryKeys = [NSMutableArray arrayWithCapacity:0];
-    
-    [self class:aClass getPropertyNameList:propertyArr primaryKeys:primaryKeys];
+    NSArray *propertyArr = [self keyTypeArrayForClass:aClass];
+    NSArray *primaryKeys = [aClass primaryKeys];
     
     NSString *propertyStr = [propertyArr componentsJoinedByString:@","];
     
@@ -1460,7 +1423,7 @@ static int STDBBusyHandler(void *f, int count) {
         sqlite3 *sqlite3DB = db.sqlite3DB;
         int ret = sqlite3_exec(sqlite3DB,[sql UTF8String], NULL, NULL, &errmsg);
         if(ret != SQLITE_OK){
-            //        fprintf(stderr,"create table fail: %s\n",errmsg);
+            STDBLog("create table fail: %s\n", errmsg);
         }
         sqlite3_free(errmsg);
         
@@ -1511,24 +1474,22 @@ static int STDBBusyHandler(void *f, int count) {
     
     sqlite3_stmt *stmt = NULL;
     STDb *db = self;
-    sqlite3 *sqlite3DB = db.sqlite3DB;
     
     // obj包含的STDbObject对象
     //    NSMutableArray *subDbObjects = [NSMutableArray arrayWithCapacity:0];
     
     const char *errmsg = NULL;
-    if (sqlite3_prepare_v2(sqlite3DB, [sql UTF8String], -1, &stmt, &errmsg) == SQLITE_OK) {
+    if (sqlite3_prepare_v2(db.sqlite3DB, [sql UTF8String], -1, &stmt, &errmsg) == SQLITE_OK) {
         
-        id obj;
         NSInteger idx = 0;
         
         for (NSString *dictionaryKey in [dictionaryArgs allKeys]) {
             
             // Prefix the key with a colon.
             NSString *parameterName = [[NSString alloc] initWithFormat:@":%@", dictionaryKey];
-            
+            const char *zName = [parameterName UTF8String];
             // Get the index for the parameter name.
-            int namedIdx = sqlite3_bind_parameter_index(stmt, [parameterName UTF8String]);
+            int namedIdx = sqlite3_bind_parameter_index(stmt, zName);
             
             if (namedIdx > 0) {
                 // Standard binding from here.
@@ -1547,10 +1508,12 @@ static int STDBBusyHandler(void *f, int count) {
             //                [self closeDb];
             
             return NO;
-        } else {
-            sqlite3_int64 rowid = sqlite3_last_insert_rowid(sqlite3DB);
-            [obj setValue:@(rowid) forKeyPath:@"__id__"];
         }
+    } else {
+        sqlite3_finalize(stmt);
+        stmt = NULL;
+        
+        return NO;
     }
     sqlite3_finalize(stmt);
     stmt = NULL;
@@ -1610,15 +1573,17 @@ int STDbExecuteBulkSQLCallback(void *theBlockAsVoid, int columns, char **values,
                 // set the handler
                 [db setMaxBusyRetryTimeInterval:db->_maxBusyRetryTimeInterval];
             }
-            
+
+#ifdef SQLITE_HAS_CODEC
             NSString *key = [self encryptKey];
             NSData *keyData = [NSData dataWithBytes:[key UTF8String] length:(NSUInteger)strlen([key UTF8String])];
+            
             int rc = sqlite3_key(_sqlite3DB, [keyData bytes], (int)[keyData length]);
             
             if (rc != SQLITE_OK) {
                 STDBLog(@"设置encrypt key值失败!");
             }
-            
+#endif
             return (rc == SQLITE_OK);
             
             return YES;
@@ -1629,18 +1594,6 @@ int STDbExecuteBulkSQLCallback(void *theBlockAsVoid, int columns, char **values,
         
         return NO;
     }
-}
-
-- (void)setEncryptDB:(BOOL)encryptDB {
-    if (encryptDB) {
-        NSString *key = [self encryptKey];
-        NSData *keyData = [NSData dataWithBytes:[key UTF8String] length:(NSUInteger)strlen([key UTF8String])];
-        int rc = sqlite3_key(_sqlite3DB, [keyData bytes], (int)[keyData length]);
-        if (rc != SQLITE_OK) {
-            STDBLog(@"设置encrypt key值失败!");
-        }
-    }
-    _encryptDB = encryptDB;
 }
 
 - (BOOL)sqlite_tableExist:(Class)aClass {
@@ -1707,10 +1660,7 @@ int STDbExecuteBulkSQLCallback(void *theBlockAsVoid, int columns, char **values,
             [columnArr addObject:dict[@"title"]];
         }
         
-        NSMutableArray *propertyArr = [NSMutableArray arrayWithCapacity:0];
-        NSMutableArray *primaryKeys = [NSMutableArray arrayWithCapacity:0];
-        
-        [self class:cls getPropertyNameList:propertyArr primaryKeys:primaryKeys];
+        NSArray *propertyArr = [self keyTypeArrayForClass:cls];
         
         NSMutableArray *propertyNames = [NSMutableArray array];
         for (NSString *property in propertyArr) {
@@ -1765,26 +1715,6 @@ int STDbExecuteBulkSQLCallback(void *theBlockAsVoid, int columns, char **values,
     return YES;
 }
 
-- (NSArray *)propertyForClass:(Class)cls {
-    
-    NSMutableArray *propertyNames = [_propertyForClassCache objectForKey:NSStringFromClass(cls)];
-    
-    if (propertyNames) {
-        return propertyNames;
-    }
-    
-    propertyNames = [NSMutableArray array];
-    NSMutableArray *propertyArr = [NSMutableArray arrayWithCapacity:0];
-    NSMutableArray *primaryKeys = [NSMutableArray arrayWithCapacity:0];
-    
-    [self class:cls getPropertyNameList:propertyArr primaryKeys:primaryKeys];
-    
-    for (NSString *property in propertyArr) {
-        [propertyNames addObject:[property componentsSeparatedByString:@" "][0]];
-    }
-    return propertyNames;
-}
-
 - (NSString *)versionFilePath {
     NSString *path = [self dbPath];
     NSInteger hash = [path hash];
@@ -1827,6 +1757,165 @@ int STDbExecuteBulkSQLCallback(void *theBlockAsVoid, int columns, char **values,
 }
 
 #pragma mark - other method
+
+- (id)ivarObject:(id)object forKey:(NSString *)key {
+    id value;
+    NSString *ivarName = [NSString stringWithFormat:@"_%@", key];
+    Ivar ivar = class_getInstanceVariable([object class], ivarName.UTF8String);
+    const char* typeEncoding = ivar_getTypeEncoding(ivar);
+    
+    /*
+     @{@"f":@"float", @"i":@"int", @"d":@"double", @"l":@"long", @"c":@"BOOL", @"s":@"short", @"q":@"long",
+     //and some famous aliases of primitive types
+     // BOOL is now "B" on iOS __LP64 builds
+     @"I":@"NSInteger", @"Q":@"NSUInteger", @"B":@"BOOL", @"*": @"char *",
+     @"@?":@"Block"};
+     */
+    switch (typeEncoding[0]) {
+        case '*': {
+            char * charValue = ((char * (*)(id, Ivar))object_getIvar)(object, ivar);
+            if (charValue) {
+                value = @(charValue);
+            }
+        }
+            break;
+        case 'i':
+        case 'c':
+        case 'B':
+        case 's': {
+            Ivar ivar = class_getInstanceVariable ([object class], ivarName.UTF8String);
+            ptrdiff_t offset = ivar_getOffset(ivar);
+            unsigned char *stuffBytes = (unsigned char *)(__bridge void *)object;
+            int intValue = * ((int *)(stuffBytes + offset));
+            value = @(intValue);
+        }
+            break;
+        case 'l':
+        case 'I':
+        case 'q':
+        case 'Q': {
+            Ivar ivar = class_getInstanceVariable ([object class], ivarName.UTF8String);
+            ptrdiff_t offset = ivar_getOffset(ivar);
+            unsigned char *stuffBytes = (unsigned char *)(__bridge void *)object;
+            long longValue = * ((long *)(stuffBytes + offset));
+            value = @(longValue);
+        }
+            break;
+        case 'f': {
+            Ivar ivar = class_getInstanceVariable ([object class], ivarName.UTF8String);
+            ptrdiff_t offset = ivar_getOffset(ivar);
+            unsigned char *stuffBytes = (unsigned char *)(__bridge void *)object;
+            float floatValue = * ((float *)(stuffBytes + offset));
+            value = @(floatValue);
+        }
+            break;
+        case 'd': {
+            Ivar ivar = class_getInstanceVariable ([object class], ivarName.UTF8String);
+            ptrdiff_t offset = ivar_getOffset(ivar);
+            unsigned char *stuffBytes = (unsigned char *)(__bridge void *)object;
+            double doubleValue = * ((double *)(stuffBytes + offset));
+            value = @(doubleValue);
+        }
+            break;
+        case '@': {
+            value = object_getIvar(object, ivar);
+        }
+            break;
+        default:
+            break;
+    }
+    return value;
+}
+
+- (id)convertToDbValue:(id)value pid:(NSString *)pid {
+    
+    if ([value isKindOfClass:[NSString class]]) {
+        NSString *retStr = [NSString stringWithFormat:@"%@", [NSString stringWithFormat:@"%@", value]];
+        if ([self encryptEnable]) {
+            retStr = [retStr encryptWithKey:[self encryptKey]];
+        }
+        return retStr;
+    }
+    
+    if ([value isKindOfClass:[NSNumber class]]) {
+        return [NSString stringWithFormat:@"%@", value];
+    }
+    
+    if ([value isKindOfClass:[NSDictionary class]]) {
+        NSMutableDictionary *results = [NSMutableDictionary dictionaryWithCapacity:0];
+        
+        for (NSString *key in value) {
+            NSObject *obj = value[key];
+            
+            if ([obj isKindOfClass:[STDbObject class]]) {
+                STDbObject *dbObject = (STDbObject *)obj;
+                
+                [self replaceDbObject:dbObject];
+                
+                NSInteger rowid = [dbObject.class lastRowId];
+                
+                [results setObject:[NSString stringWithFormat:@"%@%@,%@", DBChildPrefix, NSStringFromClass(obj.class),@(rowid)]  forKey:key];
+            } else {
+                [results setObject:obj forKey:key];
+            }
+        }
+        
+        NSString *retStr = [NSString stringWithFormat:@"%@", [NSDictionary stringWithObject:results]];
+        if ([self encryptEnable]) {
+            retStr = [retStr encryptWithKey:[self encryptKey]];
+        }
+        return retStr;
+    }
+    
+    if ([value isKindOfClass:[NSArray class]]) {
+        
+        NSMutableArray *results = [NSMutableArray arrayWithCapacity:0];
+        for (NSObject *obj in (NSArray *)value) {
+            if ([obj isKindOfClass:[STDbObject class]]) {
+                STDbObject *dbObject = (STDbObject *)obj;
+                
+                [dbObject setValue:pid forKey:kPId];
+                [self replaceDbObject:dbObject];
+                
+                [results addObject:[NSString stringWithFormat:@"%@%@,%@", DBChildPrefix, NSStringFromClass(obj.class), dbObject.__id__]];
+            } else {
+                [results addObject:obj];
+            }
+        }
+        NSString *retStr = [NSString stringWithFormat:@"%@", [NSArray stringWithObject:results]];
+        if ([self encryptEnable]) {
+            retStr = [retStr encryptWithKey:[self encryptKey]];
+        }
+        return retStr;
+    }
+    
+    if ([value isKindOfClass:[NSDate class]]) {
+        if ([value isKindOfClass:[NSDate class]]) {
+            NSString *retStr = [NSString stringWithFormat:@"%@", [NSDate stringWithDate:value]];
+            if ([self encryptEnable]) {
+                retStr = [retStr encryptWithKey:[self encryptKey]];
+            }
+            return retStr;
+        } else {
+            return @"";
+        }
+        
+    }
+    
+    if ([value isKindOfClass:[NSValue class]]) {
+        return [NSData dataWithData:value];
+    }
+    
+    if ([value isKindOfClass:[STDbObject class]]) {
+        STDbObject *dbObject = (STDbObject *)value;
+        [dbObject setValue:pid forKey:kDbPId];
+        [self replaceDbObject:dbObject];
+        NSString *result = [NSString stringWithFormat:@"%@%@,%@", DBChildPrefix, NSStringFromClass([value class]), dbObject.__id__];
+        return result;
+    }
+    
+    return value;
+}
 
 - (NSArray *)sameItemsWithArray1:(NSArray *)array1 array2:(NSArray *)array2 {
     NSMutableArray *sameItems = [NSMutableArray array];

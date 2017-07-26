@@ -2,9 +2,9 @@
 //  STDb.h
 //  STDbObject
 //
-//  Created by yls on 13-12-5.
+//  Created by stlwtr on 13-12-5.
 //
-// Version 2.2.1
+// Version 2.3.0
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -26,8 +26,13 @@
 //
 // emailto: 2008.yls@163.com
 // QQ: 603291699
+// https://github.com/stlwtr/STDbKit
 //
-#define SQLITE_HAS_CODEC 1
+
+/**
+ * 如果要打开数据库加密，打开下面的注释
+ */
+//#define STDBEncryptEnable 1
 
 #import <Foundation/Foundation.h>
 #import <objc/runtime.h>
@@ -52,7 +57,7 @@ extern objc_property_t * st_class_copyPropertyList(Class cls, unsigned int *coun
  *
  *	@param 	dbPath 	数据库路径
  *
- *  @param descrpition 在应用启动或登录时设置，如果数据库文件不存在，
+ *  @descrpition 在应用启动或登录时设置，如果数据库文件不存在，
     自动创建，如果存在，则直接使用该数据库文件
  */
 + (BOOL)setCurrentDbPath:(NSString *)dbPath __attribute__ ((deprecated));
@@ -86,11 +91,6 @@ extern objc_property_t * st_class_copyPropertyList(Class cls, unsigned int *coun
  *	@brief	是否进行字段加密
  */
 @property (nonatomic, assign) BOOL encryptEnable;
-
-/**
- *	@brief	是否进行数据库文件加密
- */
-@property (nonatomic, assign) BOOL encryptDB;
 
 /**
  *	@brief	执行select方法
@@ -163,7 +163,6 @@ extern objc_property_t * st_class_copyPropertyList(Class cls, unsigned int *coun
 - (NSInteger)localVersionForClass:(Class)cls;
 - (BOOL)setDbVersion:(NSInteger)version toDbObjectClass:(Class)cls;
 
-- (NSArray *)propertyForClass:(Class)cls;
 - (BOOL)upgradeTableIfNeed:(Class)cls;
 
 @end
