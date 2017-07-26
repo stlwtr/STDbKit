@@ -2,9 +2,9 @@
 //  STDbVersion.h
 //  STDbObject
 //
-//  Created by yls on 13-12-2.
+//  Created by stlwtr on 13-12-2.
 //
-// Version 2.2.1
+// Version 2.3.0
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -26,12 +26,24 @@
 //
 // emailto: 2008.yls@163.com
 // QQ: 603291699
+// https://github.com/stlwtr/STDbKit
 //
 
 #ifndef STDbObject_STDbVersion_h
 #define STDbObject_STDbVersion_h
 
 /*************** 版本更新 ******************
+ *  @brief v2.2.3 2017-07-26更新
+ 1. 优化了主键逻辑
+ 2. 增加了打包SDK脚本
+ --------------------------
+ 
+ *  @brief v2.2.2 2017-04-08更新
+ 1. 添加忽略、主键标识
+ --------------------------
+ *  @brief v2.2.1 2013-12-20更新
+ 1. 添加dbObject过期属性，当数据过期，数据会被自动删除，可用于有时间限制的历史纪录等场景
+ --------------------------
  *  @brief v1.0 STDbObject类实现方法
     1. 数据库查询: + (NSMutableArray *)allDbObjects;
                  + (NSArray *)dbObjectsWhere:(NSString *)where orderby:(NSString *)orderby;
@@ -48,18 +60,16 @@
     1. 支持复杂类型（NSData， NSDate， NSArray, NSDictionary）
     2. 修正一些bug
  --------------------------
- *  @brief v2.2.1 2013-12-20更新
-    1. 添加dbObject过期属性，当数据过期，数据会被自动删除，可用于有时间限制的历史纪录等场景
- --------------------------
  *  @brief v1.0.5 2013-12-31更新
     1. 添加dbObject加密功能
  *****************************************/
 
 
-#define STDbKitVersionNumber1_0 100.00
-#define STDbKitVersionNumber1_0_4 100.40
+#define STDbKitVersionNumber1_0     100.00
+#define STDbKitVersionNumber1_0_4   100.40
+#define STDbKitVersionNumber2_3_0   230.161117
 
-static double STDbKitVersionNumber = STDbKitVersionNumber1_0_4;
-static const unsigned char STDbKitVersionString[] = "2.2.1";
+static double STDbKitVersionNumber = STDbKitVersionNumber2_3_0;
+static const unsigned char STDbKitVersionString[] = "2.3.0";
 
 #endif

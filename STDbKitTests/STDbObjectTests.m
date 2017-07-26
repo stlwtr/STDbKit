@@ -3,14 +3,12 @@
 //  STDbKit
 //
 //  Created by stlwtr on 15/6/14.
-//  Copyright (c) 2015年 yls. All rights reserved.
+//  Copyright (c) 2015年stlwtr. All rights reserved.
 //
 
 #import <XCTest/XCTest.h>
-#import "STDbKit.h"
+#import <STDbKit/STDbKit.h>
 #import "User.h"
-#import "STDb.h"
-#import "STDbQueue.h"
 
 @interface STDbObjectTests : XCTestCase
 {
@@ -33,7 +31,7 @@
 - (void)setUp {
     [super setUp];
 
-    _dbQueue = [STDbQueue dbWithPath:@"stdb_test/test_queue.sqlite"];
+    _dbQueue = [STDbQueue dbQueueWithPath:@"stdb_test/test_queue.sqlite"];
     XCTAssertNotNil([_dbQueue dbPath]);
 }
 
@@ -44,27 +42,67 @@
 
 - (void)testInsert {
     [_dbQueue execute:^(STDb *db) {
-         if (![User existDbObjectsWhere:@"__id__=8" db:db]) {
-             User *user = [[User alloc] initWithPrimaryValue:8];
+         if (![User existDbObjectsWhere:@"userId=153" db:db]) {
+             
+             User *u = [[User alloc] init];
+             u.userId = @1;
+             
+             User *user = [[User alloc] init];
+             user.user = u;
+             user.userId = @153;
+             user.address = "bei jing, China";
+             user.classId = 45;
              user.name = @"yls";
+             user.weight = 65.3;
+             user.ignore = @"this is ignored";
+             user.userInfo = @{@"aa": @"bb"};
+             user.resultBlock = ^{};
+             user.age = 21;
+             user.shortValue = 41;
+             user.longlongValue = 240240;
              XCTAssertTrue([db insertDbObject:user]);
+             
+             NSArray *users = [User dbObjectsWhere:@"userId=153" orderby:nil db:db];
+             if (users.count > 0){
+                 User *resultObject = users[0];
+                 XCTAssertNotNil(resultObject.user);
+             }
          }
     }];
 }
 
+- (void)testPropertyType {
+    NSArray *properties = [User properties];
+    for (STDbObjectProperty *p in properties) {
+        NSLog(@"name = %@, type = %@, dbType = %@", p.name, p.structName ? p.structName : NSStringFromClass(p.type), p.dbType);
+        XCTAssertNotNil(p.dbType);
+    }
+}
+
 - (void)testRemove {
     [_dbQueue execute:^(STDb *db) {
-        if ([User existDbObjectsWhere:@"__id__=8" db:db]) {
-            XCTAssertTrue([User removeDbObjectsWhere:@"__id__=8" db:db]);
+        if ([User existDbObjectsWhere:@"userId=153" db:db]) {
+            XCTAssertTrue([User removeDbObjectsWhere:@"userId=153" db:db]);
         } else {
-            [db executeQuery:@"delete from User where __id__=8"];
+            [db executeQuery:@"delete from User"];
         }
+    }];
+}
+
+- (void)testRemoveAll {
+    [_dbQueue execute:^(STDb *db) {
+        [db executeQuery:@"delete from User"];
     }];
 }
 
 - (void)testSelect {
     
     [_dbQueue execute:^(STDb *db) {
+        
+        [db executeQuery:@"select * from User where __id__ = \"1F25E0CB604D4C03\" and __pid__ is not null;" resultBlock:^(NSArray *resultArray) {
+            NSLog(@"%@", resultArray);
+        }];
+        
         
         [db beginTransaction];
             
@@ -73,8 +111,7 @@
         NSLog(@"all user count：%@", @(users.count));
         
         XCTAssertTrue([db executeQuery:@"select * from User;" resultBlock:^(NSArray *resultArray) {
-//            NSLog(@"%@", resultArray);
-            
+            NSLog(@"%@", resultArray);
             NSLog(@"select count：%@", @(resultArray.count));
         }]);
         
@@ -91,7 +128,8 @@
 
 - (void)testQuery {
     [_dbQueue execute:^(STDb *db) {
-        XCTAssertTrue([db executeUpdate:@"insert into User(?) values(?)" dictionaryArgs:@{@"name" : @"aaa"}]);
+        NSDictionary *args = @{ @"name" : @"aaa", @"userId" : @123 };
+        XCTAssertTrue([db executeUpdate:@"insert into User(name,age,__pid__,shortValue,weight,userId,address,expireDate,longlongValue,classId,userInfo,__id__) values(:name,:age,:__pid__,:shortValue,:weight,:userId,:address,:expireDate,:longlongValue,:classId,:userInfo,:__id__)" dictionaryArgs:args]);
     }];
 }
 
@@ -99,13 +137,12 @@
     [_dbQueue execute:^(STDb *db) {
         User *user = [[User alloc] init];
         user.name = @"ab";
-        XCTAssertTrue(user.__id__ == -1);
-        XCTAssertTrue([user insertToDb:db]);
-        NSInteger row = [User lastRowIdInDb:db];
-        XCTAssertTrue(row == user.__id__);
+        user.userId = @15;
+        XCTAssertTrue([user replaceToDb:db]);
+
         user.name = @"cc";
         XCTAssertTrue([user updateToDb:db]);
-        NSString *where = [NSString stringWithFormat:@"%@==%@", kDbId, @(user.__id__)];
+        NSString *where = [NSString stringWithFormat:@"%@=%@", @"userId", @15];
         NSArray *users = [User dbObjectsWhere:where orderby:nil db:db];
         if (users.count > 0) {
             User *user2 = users[0];
@@ -117,9 +154,12 @@
 - (void)testFor {
     
     [_dbQueue execute:^(STDb *db) {
+        [db executeQuery:@"delete from User"];
+        
         for (int i = 0; i < 1000; i++) {
             User *user = [[User alloc] init];
             user.name = @"ab";
+            user.userId = @(i);
             user.userInfo = @{ @"age" : @29, @"class" : @"高三"};
             XCTAssertTrue([user insertToDb:db]);
         }
@@ -132,9 +172,12 @@
         
         [db beginTransaction];
         
+        [db executeQuery:@"delete from User"];
+        
         for (int i = 0; i < 1000; i++) {
             User *user = [[User alloc] init];
             user.name = @"ab";
+            user.userId = @(i);
             user.userInfo = @{ @"age" : @29, @"class" : @"高三"};
             XCTAssertTrue([user insertToDb:db]);
         }
@@ -148,12 +191,14 @@
 - (void)testForInsert {
     
     [self measureBlock:^{
+        
        [self testFor];
     }];
 }
 
 - (void)testForMeasure {
-        
+        [self testRemoveAll];
+    
         [_dbQueue execute:^(STDb *db) {
             
 //            [db beginTransaction];
@@ -182,9 +227,29 @@
 - (void)testProperty {
     
     [_dbQueue execute:^(STDb *db) {
-//        [db propertyForClass:[User class]];
         [db upgradeTableIfNeed:[User class]];
     }];
+}
+
+- (void)testRandom {
+    NSTimeInterval ti = [NSDate timeIntervalSinceReferenceDate];
+    NSString *ramdomStr = [NSString stringWithFormat:@"%0X%0X", (uint32_t)floor(ti), arc4random()];
+    
+    NSLog(@"%@", ramdomStr);
+}
+
+- (void)testNSObject2Dictionary {
+    User *user = [[User alloc] init];
+    user.name = @"abc";
+    user.address = "address is bei jing";
+    user.longlongValue = 5157107510;
+    user.ignore = @"ignore";
+    NSDictionary *dictionary = [user objcDictionary];
+    NSLog(@"%@", dictionary);
+    
+    User *user2 = [User objcFromDictionary:dictionary];
+    
+    NSLog(@"%@", user2);
 }
 
 @end

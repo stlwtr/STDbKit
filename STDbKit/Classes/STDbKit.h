@@ -2,9 +2,9 @@
 //  STDbKit.h
 //  STDbObject
 //
-//  Created by yls on 13-12-2.
+//  Created by stlwtr on 13-12-2.
 //
-// Version 2.2.1
+// Version 2.3.0
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -26,19 +26,16 @@
 //
 // emailto: 2008.yls@163.com
 // QQ: 603291699
+// https://github.com/stlwtr/STDbKit
 //
 
 #ifndef STDbObject_STDbKit_h
 #define STDbObject_STDbKit_h
 
-#import "STDb.h"
-#import "STDbQueue.h"
-#import "STDbObject.h"
-
-//! Project version number for STDbKit.
-FOUNDATION_EXPORT double STDbKitVersionNumber;
-
-//! Project version string for STDbKit.
-FOUNDATION_EXPORT const unsigned char STDbKitVersionString[];
+#import <STDbKit/STDb.h>
+#import <STDbKit/STDbQueue.h>
+#import <STDbKit/STDbObject.h>
+#import <STDbKit/STDbObjectProperty.h>
+#import <STDbKit/NSObject+Dictionary.h>
 
 #endif

@@ -7,10 +7,8 @@
 //
 
 #import <XCTest/XCTest.h>
-#import "STDbKit.h"
+#import <STDbKit/STDbKit.h>
 #import "User.h"
-#import "STDb.h"
-#import "STDbQueue.h"
 
 @interface EncryptTests : XCTestCase
 {
@@ -23,12 +21,7 @@
 - (void)setUp {
     [super setUp];
     
-    _dbQueue = [STDbQueue dbWithPath:@"stdb_test/test_encrypt_queue.sqlite"];
-    
-    // 数据库db文件加密
-    [_dbQueue execute:^(STDb *db) {
-        db.encryptDB = YES;
-    }];
+    _dbQueue = [STDbQueue dbQueueWithPath:@"stdb_test/test_encrypt_queue.sqlite"];
     
     XCTAssertNotNil([_dbQueue dbPath]);
 }
@@ -41,8 +34,9 @@
 - (void)testInsert {
     [_dbQueue execute:^(STDb *db) {
         if (![User existDbObjectsWhere:@"__id__=8" db:db]) {
-            User *user = [[User alloc] initWithPrimaryValue:8];
+            User *user = [[User alloc] init];
             user.name = @"yls";
+            user.ignore = @"不应该显示的";
             XCTAssertTrue([db insertDbObject:user]);
         }
     }];
@@ -59,7 +53,7 @@
         NSLog(@"all user count：%@", @(users.count));
         
         XCTAssertTrue([db executeQuery:@"select * from User;" resultBlock:^(NSArray *resultArray) {
-            //            NSLog(@"%@", resultArray);
+                        NSLog(@"%@", resultArray);
             
             NSLog(@"select count：%@", @(resultArray.count));
         }]);

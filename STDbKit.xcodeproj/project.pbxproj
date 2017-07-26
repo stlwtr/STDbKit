@@ -7,24 +7,48 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		44EE87941C508657002BE2DA /* libSTDbKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 44EE877F1C50862D002BE2DA /* libSTDbKit.a */; };
+		4424F9C31F282CF30085B89B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4424F9C21F282CF30085B89B /* main.m */; };
+		4424F9C61F282CF30085B89B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4424F9C51F282CF30085B89B /* AppDelegate.m */; };
+		4424F9C91F282CF30085B89B /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4424F9C81F282CF30085B89B /* ViewController.m */; };
+		4424F9CC1F282CF30085B89B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4424F9CA1F282CF30085B89B /* Main.storyboard */; };
+		4424F9CE1F282CF30085B89B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4424F9CD1F282CF30085B89B /* Assets.xcassets */; };
+		4424F9D11F282CF30085B89B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4424F9CF1F282CF30085B89B /* LaunchScreen.storyboard */; };
+		44D812DC1E98B4C8008FAD65 /* STDbObjectPropertyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 44D812DB1E98B4C8008FAD65 /* STDbObjectPropertyTests.m */; };
+		44EC860F1F29E5860089A91A /* libSTDbKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 44EE877F1C50862D002BE2DA /* libSTDbKit.a */; };
+		44EC86181F29F7DC0089A91A /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 44EC86171F29F7DC0089A91A /* libsqlite3.dylib */; };
+		44EC86691F2A0FFE0089A91A /* NSData+STDbHandle.h in Headers */ = {isa = PBXBuildFile; fileRef = 44EC86521F2A0FFE0089A91A /* NSData+STDbHandle.h */; };
+		44EC866A1F2A0FFE0089A91A /* NSData+STDbHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 44EC86531F2A0FFE0089A91A /* NSData+STDbHandle.m */; };
+		44EC866B1F2A0FFE0089A91A /* NSData+STDbHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 44EC86531F2A0FFE0089A91A /* NSData+STDbHandle.m */; };
+		44EC866C1F2A0FFE0089A91A /* NSDate+STDbHandle.h in Headers */ = {isa = PBXBuildFile; fileRef = 44EC86541F2A0FFE0089A91A /* NSDate+STDbHandle.h */; };
+		44EC866D1F2A0FFE0089A91A /* NSDate+STDbHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 44EC86551F2A0FFE0089A91A /* NSDate+STDbHandle.m */; };
+		44EC866E1F2A0FFE0089A91A /* NSDate+STDbHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 44EC86551F2A0FFE0089A91A /* NSDate+STDbHandle.m */; };
+		44EC866F1F2A0FFE0089A91A /* NSObject+Dictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = 44EC86561F2A0FFE0089A91A /* NSObject+Dictionary.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		44EC86701F2A0FFE0089A91A /* NSObject+Dictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 44EC86571F2A0FFE0089A91A /* NSObject+Dictionary.m */; };
+		44EC86711F2A0FFE0089A91A /* NSObject+Dictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 44EC86571F2A0FFE0089A91A /* NSObject+Dictionary.m */; };
+		44EC86721F2A0FFE0089A91A /* NSObject+STDbHandle.h in Headers */ = {isa = PBXBuildFile; fileRef = 44EC86581F2A0FFE0089A91A /* NSObject+STDbHandle.h */; };
+		44EC86731F2A0FFE0089A91A /* NSObject+STDbHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 44EC86591F2A0FFE0089A91A /* NSObject+STDbHandle.m */; };
+		44EC86741F2A0FFE0089A91A /* NSObject+STDbHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 44EC86591F2A0FFE0089A91A /* NSObject+STDbHandle.m */; };
+		44EC86751F2A0FFE0089A91A /* NSString+STDbHandle.h in Headers */ = {isa = PBXBuildFile; fileRef = 44EC865A1F2A0FFE0089A91A /* NSString+STDbHandle.h */; };
+		44EC86761F2A0FFE0089A91A /* NSString+STDbHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 44EC865B1F2A0FFE0089A91A /* NSString+STDbHandle.m */; };
+		44EC86771F2A0FFE0089A91A /* NSString+STDbHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 44EC865B1F2A0FFE0089A91A /* NSString+STDbHandle.m */; };
+		44EC86781F2A0FFE0089A91A /* STDb.h in Headers */ = {isa = PBXBuildFile; fileRef = 44EC865D1F2A0FFE0089A91A /* STDb.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		44EC86791F2A0FFE0089A91A /* STDb.m in Sources */ = {isa = PBXBuildFile; fileRef = 44EC865E1F2A0FFE0089A91A /* STDb.m */; };
+		44EC867A1F2A0FFE0089A91A /* STDb.m in Sources */ = {isa = PBXBuildFile; fileRef = 44EC865E1F2A0FFE0089A91A /* STDb.m */; };
+		44EC867B1F2A0FFE0089A91A /* STDbKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 44EC865F1F2A0FFE0089A91A /* STDbKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		44EC867C1F2A0FFE0089A91A /* STDbObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 44EC86601F2A0FFE0089A91A /* STDbObject.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		44EC867D1F2A0FFE0089A91A /* STDbObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 44EC86611F2A0FFE0089A91A /* STDbObject.m */; };
+		44EC867E1F2A0FFE0089A91A /* STDbObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 44EC86611F2A0FFE0089A91A /* STDbObject.m */; };
+		44EC867F1F2A0FFE0089A91A /* STDbObjectProperty.h in Headers */ = {isa = PBXBuildFile; fileRef = 44EC86621F2A0FFE0089A91A /* STDbObjectProperty.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		44EC86801F2A0FFE0089A91A /* STDbObjectProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = 44EC86631F2A0FFE0089A91A /* STDbObjectProperty.m */; };
+		44EC86811F2A0FFE0089A91A /* STDbObjectProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = 44EC86631F2A0FFE0089A91A /* STDbObjectProperty.m */; };
+		44EC86821F2A0FFE0089A91A /* STDbQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = 44EC86641F2A0FFE0089A91A /* STDbQueue.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		44EC86831F2A0FFE0089A91A /* STDbQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 44EC86651F2A0FFE0089A91A /* STDbQueue.m */; };
+		44EC86841F2A0FFE0089A91A /* STDbQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 44EC86651F2A0FFE0089A91A /* STDbQueue.m */; };
+		44EC86851F2A0FFE0089A91A /* libsqlcipher.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 44EC86671F2A0FFE0089A91A /* libsqlcipher.a */; };
+		44EC86861F2A0FFE0089A91A /* libsqlcipher.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 44EC86671F2A0FFE0089A91A /* libsqlcipher.a */; };
+		44EC86871F2A0FFE0089A91A /* STDbVersion.h in Headers */ = {isa = PBXBuildFile; fileRef = 44EC86681F2A0FFE0089A91A /* STDbVersion.h */; };
 		44EE879F1C5086BB002BE2DA /* STDbObjectTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 44EE879C1C5086BB002BE2DA /* STDbObjectTests.m */; };
 		44EE87A01C5086BB002BE2DA /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 44EE879E1C5086BB002BE2DA /* User.m */; };
-		44EE87B61C50873F002BE2DA /* NSData+STDbHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 44EE87A51C50873F002BE2DA /* NSData+STDbHandle.m */; };
-		44EE87B71C50873F002BE2DA /* NSDate+STDbHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 44EE87A71C50873F002BE2DA /* NSDate+STDbHandle.m */; };
-		44EE87B81C50873F002BE2DA /* NSObject+STDbHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 44EE87A91C50873F002BE2DA /* NSObject+STDbHandle.m */; };
-		44EE87B91C50873F002BE2DA /* NSString+STDbHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 44EE87AB1C50873F002BE2DA /* NSString+STDbHandle.m */; };
-		44EE87BA1C50873F002BE2DA /* STDb.m in Sources */ = {isa = PBXBuildFile; fileRef = 44EE87AF1C50873F002BE2DA /* STDb.m */; };
-		44EE87BB1C50873F002BE2DA /* STDbObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 44EE87B21C50873F002BE2DA /* STDbObject.m */; };
-		44EE87BC1C50873F002BE2DA /* STDbQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 44EE87B41C50873F002BE2DA /* STDbQueue.m */; };
-		44EE87E61C50930A002BE2DA /* NSData+STDbHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 44EE87A51C50873F002BE2DA /* NSData+STDbHandle.m */; };
-		44EE87E71C50930A002BE2DA /* NSDate+STDbHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 44EE87A71C50873F002BE2DA /* NSDate+STDbHandle.m */; };
-		44EE87E81C50930A002BE2DA /* NSObject+STDbHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 44EE87A91C50873F002BE2DA /* NSObject+STDbHandle.m */; };
-		44EE87E91C50930A002BE2DA /* NSString+STDbHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = 44EE87AB1C50873F002BE2DA /* NSString+STDbHandle.m */; };
-		44EE87EA1C50930A002BE2DA /* STDb.m in Sources */ = {isa = PBXBuildFile; fileRef = 44EE87AF1C50873F002BE2DA /* STDb.m */; };
-		44EE87EB1C50930A002BE2DA /* STDbObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 44EE87B21C50873F002BE2DA /* STDbObject.m */; };
-		44EE87EC1C50930A002BE2DA /* STDbQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 44EE87B41C50873F002BE2DA /* STDbQueue.m */; };
-		44F747521D580F120096473E /* libsqlcipher.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 44F747511D580F120096473E /* libsqlcipher.a */; };
 		44F747551D5813DE0096473E /* EncryptTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 44F747531D5813DE0096473E /* EncryptTests.m */; };
 /* End PBXBuildFile section */
 
@@ -39,6 +63,16 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		4424F9DA1F282D060085B89B /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		44EE877D1C50862D002BE2DA /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -51,38 +85,62 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4424F9BF1F282CF30085B89B /* STDbExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = STDbExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4424F9C21F282CF30085B89B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		4424F9C41F282CF30085B89B /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		4424F9C51F282CF30085B89B /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		4424F9C71F282CF30085B89B /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		4424F9C81F282CF30085B89B /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		4424F9CB1F282CF30085B89B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		4424F9CD1F282CF30085B89B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		4424F9D01F282CF30085B89B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		4424F9D21F282CF30085B89B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		44D812DB1E98B4C8008FAD65 /* STDbObjectPropertyTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STDbObjectPropertyTests.m; sourceTree = "<group>"; };
+		44EC86171F29F7DC0089A91A /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = ../../../../../usr/lib/libsqlite3.dylib; sourceTree = "<group>"; };
+		44EC86521F2A0FFE0089A91A /* NSData+STDbHandle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+STDbHandle.h"; sourceTree = "<group>"; };
+		44EC86531F2A0FFE0089A91A /* NSData+STDbHandle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+STDbHandle.m"; sourceTree = "<group>"; };
+		44EC86541F2A0FFE0089A91A /* NSDate+STDbHandle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+STDbHandle.h"; sourceTree = "<group>"; };
+		44EC86551F2A0FFE0089A91A /* NSDate+STDbHandle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+STDbHandle.m"; sourceTree = "<group>"; };
+		44EC86561F2A0FFE0089A91A /* NSObject+Dictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+Dictionary.h"; sourceTree = "<group>"; };
+		44EC86571F2A0FFE0089A91A /* NSObject+Dictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+Dictionary.m"; sourceTree = "<group>"; };
+		44EC86581F2A0FFE0089A91A /* NSObject+STDbHandle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+STDbHandle.h"; sourceTree = "<group>"; };
+		44EC86591F2A0FFE0089A91A /* NSObject+STDbHandle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+STDbHandle.m"; sourceTree = "<group>"; };
+		44EC865A1F2A0FFE0089A91A /* NSString+STDbHandle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+STDbHandle.h"; sourceTree = "<group>"; };
+		44EC865B1F2A0FFE0089A91A /* NSString+STDbHandle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+STDbHandle.m"; sourceTree = "<group>"; };
+		44EC865D1F2A0FFE0089A91A /* STDb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STDb.h; sourceTree = "<group>"; };
+		44EC865E1F2A0FFE0089A91A /* STDb.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STDb.m; sourceTree = "<group>"; };
+		44EC865F1F2A0FFE0089A91A /* STDbKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STDbKit.h; sourceTree = "<group>"; };
+		44EC86601F2A0FFE0089A91A /* STDbObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STDbObject.h; sourceTree = "<group>"; };
+		44EC86611F2A0FFE0089A91A /* STDbObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STDbObject.m; sourceTree = "<group>"; };
+		44EC86621F2A0FFE0089A91A /* STDbObjectProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STDbObjectProperty.h; sourceTree = "<group>"; };
+		44EC86631F2A0FFE0089A91A /* STDbObjectProperty.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STDbObjectProperty.m; sourceTree = "<group>"; };
+		44EC86641F2A0FFE0089A91A /* STDbQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STDbQueue.h; sourceTree = "<group>"; };
+		44EC86651F2A0FFE0089A91A /* STDbQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STDbQueue.m; sourceTree = "<group>"; };
+		44EC86671F2A0FFE0089A91A /* libsqlcipher.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libsqlcipher.a; sourceTree = "<group>"; };
+		44EC86681F2A0FFE0089A91A /* STDbVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STDbVersion.h; sourceTree = "<group>"; };
 		44EE877F1C50862D002BE2DA /* libSTDbKit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libSTDbKit.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		44EE878F1C508657002BE2DA /* STDbKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = STDbKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		44EE87931C508657002BE2DA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		44EE879C1C5086BB002BE2DA /* STDbObjectTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STDbObjectTests.m; sourceTree = "<group>"; };
 		44EE879D1C5086BB002BE2DA /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
 		44EE879E1C5086BB002BE2DA /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
-		44EE87A41C50873F002BE2DA /* NSData+STDbHandle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+STDbHandle.h"; sourceTree = "<group>"; };
-		44EE87A51C50873F002BE2DA /* NSData+STDbHandle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+STDbHandle.m"; sourceTree = "<group>"; };
-		44EE87A61C50873F002BE2DA /* NSDate+STDbHandle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+STDbHandle.h"; sourceTree = "<group>"; };
-		44EE87A71C50873F002BE2DA /* NSDate+STDbHandle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+STDbHandle.m"; sourceTree = "<group>"; };
-		44EE87A81C50873F002BE2DA /* NSObject+STDbHandle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+STDbHandle.h"; sourceTree = "<group>"; };
-		44EE87A91C50873F002BE2DA /* NSObject+STDbHandle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+STDbHandle.m"; sourceTree = "<group>"; };
-		44EE87AA1C50873F002BE2DA /* NSString+STDbHandle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+STDbHandle.h"; sourceTree = "<group>"; };
-		44EE87AB1C50873F002BE2DA /* NSString+STDbHandle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+STDbHandle.m"; sourceTree = "<group>"; };
-		44EE87AE1C50873F002BE2DA /* STDb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STDb.h; sourceTree = "<group>"; };
-		44EE87AF1C50873F002BE2DA /* STDb.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STDb.m; sourceTree = "<group>"; };
-		44EE87B01C50873F002BE2DA /* STDbKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STDbKit.h; sourceTree = "<group>"; };
-		44EE87B11C50873F002BE2DA /* STDbObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STDbObject.h; sourceTree = "<group>"; };
-		44EE87B21C50873F002BE2DA /* STDbObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STDbObject.m; sourceTree = "<group>"; };
-		44EE87B31C50873F002BE2DA /* STDbQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STDbQueue.h; sourceTree = "<group>"; };
-		44EE87B41C50873F002BE2DA /* STDbQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STDbQueue.m; sourceTree = "<group>"; };
-		44EE87B51C50873F002BE2DA /* STDbVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STDbVersion.h; sourceTree = "<group>"; };
-		44F747511D580F120096473E /* libsqlcipher.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libsqlcipher.a; sourceTree = "<group>"; };
 		44F747531D5813DE0096473E /* EncryptTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EncryptTests.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		4424F9BC1F282CF30085B89B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		44EE877C1C50862D002BE2DA /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				44F747521D580F120096473E /* libsqlcipher.a in Frameworks */,
+				44EC86181F29F7DC0089A91A /* libsqlite3.dylib in Frameworks */,
+				44EC86851F2A0FFE0089A91A /* libsqlcipher.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -90,19 +148,106 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				44EE87941C508657002BE2DA /* libSTDbKit.a in Frameworks */,
+				44EC860F1F29E5860089A91A /* libSTDbKit.a in Frameworks */,
+				44EC86861F2A0FFE0089A91A /* libsqlcipher.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4424F9C01F282CF30085B89B /* STDbExample */ = {
+			isa = PBXGroup;
+			children = (
+				4424F9C41F282CF30085B89B /* AppDelegate.h */,
+				4424F9C51F282CF30085B89B /* AppDelegate.m */,
+				4424F9C71F282CF30085B89B /* ViewController.h */,
+				4424F9C81F282CF30085B89B /* ViewController.m */,
+				4424F9CA1F282CF30085B89B /* Main.storyboard */,
+				4424F9CD1F282CF30085B89B /* Assets.xcassets */,
+				4424F9CF1F282CF30085B89B /* LaunchScreen.storyboard */,
+				4424F9D21F282CF30085B89B /* Info.plist */,
+				4424F9C11F282CF30085B89B /* Supporting Files */,
+			);
+			path = STDbExample;
+			sourceTree = "<group>";
+		};
+		4424F9C11F282CF30085B89B /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				4424F9C21F282CF30085B89B /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		44C4C6981F2069AC000A473E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				44EC86171F29F7DC0089A91A /* libsqlite3.dylib */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		44EC86501F2A0FFE0089A91A /* STDbKit */ = {
+			isa = PBXGroup;
+			children = (
+				44EC86511F2A0FFE0089A91A /* Categories */,
+				44EC865C1F2A0FFE0089A91A /* Classes */,
+				44EC86661F2A0FFE0089A91A /* libs */,
+				44EC86681F2A0FFE0089A91A /* STDbVersion.h */,
+			);
+			path = STDbKit;
+			sourceTree = "<group>";
+		};
+		44EC86511F2A0FFE0089A91A /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				44EC86521F2A0FFE0089A91A /* NSData+STDbHandle.h */,
+				44EC86531F2A0FFE0089A91A /* NSData+STDbHandle.m */,
+				44EC86541F2A0FFE0089A91A /* NSDate+STDbHandle.h */,
+				44EC86551F2A0FFE0089A91A /* NSDate+STDbHandle.m */,
+				44EC86561F2A0FFE0089A91A /* NSObject+Dictionary.h */,
+				44EC86571F2A0FFE0089A91A /* NSObject+Dictionary.m */,
+				44EC86581F2A0FFE0089A91A /* NSObject+STDbHandle.h */,
+				44EC86591F2A0FFE0089A91A /* NSObject+STDbHandle.m */,
+				44EC865A1F2A0FFE0089A91A /* NSString+STDbHandle.h */,
+				44EC865B1F2A0FFE0089A91A /* NSString+STDbHandle.m */,
+			);
+			path = Categories;
+			sourceTree = "<group>";
+		};
+		44EC865C1F2A0FFE0089A91A /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				44EC865D1F2A0FFE0089A91A /* STDb.h */,
+				44EC865E1F2A0FFE0089A91A /* STDb.m */,
+				44EC865F1F2A0FFE0089A91A /* STDbKit.h */,
+				44EC86601F2A0FFE0089A91A /* STDbObject.h */,
+				44EC86611F2A0FFE0089A91A /* STDbObject.m */,
+				44EC86621F2A0FFE0089A91A /* STDbObjectProperty.h */,
+				44EC86631F2A0FFE0089A91A /* STDbObjectProperty.m */,
+				44EC86641F2A0FFE0089A91A /* STDbQueue.h */,
+				44EC86651F2A0FFE0089A91A /* STDbQueue.m */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
+		44EC86661F2A0FFE0089A91A /* libs */ = {
+			isa = PBXGroup;
+			children = (
+				44EC86671F2A0FFE0089A91A /* libsqlcipher.a */,
+			);
+			path = libs;
+			sourceTree = "<group>";
+		};
 		44EE87761C50862D002BE2DA = {
 			isa = PBXGroup;
 			children = (
-				44EE87811C50862D002BE2DA /* STDbKit */,
+				44EC86501F2A0FFE0089A91A /* STDbKit */,
 				44EE87901C508657002BE2DA /* STDbKitTests */,
+				4424F9C01F282CF30085B89B /* STDbExample */,
 				44EE87801C50862D002BE2DA /* Products */,
+				44C4C6981F2069AC000A473E /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -111,18 +256,9 @@
 			children = (
 				44EE877F1C50862D002BE2DA /* libSTDbKit.a */,
 				44EE878F1C508657002BE2DA /* STDbKitTests.xctest */,
+				4424F9BF1F282CF30085B89B /* STDbExample.app */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		44EE87811C50862D002BE2DA /* STDbKit */ = {
-			isa = PBXGroup;
-			children = (
-				44F747501D580F120096473E /* libs */,
-				44EE87A31C50873F002BE2DA /* Category */,
-				44EE87AC1C50873F002BE2DA /* Classes */,
-			);
-			path = STDbKit;
 			sourceTree = "<group>";
 		};
 		44EE87901C508657002BE2DA /* STDbKitTests */ = {
@@ -132,52 +268,54 @@
 				44F747531D5813DE0096473E /* EncryptTests.m */,
 				44EE879D1C5086BB002BE2DA /* User.h */,
 				44EE879E1C5086BB002BE2DA /* User.m */,
+				44D812DB1E98B4C8008FAD65 /* STDbObjectPropertyTests.m */,
 				44EE87931C508657002BE2DA /* Info.plist */,
 			);
 			path = STDbKitTests;
 			sourceTree = "<group>";
 		};
-		44EE87A31C50873F002BE2DA /* Category */ = {
-			isa = PBXGroup;
-			children = (
-				44EE87A41C50873F002BE2DA /* NSData+STDbHandle.h */,
-				44EE87A51C50873F002BE2DA /* NSData+STDbHandle.m */,
-				44EE87A61C50873F002BE2DA /* NSDate+STDbHandle.h */,
-				44EE87A71C50873F002BE2DA /* NSDate+STDbHandle.m */,
-				44EE87A81C50873F002BE2DA /* NSObject+STDbHandle.h */,
-				44EE87A91C50873F002BE2DA /* NSObject+STDbHandle.m */,
-				44EE87AA1C50873F002BE2DA /* NSString+STDbHandle.h */,
-				44EE87AB1C50873F002BE2DA /* NSString+STDbHandle.m */,
-			);
-			path = Category;
-			sourceTree = "<group>";
-		};
-		44EE87AC1C50873F002BE2DA /* Classes */ = {
-			isa = PBXGroup;
-			children = (
-				44EE87AE1C50873F002BE2DA /* STDb.h */,
-				44EE87AF1C50873F002BE2DA /* STDb.m */,
-				44EE87B01C50873F002BE2DA /* STDbKit.h */,
-				44EE87B11C50873F002BE2DA /* STDbObject.h */,
-				44EE87B21C50873F002BE2DA /* STDbObject.m */,
-				44EE87B31C50873F002BE2DA /* STDbQueue.h */,
-				44EE87B41C50873F002BE2DA /* STDbQueue.m */,
-				44EE87B51C50873F002BE2DA /* STDbVersion.h */,
-			);
-			path = Classes;
-			sourceTree = "<group>";
-		};
-		44F747501D580F120096473E /* libs */ = {
-			isa = PBXGroup;
-			children = (
-				44F747511D580F120096473E /* libsqlcipher.a */,
-			);
-			path = libs;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
+/* Begin PBXHeadersBuildPhase section */
+		4424FA241F287E450085B89B /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				44EC867C1F2A0FFE0089A91A /* STDbObject.h in Headers */,
+				44EC867B1F2A0FFE0089A91A /* STDbKit.h in Headers */,
+				44EC86781F2A0FFE0089A91A /* STDb.h in Headers */,
+				44EC866F1F2A0FFE0089A91A /* NSObject+Dictionary.h in Headers */,
+				44EC867F1F2A0FFE0089A91A /* STDbObjectProperty.h in Headers */,
+				44EC86821F2A0FFE0089A91A /* STDbQueue.h in Headers */,
+				44EC86751F2A0FFE0089A91A /* NSString+STDbHandle.h in Headers */,
+				44EC866C1F2A0FFE0089A91A /* NSDate+STDbHandle.h in Headers */,
+				44EC86871F2A0FFE0089A91A /* STDbVersion.h in Headers */,
+				44EC86691F2A0FFE0089A91A /* NSData+STDbHandle.h in Headers */,
+				44EC86721F2A0FFE0089A91A /* NSObject+STDbHandle.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
 /* Begin PBXNativeTarget section */
+		4424F9BE1F282CF30085B89B /* STDbExample */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4424F9D31F282CF30085B89B /* Build configuration list for PBXNativeTarget "STDbExample" */;
+			buildPhases = (
+				4424F9BB1F282CF30085B89B /* Sources */,
+				4424F9BC1F282CF30085B89B /* Frameworks */,
+				4424F9BD1F282CF30085B89B /* Resources */,
+				4424F9DA1F282D060085B89B /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = STDbExample;
+			productName = STDbExample;
+			productReference = 4424F9BF1F282CF30085B89B /* STDbExample.app */;
+			productType = "com.apple.product-type.application";
+		};
 		44EE877E1C50862D002BE2DA /* STDbKit */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 44EE87881C50862D002BE2DA /* Build configuration list for PBXNativeTarget "STDbKit" */;
@@ -185,6 +323,8 @@
 				44EE877B1C50862D002BE2DA /* Sources */,
 				44EE877C1C50862D002BE2DA /* Frameworks */,
 				44EE877D1C50862D002BE2DA /* CopyFiles */,
+				4424FA241F287E450085B89B /* Headers */,
+				4424FA301F287E870085B89B /* Build Framework */,
 			);
 			buildRules = (
 			);
@@ -222,6 +362,11 @@
 				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = stlwtr;
 				TargetAttributes = {
+					4424F9BE1F282CF30085B89B = {
+						CreatedOnToolsVersion = 8.3.3;
+						DevelopmentTeam = XJBE34DFXX;
+						ProvisioningStyle = Automatic;
+					};
 					44EE877E1C50862D002BE2DA = {
 						CreatedOnToolsVersion = 7.2;
 						DevelopmentTeam = B72UJJRPYK;
@@ -238,6 +383,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 44EE87761C50862D002BE2DA;
 			productRefGroup = 44EE87801C50862D002BE2DA /* Products */;
@@ -246,11 +392,22 @@
 			targets = (
 				44EE877E1C50862D002BE2DA /* STDbKit */,
 				44EE878E1C508657002BE2DA /* STDbKitTests */,
+				4424F9BE1F282CF30085B89B /* STDbExample */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		4424F9BD1F282CF30085B89B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4424F9D11F282CF30085B89B /* LaunchScreen.storyboard in Resources */,
+				4424F9CE1F282CF30085B89B /* Assets.xcassets in Resources */,
+				4424F9CC1F282CF30085B89B /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		44EE878D1C508657002BE2DA /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -260,18 +417,47 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		4424FA301F287E870085B89B /* Build Framework */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 12;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Build Framework";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -e\n\nexport FRAMEWORK_LOCN=\"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.framework\"\n\n# Create the path to the real Headers die\nmkdir -p \"${FRAMEWORK_LOCN}/Versions/A/Headers\"\n\n# Create the required symlinks\n/bin/ln -sfh A \"${FRAMEWORK_LOCN}/Versions/Current\"\n/bin/ln -sfh Versions/Current/Headers \"${FRAMEWORK_LOCN}/Headers\"\n/bin/ln -sfh \"Versions/Current/${PRODUCT_NAME}\" \\\n\"${FRAMEWORK_LOCN}/${PRODUCT_NAME}\"\n\n# Copy the public headers into the framework\n/bin/cp -a \"${TARGET_BUILD_DIR}/${PUBLIC_HEADERS_FOLDER_PATH}/\" \\\n\"${FRAMEWORK_LOCN}/Versions/A/Headers\"\n\n# If we're already inside this script then die\nif [ -n \"$RW_MULTIPLATFORM_BUILD_IN_PROGRESS\" ]; then\nexit 0\nfi\nexport RW_MULTIPLATFORM_BUILD_IN_PROGRESS=1\n\nRW_FRAMEWORK_NAME=${PROJECT_NAME}\nRW_INPUT_STATIC_LIB=\"lib${PROJECT_NAME}.a\"\nRW_FRAMEWORK_LOCATION=\"${BUILT_PRODUCTS_DIR}/${RW_FRAMEWORK_NAME}.framework\"\n\nfunction build_static_library {\n    # Will rebuild the static library as specified\n    #     build_static_library sdk\n    xcrun xcodebuild -project \"${PROJECT_FILE_PATH}\" \\\n    -target \"${TARGET_NAME}\" \\\n    -configuration \"${CONFIGURATION}\" \\\n    -sdk \"${1}\" \\\n    ONLY_ACTIVE_ARCH=NO \\\n    BUILD_DIR=\"${BUILD_DIR}\" \\\n    OBJROOT=\"${OBJROOT}\" \\\n    BUILD_ROOT=\"${BUILD_ROOT}\" \\\n    SYMROOT=\"${SYMROOT}\" $ACTION\n}\n\nfunction make_fat_library {\n    # Will smash 2 static libs together\n    #     make_fat_library in1 in2 out\n    xcrun lipo -create \"${1}\" \"${2}\" -output \"${3}\"\n}\n\n# 1 - Extract the platform (iphoneos/iphonesimulator) from the SDK name\nif [[ \"$SDK_NAME\" =~ ([A-Za-z]+) ]]; then\nRW_SDK_PLATFORM=${BASH_REMATCH[1]}\nelse\necho \"Could not find platform name from SDK_NAME: $SDK_NAME\"\nexit 1\nfi\n\n# 2 - Extract the version from the SDK\nif [[ \"$SDK_NAME\" =~ ([0-9]+.*$) ]]; then\nRW_SDK_VERSION=${BASH_REMATCH[1]}\nelse\necho \"Could not find sdk version from SDK_NAME: $SDK_NAME\"\nexit 1\nfi\n\n# 3 - Determine the other platform\nif [ \"$RW_SDK_PLATFORM\" == \"iphoneos\" ]; then\nRW_OTHER_PLATFORM=iphonesimulator\nelse\nRW_OTHER_PLATFORM=iphoneos\nfi\n\n# 4 - Find the build directory\nif [[ \"$BUILT_PRODUCTS_DIR\" =~ (.*)$RW_SDK_PLATFORM$ ]]; then\nRW_OTHER_BUILT_PRODUCTS_DIR=\"${BASH_REMATCH[1]}${RW_OTHER_PLATFORM}\"\nelse\necho \"Could not find other platform build directory.\"\nexit 1\nfi\n\n# Build the other platform.\nbuild_static_library \"${RW_OTHER_PLATFORM}${RW_SDK_VERSION}\"\n\n# If we're currently building for iphonesimulator, then need to rebuild\n#   to ensure that we get both i386 and x86_64\nif [ \"$RW_SDK_PLATFORM\" == \"iphonesimulator\" ]; then\nbuild_static_library \"${SDK_NAME}\"\nfi\n\n# Join the 2 static libs into 1 and push into the .framework\nmake_fat_library \"${BUILT_PRODUCTS_DIR}/${RW_INPUT_STATIC_LIB}\" \\\n\"${RW_OTHER_BUILT_PRODUCTS_DIR}/${RW_INPUT_STATIC_LIB}\" \\\n\"${RW_FRAMEWORK_LOCATION}/Versions/A/${RW_FRAMEWORK_NAME}\"\n\n# Ensure that the framework is present in both platform's build directories\ncp -a \"${RW_FRAMEWORK_LOCATION}/Versions/A/${RW_FRAMEWORK_NAME}\" \\\n\"${RW_OTHER_BUILT_PRODUCTS_DIR}/${RW_FRAMEWORK_NAME}.framework/Versions/A/${RW_FRAMEWORK_NAME}\"\n\n# Copy the framework to the user's desktop\nditto \"${RW_FRAMEWORK_LOCATION}\" \"${HOME}/Desktop/${RW_FRAMEWORK_NAME}.framework\"";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
+		4424F9BB1F282CF30085B89B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4424F9C91F282CF30085B89B /* ViewController.m in Sources */,
+				4424F9C61F282CF30085B89B /* AppDelegate.m in Sources */,
+				4424F9C31F282CF30085B89B /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		44EE877B1C50862D002BE2DA /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				44EE87BA1C50873F002BE2DA /* STDb.m in Sources */,
-				44EE87B91C50873F002BE2DA /* NSString+STDbHandle.m in Sources */,
-				44EE87B81C50873F002BE2DA /* NSObject+STDbHandle.m in Sources */,
-				44EE87BC1C50873F002BE2DA /* STDbQueue.m in Sources */,
-				44EE87BB1C50873F002BE2DA /* STDbObject.m in Sources */,
-				44EE87B61C50873F002BE2DA /* NSData+STDbHandle.m in Sources */,
-				44EE87B71C50873F002BE2DA /* NSDate+STDbHandle.m in Sources */,
+				44EC86801F2A0FFE0089A91A /* STDbObjectProperty.m in Sources */,
+				44EC86731F2A0FFE0089A91A /* NSObject+STDbHandle.m in Sources */,
+				44EC86761F2A0FFE0089A91A /* NSString+STDbHandle.m in Sources */,
+				44EC867D1F2A0FFE0089A91A /* STDbObject.m in Sources */,
+				44EC86831F2A0FFE0089A91A /* STDbQueue.m in Sources */,
+				44EC86791F2A0FFE0089A91A /* STDb.m in Sources */,
+				44EC86701F2A0FFE0089A91A /* NSObject+Dictionary.m in Sources */,
+				44EC866A1F2A0FFE0089A91A /* NSData+STDbHandle.m in Sources */,
+				44EC866D1F2A0FFE0089A91A /* NSDate+STDbHandle.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -279,15 +465,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				44EE87E61C50930A002BE2DA /* NSData+STDbHandle.m in Sources */,
-				44EE87E71C50930A002BE2DA /* NSDate+STDbHandle.m in Sources */,
-				44EE87E81C50930A002BE2DA /* NSObject+STDbHandle.m in Sources */,
-				44EE87E91C50930A002BE2DA /* NSString+STDbHandle.m in Sources */,
-				44EE87EA1C50930A002BE2DA /* STDb.m in Sources */,
+				44EC867A1F2A0FFE0089A91A /* STDb.m in Sources */,
+				44EC867E1F2A0FFE0089A91A /* STDbObject.m in Sources */,
+				44D812DC1E98B4C8008FAD65 /* STDbObjectPropertyTests.m in Sources */,
 				44F747551D5813DE0096473E /* EncryptTests.m in Sources */,
-				44EE87EB1C50930A002BE2DA /* STDbObject.m in Sources */,
-				44EE87EC1C50930A002BE2DA /* STDbQueue.m in Sources */,
 				44EE87A01C5086BB002BE2DA /* User.m in Sources */,
+				44EC86771F2A0FFE0089A91A /* NSString+STDbHandle.m in Sources */,
+				44EC866E1F2A0FFE0089A91A /* NSDate+STDbHandle.m in Sources */,
+				44EC86741F2A0FFE0089A91A /* NSObject+STDbHandle.m in Sources */,
+				44EC86841F2A0FFE0089A91A /* STDbQueue.m in Sources */,
+				44EC86811F2A0FFE0089A91A /* STDbObjectProperty.m in Sources */,
+				44EC86711F2A0FFE0089A91A /* NSObject+Dictionary.m in Sources */,
+				44EC866B1F2A0FFE0089A91A /* NSData+STDbHandle.m in Sources */,
 				44EE879F1C5086BB002BE2DA /* STDbObjectTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -302,7 +491,64 @@
 		};
 /* End PBXTargetDependency section */
 
+/* Begin PBXVariantGroup section */
+		4424F9CA1F282CF30085B89B /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4424F9CB1F282CF30085B89B /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		4424F9CF1F282CF30085B89B /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4424F9D01F282CF30085B89B /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
 /* Begin XCBuildConfiguration section */
+		4424F9D41F282CF30085B89B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				DEVELOPMENT_TEAM = XJBE34DFXX;
+				INFOPLIST_FILE = STDbExample/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.stlwtr.STDbExample;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		4424F9D51F282CF30085B89B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				DEVELOPMENT_TEAM = XJBE34DFXX;
+				INFOPLIST_FILE = STDbExample/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.stlwtr.STDbExample;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		44EE87861C50862D002BE2DA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -339,10 +585,15 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				HEADER_SEARCH_PATHS = (
+					"${SRCROOT}/STDbKit/Classes",
+					"${SRCROOT}/STDbKit/Category",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				VALID_ARCHS = "arm64 armv7";
 			};
 			name = Debug;
 		};
@@ -376,62 +627,103 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				HEADER_SEARCH_PATHS = (
+					"${SRCROOT}/STDbKit/Classes",
+					"${SRCROOT}/STDbKit/Category",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
+				VALID_ARCHS = "arm64 armv7";
 			};
 			name = Release;
 		};
 		44EE87891C50862D002BE2DA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
+				HEADER_SEARCH_PATHS = "${SRCROOT}/STDbKit";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/STDbKit/libs",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "include/${PROJECT_NAME}";
 				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALID_ARCHS = "arm64 armv7 x86_64 i386";
 			};
 			name = Debug;
 		};
 		44EE878A1C50862D002BE2DA /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
+				HEADER_SEARCH_PATHS = "${SRCROOT}/STDbKit";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/STDbKit/libs",
 				);
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "include/${PROJECT_NAME}";
 				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALID_ARCHS = "arm64 armv7 x86_64 i386";
 			};
 			name = Release;
 		};
 		44EE87981C508657002BE2DA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/STDbKit";
 				INFOPLIST_FILE = STDbKitTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/STDbKit/libs",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.stlwtr.STDbKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
 		44EE87991C508657002BE2DA /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/STDbKit";
 				INFOPLIST_FILE = STDbKitTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/STDbKit/libs",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.stlwtr.STDbKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		4424F9D31F282CF30085B89B /* Build configuration list for PBXNativeTarget "STDbExample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4424F9D41F282CF30085B89B /* Debug */,
+				4424F9D51F282CF30085B89B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		44EE877A1C50862D002BE2DA /* Build configuration list for PBXProject "STDbKit" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

@@ -2,8 +2,8 @@
 //  NSObject+STDbHandle.m
 //  STDbKit
 //
-//  Created by yls on 15/3/4.
-//  Copyright (c) 2015年 yls. All rights reserved.
+//  Created by stlwtr on 15/3/4.
+//  Copyright (c) 2015年stlwtr. All rights reserved.
 //
 
 #import "NSObject+STDbHandle.h"
@@ -24,6 +24,12 @@
     }
     NSData *data = [NSJSONSerialization dataWithJSONObject:obj options:NSJSONWritingPrettyPrinted error:nil];
     return [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+}
+
++ (NSString *)random {
+    NSTimeInterval ti = [NSDate timeIntervalSinceReferenceDate];
+    NSString *ramdomStr = [NSString stringWithFormat:@"%0X%0X", (uint32_t)floor(ti), arc4random()];
+    return ramdomStr;
 }
 
 @end

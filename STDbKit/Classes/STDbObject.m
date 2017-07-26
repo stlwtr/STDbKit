@@ -2,9 +2,9 @@
 //  DbObject.m
 //  STQuickKit
 //
-//  Created by yls on 13-11-21.
+//  Created by stlwtr on 13-11-21.
 //
-// Version 2.2.1
+// Version 2.3.0
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -26,6 +26,7 @@
 //
 // emailto: 2008.yls@163.com
 // QQ: 603291699
+// https://github.com/stlwtr/STDbKit
 //
 
 #import "STDbObject.h"
@@ -37,24 +38,32 @@
 
 #import "NSDate+STDbHandle.h"
 #import "NSData+STDbHandle.h"
+#import "STDbObjectProperty.h"
+#import "NSObject+STDbHandle.h"
+
+static const char * kSTDbClassPrimaryPropertyNameKey;
+
+#pragma mark - class static variables
+
+
 
 @implementation STDbObject
+
++ (void)load {
+    static dispatch_once_t once;
+    dispatch_once(&once, ^{
+        @autoreleasepool {
+            [self __setup__];
+        }
+    });
+}
 
 - (id)init
 {
     self = [super init];
     if (self) {
         self.expireDate = [NSDate distantFuture];
-        ___id__ = -1;
-    }
-    return self;
-}
-
-- (instancetype)initWithPrimaryValue:(NSInteger)_id;
-{
-    self = [self init];
-    if (self) {
-        ___id__ = _id;
+        ___id__ = [STDbObject random];
     }
     return self;
 }
@@ -113,8 +122,8 @@
 }
 - (BOOL)updateToDb:(STDb *)db
 {
-    @synchronized(self){
-        NSString *condition = [NSString stringWithFormat:@"%@=%@", kDbId, @(self.__id__)];
+    @synchronized(self) {
+        NSString *condition = [self primaryConditionString];
         return [db updateDbObject:self condition:condition];
     }
 }
@@ -137,8 +146,8 @@
         [self subDbObjects:subDbObjects];
         
         for (STDbObject *dbObj in subDbObjects) {
-            NSString *where = [NSString stringWithFormat:@"%@=%@", kDbId, @(dbObj.__id__)];
-            [db removeDbObjects:[dbObj class] condition:where];
+            NSString *condition = [self primaryConditionString];
+            [db removeDbObjects:[dbObj class] condition:condition];
         }
         return YES;
     }
@@ -257,7 +266,7 @@
 }
 
 /**
- *	@brief	取出所有数据
+ *	@brief	select all data from db
  *
  *	@return	数据
  */
@@ -274,61 +283,219 @@
     }
 }
 
-/**
- *	@brief	objc to dictionary
- */
-- (NSDictionary *)objcDictionary;
-{
-    @synchronized(self){
-        unsigned int count;
-        STDbObject *obj = self;
-
-        Class cls = [obj class];
-        objc_property_t *properties = st_class_copyPropertyList(cls, &count);
-
-        NSMutableDictionary *retDict = [NSMutableDictionary dictionary];
-        
-        for (int i = 0; i < count; i++) {
-            objc_property_t property = properties[i];
-            NSString * key = [[NSString alloc]initWithCString:property_getName(property) encoding:NSUTF8StringEncoding];
-            id value = [obj valueForKey:key];
-            if (value) {
-                [retDict setObject:value forKey:key];
-            }
-        }
-        
-        return retDict;
-    }
-}
-
-/**
- *	@brief	objc from dictionary
- */
-+ (STDbObject *)objcFromDictionary:(NSDictionary *)dict;
-{
-    @synchronized(self){
-        STDbObject *obj = [[[self class] alloc] init];
-        
-        unsigned int count;
-        
-        Class cls = [obj class];
-        objc_property_t *properties = st_class_copyPropertyList(cls, &count);
-
-        for (int i = 0; i < count; i++) {
-            objc_property_t property = properties[i];
-            NSString * key = [[NSString alloc]initWithCString:property_getName(property) encoding:NSUTF8StringEncoding];
-            id value = [dict objectForKey:key];
-            if (value) {
-                [obj setValue:value forKey:key];
-            }
-        }
-        return obj;
-    }
-}
-
 + (NSInteger)dbVersion
 {
     return 0;
+}
+
++ (NSArray *)properties {
+    return [self __properties__];
+}
+
++ (NSArray *)primaryKeys {
+    return [self __primaryKeys];
+}
+
+#pragma mark - Private Method
+
++ (NSArray *)__properties__ {
+    NSDictionary* classProperties = objc_getAssociatedObject(self.class, &kSTDbClassPropertiesKey);
+    if (classProperties) return [classProperties allValues];
+    
+    [self __setup__];
+    
+    classProperties = objc_getAssociatedObject(self.class, &kSTDbClassPropertiesKey);
+    return [classProperties allValues];
+}
+
++ (NSArray *)__primaryKeys {
+    NSMutableArray *primaryKeys = [NSMutableArray array];
+    NSArray *properties = [self __properties__];
+    for (STDbObjectProperty *p in properties) {
+        if (p.isPrimaryKey) {
+            [primaryKeys addObject:p.name];
+        }
+    }
+
+    return primaryKeys;
+}
+
+- (NSString *)primaryConditionString {
+    NSArray *primaryKeys = [self.class __primaryKeys];
+    NSMutableArray *conditionArray = [NSMutableArray array];
+    
+    for (NSString *key in primaryKeys) {
+        NSString *keyValue = [NSString stringWithFormat:@"%@='%@'", key, [self valueForKey:key]];
+        [conditionArray addObject:keyValue];
+    }
+    NSString *condition = [conditionArray componentsJoinedByString:@" and "];
+    return condition;
+}
+
++ (void)__setup__
+{
+    if (!objc_getAssociatedObject(self.class, &kSTDbClassPropertiesKey)) {
+        [self __inspectProperties];
+    }
+}
+
++ (void)__inspectProperties
+{
+    NSMutableDictionary* propertyIndex = [NSMutableDictionary dictionary];
+
+    Class class = [self class];
+    NSScanner* scanner = nil;
+    NSString* propertyType = nil;
+    
+    while ([class isSubclassOfClass:[STDbObject class]]) {
+        
+        unsigned int propertyCount;
+        objc_property_t *properties = class_copyPropertyList(class, &propertyCount);
+        
+        for (unsigned int i = 0; i < propertyCount; i++) {
+            
+            STDbObjectProperty* p = [[STDbObjectProperty alloc] init];
+            
+            objc_property_t property = properties[i];
+            const char *propertyName = property_getName(property);
+            p.name = @(propertyName);
+            
+            const char *attrs = property_getAttributes(property);
+            NSString* propertyAttributes = @(attrs);
+            NSArray* attributeItems = [propertyAttributes componentsSeparatedByString:@","];
+            
+            if ([attributeItems containsObject:@"R"]) {
+//                continue; //to next property
+            }
+            
+            if ([propertyAttributes hasPrefix:@"Tc,"]) {
+                p.structName = @"BOOL";
+            }
+            
+            scanner = [NSScanner scannerWithString: propertyAttributes];
+            
+            [scanner scanUpToString:@"T" intoString: nil];
+            [scanner scanString:@"T" intoString:nil];
+            
+            if ([scanner scanString:@"@\"" intoString: &propertyType]) {
+                
+                [scanner scanUpToCharactersFromSet:[NSCharacterSet characterSetWithCharactersInString:@"\"<"]
+                                        intoString:&propertyType];
+                
+                p.type = NSClassFromString(propertyType);
+                p.isMutable = ([propertyType rangeOfString:@"Mutable"].location != NSNotFound);
+                
+                while ([scanner scanString:@"<" intoString:NULL]) {
+                    
+                    NSString* protocolName = nil;
+                    
+                    [scanner scanUpToString:@">" intoString: &protocolName];
+                    
+                    if ([protocolName isEqualToString:@"STDbIgnore"]) {
+                        p = nil;
+                    } else if([protocolName isEqualToString:@"STDbPrimaryKey"]) {
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+                        p.isPrimaryKey = YES;
+#pragma GCC diagnostic pop
+                        
+                        objc_setAssociatedObject(
+                                                 self.class,
+                                                 &kSTDbClassPrimaryPropertyNameKey,
+                                                 p.name,
+                                                 OBJC_ASSOCIATION_RETAIN
+                                                 );
+                    } else {
+                        p.protocol = protocolName;
+                    }
+                    
+                    [scanner scanString:@">" intoString:NULL];
+                }
+                
+            }
+            
+            else if ([scanner scanString:@"{" intoString: &propertyType]) {
+                [scanner scanCharactersFromSet:[NSCharacterSet alphanumericCharacterSet]
+                                    intoString:&propertyType];
+                p.structName = propertyType;
+                
+            } else {
+                [scanner scanUpToCharactersFromSet:[NSCharacterSet characterSetWithCharactersInString:@","]
+                                        intoString:&propertyType];
+                
+                //get the full name of the primitive type
+                NSDictionary *primitivesNames = @{@"f":@"float", @"i":@"int", @"d":@"double", @"l":@"long", @"c":@"BOOL", @"s":@"short", @"q":@"long",
+                                     //and some famous aliases of primitive types
+                                     // BOOL is now "B" on iOS __LP64 builds
+                                     @"I":@"NSInteger", @"Q":@"NSUInteger", @"B":@"BOOL", @"*": @"char *",
+                                     @"@?":@"Block"};
+                propertyType = primitivesNames[propertyType];
+                p.structName = propertyType;
+            }
+            
+            NSString *nsPropertyName = @(propertyName);
+            
+            if([[self class] propertyIsPrimary:nsPropertyName]){
+                p.isPrimaryKey = YES;
+            }
+            
+            if([[self class] propertyIsIgnored:nsPropertyName]){
+                p = nil;
+            }
+            
+            Class customClass = [[self class] classForCollectionProperty:nsPropertyName];
+            if (customClass) {
+                p.protocol = NSStringFromClass(customClass);
+            }
+            
+            if ([propertyType isEqualToString:@"Block"]) {
+                p = nil;
+            }
+            
+            if (p && ![propertyIndex objectForKey:p.name]) {
+                [propertyIndex setValue:p forKey:p.name];
+            }
+        }
+        
+        free(properties);
+        
+        class = [class superclass];
+    }
+    
+    objc_setAssociatedObject(
+                             self.class,
+                             &kSTDbClassPropertiesKey,
+                             [propertyIndex copy],
+                             OBJC_ASSOCIATION_RETAIN
+                             );
+}
+
++(Class)classForCollectionProperty:(NSString *)propertyName
+{
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+    NSString *protocolName = [self protocolForArrayProperty:propertyName];
+#pragma GCC diagnostic pop
+    
+    if (!protocolName)
+        return nil;
+    
+    return NSClassFromString(protocolName);
+}
+
++(NSString*)protocolForArrayProperty:(NSString *)propertyName
+{
+    return nil;
+}
+
++(BOOL)propertyIsPrimary:(NSString*)propertyName
+{
+    return NO;
+}
+
++(BOOL)propertyIsIgnored:(NSString *)propertyName
+{
+    return NO;
 }
 
 @end

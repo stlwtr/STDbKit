@@ -2,8 +2,8 @@
 //  NSDate+STDbHandle.h
 //  STDbKit
 //
-//  Created by yls on 15/3/4.
-//  Copyright (c) 2015年 yls. All rights reserved.
+//  Created by stlwtr on 15/3/4.
+//  Copyright (c) 2015年stlwtr. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
